@@ -1,45 +1,55 @@
 import dayjs from "dayjs";
-import { useCallback, useEffect, useState } from "react";
-import { useLongPress } from "use-long-press";
+import { useState } from "react";
 import { List, ListItem, ListItemButton, ListItemText } from "@mui/material";
+import { usePress } from "../../hooks/usePress";
 
 export default function TaskList({ tasks }) {
-  const [longPressOccurred, setLongPressOccurred] = useState(false);
+  const [pressed, setPressed] = useState("Nothing pressed yet");
+  const longPress = (id) => {
+    setPressed("Long press " + id);
+  };
 
-  const handleShortPress = useCallback(() => {
-    if (!longPressOccurred) {
-      console.log("complete");
-    }
-  }, [longPressOccurred]);
-
-  const bind = useLongPress(
-    () => {
-      console.log("Long pressed!");
-      setLongPressOccurred(true);
-      const timeout = setTimeout(() => {
-        setLongPressOccurred(false);
-      }, 1000); // Timeout duration to distinguish long press and short press
-      return () => clearTimeout(timeout);
-    },
-    {
-      threshold: 1000,
-      cancelOnMovement: false,
-    }
+  const shortPress = (id) => {
+    setPressed("Short press " + id);
+  };
+  return (
+    <>
+      <List>
+        {tasks?.map((task) => (
+          <TaskListItem
+            key={task._id}
+            task={task}
+            longPress={longPress}
+            shortPress={shortPress}
+          />
+        ))}
+      </List>
+      <div>{pressed}</div>
+    </>
   );
+}
 
-  useEffect(() => {
-    setLongPressOccurred(false);
-  }, [tasks]);
+function TaskListItem({ task, longPress, shortPress }) {
+  const [taskId, setTaskId] = useState(task._id); // Initialize with the task ID
+
+  const handleShortPress = () => {
+    shortPress(taskId);
+  };
+
+  const handleLongPress = () => {
+    longPress(taskId);
+  };
+
+  const { longPressProps } = usePress({
+    shortPressCallback: handleShortPress,
+    longPressCallback: handleLongPress,
+  });
 
   return (
-    <List>
-      {tasks?.map((task) => (
-        <ListItem key={task._id}>
-          <ListItemButton onClick={handleShortPress} {...bind()}>
-            <ListItemText primary={task.taskTitle} />
-          </ListItemButton>
-        </ListItem>
-      ))}
-    </List>
+    <ListItem>
+      <ListItemButton {...longPressProps} onClick={() => setTaskId(task._id)}>
+        <ListItemText primary={task.taskTitle} />
+      </ListItemButton>
+    </ListItem>
   );
 }
