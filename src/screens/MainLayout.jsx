@@ -9,7 +9,6 @@ import Login from "./Login";
 import DashboardPage from "./DashboardPage";
 import TaskListsPage from "./TaskListsPage";
 import FamilyPage from "./FamilyPage";
-import TaskList from "../components/Lists/TaskList";
 import TasksPage from "./TasksPage";
 
 export default function MainLayout() {
@@ -46,8 +45,10 @@ export default function MainLayout() {
           <Routes>
             <Route path="/" element={<DashboardPage />} />
             <Route path="/tasklists" element={<TaskListsPage />} exact />
-            <Route path="/tasklists/:id" element={<TaskList />} />
-            <Route path="/tasklists/:id/tasks" element={<TasksPage />} />
+            <Route
+              path="/tasklists/:taskListId/tasks"
+              element={<TasksPage />}
+            />
             <Route path="/login" element={<Login />} />
             <Route path="/family" element={<FamilyPage />} />
           </Routes>

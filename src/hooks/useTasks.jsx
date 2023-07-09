@@ -1,18 +1,18 @@
 import { useState, useEffect, useCallback } from "react";
-import io from "socket.io-client";
 
-export function useTaskControl() {
-  const defaultFamilyId = localStorage.getItem("defaultFamilyId");
-  const [taskLists, setTaskLists] = useState([]);
+export function useTasks(taskListId) {
+  const [tasks, setTasks] = useState([]);
+  const [taskList, setTaskList] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [status, setStatus] = useState(null);
 
   const server = process.env.REACT_APP_BASE_SERVER;
 
-  const getTaskList = useCallback(async () => {
+  const getTasks = useCallback(async () => {
+    setLoading(true);
     try {
-      const response = await fetch(`${server}/tasks/gettasklists`, {
+      const response = await fetch(`${server}/task/tasks/${taskListId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -23,7 +23,8 @@ export function useTaskControl() {
         throw new Error("Failed to fetch user task list");
       }
       const data = await response.json();
-      setTaskLists(data.taskList);
+      setTasks(data.tasks);
+      setTaskList(data.taskList);
       setStatus("success");
     } catch (error) {
       console.error("Error:", error);
@@ -32,25 +33,7 @@ export function useTaskControl() {
     } finally {
       setLoading(false);
     }
-  }, [server]);
+  }, [taskListId, server]);
 
-  useEffect(() => {
-    getTaskList();
-  }, [getTaskList]);
-
-  useEffect(() => {
-    const socket = io(server, {
-      query: { room: defaultFamilyId },
-    });
-
-    socket.on("updateTaskList", () => {
-      getTaskList();
-    });
-
-    return () => {
-      socket.disconnect();
-    };
-  }, [server, defaultFamilyId, getTaskList]);
-
-  return { loading, status, error, getTaskList, taskLists };
+  return { tasks, taskList, loading, status, error, getTasks };
 }

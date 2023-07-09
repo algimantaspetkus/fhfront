@@ -1,11 +1,11 @@
 import { useState, useCallback } from "react";
 import { Box, Typography, Container, SwipeableDrawer } from "@mui/material";
-import TaskList from "../components/Lists/TaskList";
+import TaskListList from "../components/Lists/TaskListList";
 import SingleActionFab from "../components/Fab/SingleActionFab";
-import { useTaskControl } from "../hooks/useTaskControl";
+import { useTaskList } from "../hooks/useTaskList";
 
 export default function TaskListPage() {
-  const { loading, status, error, getTaskList, taskLists } = useTaskControl();
+  const { taskLists } = useTaskList();
   const [activeTaskListId, setActiveTaskListId] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -34,7 +34,7 @@ export default function TaskListPage() {
           <Typography variant="h4" component="h2">
             TaskList page
           </Typography>
-          <TaskList {...taskListProps} />
+          <TaskListList {...taskListProps} />
         </Box>
       </Container>
       <SingleActionFab onClick={() => console.log("fab click")} />

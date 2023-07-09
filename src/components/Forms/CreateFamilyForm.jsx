@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { Box, TextField, Typography, Container } from "@mui/material";
-import { useFamilyControl } from "../../hooks/useFamilyControl";
+import { useFamily } from "../../hooks/useFamily";
 import LoadingButton from "@mui/lab/LoadingButton";
 
 export default function CreateFamilyForm({ drawerClose }) {
@@ -9,7 +9,7 @@ export default function CreateFamilyForm({ drawerClose }) {
     setFamilyNameHandler,
     joinFamily,
     setFamilySecretHandler,
-  } = useFamilyControl();
+  } = useFamily();
   const name = useRef(null);
   const secret = useRef(null);
 

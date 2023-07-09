@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useSnackbar } from "notistack";
 
-export function useFamilyControl() {
+export function useFamily() {
   const [defaultFamily, setDefaultFamily] = useState(
     localStorage.getItem("defaultFamilyId")
   );

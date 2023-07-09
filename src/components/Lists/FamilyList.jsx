@@ -45,7 +45,7 @@ export default function FamilyList({
             )}
 
             <IconButton
-              aria-controls={`menu-${family._id}`}
+              aria-controls={`menu-icon-${family.familyId._id}`}
               aria-haspopup="true"
               onClick={(event) => handleClick(event, family.familyId._id)}
             >
@@ -53,7 +53,7 @@ export default function FamilyList({
             </IconButton>
           </Box>
           <Menu
-            id={`menu-${family._id}`}
+            id={`menu-${family.familyId._id}`}
             anchorEl={anchorEl}
             open={activeFamilyId === family.familyId._id && Boolean(anchorEl)}
             onClose={handleClose}

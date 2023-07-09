@@ -1,61 +1,43 @@
 import dayjs from "dayjs";
-import {
-  Box,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-  ListItemAvatar,
-  Menu,
-  IconButton,
-  MenuItem,
-  Avatar,
-} from "@mui/material";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import ShareIcon from "@mui/icons-material/Share";
-import LockIcon from "@mui/icons-material/Lock";
-import { useNavigate } from "react-router-dom";
+import { useCallback, useEffect, useState } from "react";
+import { useLongPress } from "use-long-press";
+import { List, ListItem, ListItemButton, ListItemText } from "@mui/material";
 
-export default function TaskList({
-  taskLists,
-  handleClick,
-  anchorEl,
-  handleClose,
-  activeTaskListId,
-}) {
-  const navigate = useNavigate();
+export default function TaskList({ tasks }) {
+  const [longPressOccurred, setLongPressOccurred] = useState(false);
+
+  const handleShortPress = useCallback(() => {
+    if (!longPressOccurred) {
+      console.log("complete");
+    }
+  }, [longPressOccurred]);
+
+  const bind = useLongPress(
+    () => {
+      console.log("Long pressed!");
+      setLongPressOccurred(true);
+      const timeout = setTimeout(() => {
+        setLongPressOccurred(false);
+      }, 1000); // Timeout duration to distinguish long press and short press
+      return () => clearTimeout(timeout);
+    },
+    {
+      threshold: 1000,
+      cancelOnMovement: false,
+    }
+  );
+
+  useEffect(() => {
+    setLongPressOccurred(false);
+  }, [tasks]);
+
   return (
     <List>
-      {taskLists?.map((taskList) => (
-        <ListItem key={taskList._id}>
-          <ListItemButton onClick={() => navigate(`${taskList._id}/tasks`)}>
-            <ListItemAvatar>
-              <Avatar>
-                {taskList.isPrivate ? <LockIcon /> : <ShareIcon />}
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText primary={taskList.listTitle} />
+      {tasks?.map((task) => (
+        <ListItem key={task._id}>
+          <ListItemButton onClick={handleShortPress} {...bind()}>
+            <ListItemText primary={task.taskTitle} />
           </ListItemButton>
-          <Box sx={{ display: "flex", alignItems: "center" }}>
-            <IconButton
-              aria-controls={`menu-${taskList._id}`}
-              aria-haspopup="true"
-              onClick={(event) => {
-                handleClick(event, taskList._id);
-              }}
-            >
-              <MoreVertIcon />
-            </IconButton>
-          </Box>
-          <Menu
-            id={`menu-${taskList._id}`}
-            anchorEl={anchorEl}
-            open={activeTaskListId === taskList._id && Boolean(anchorEl)}
-            onClose={handleClose}
-          >
-            <MenuItem onClick={handleClose}>Mark as Complete</MenuItem>
-            <MenuItem onClick={handleClose}>Make Public</MenuItem>
-          </Menu>
         </ListItem>
       ))}
     </List>

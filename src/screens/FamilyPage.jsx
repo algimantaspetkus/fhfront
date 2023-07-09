@@ -1,9 +1,9 @@
-import React, { useEffect, useState, useCallback, memo } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import SingleActionFab from "../components/Fab/SingleActionFab";
 import Dialog from "../components/Dialog/Dialog";
 import { Box, Typography, Container, SwipeableDrawer } from "@mui/material";
 import { useUserFamilies } from "../hooks/useUserFamilies";
-import { useFamilyControl } from "../hooks/useFamilyControl";
+import { useFamily } from "../hooks/useFamily";
 import { useDialog } from "../hooks/useDialog";
 import { useDrawer } from "../hooks/useDrawer";
 import CreateFamilyForm from "../components/Forms/CreateFamilyForm";
@@ -53,20 +53,19 @@ export default function FamilyPage() {
     disableFamily,
     leaveFamily,
     getFamilySecret,
-  } = useFamilyControl();
+  } = useFamily();
 
   const handleClick = useCallback((event, familyId) => {
     event.stopPropagation();
-    setAnchorEl(event.currentTarget);
     setActiveFamilyId(familyId);
+    setAnchorEl(event.currentTarget);
   }, []);
 
   const handleClose = () => {
     setAnchorEl(null);
   };
 
-  const MemorizedFamilyList = memo(FamilyList);
-  const familyListPorps = {
+  const familyListProps = {
     families,
     defaultFamily,
     handleClick,
@@ -85,15 +84,15 @@ export default function FamilyPage() {
 
   return (
     <>
-      {dialogDeleteProps.isOpen && <Dialog dialogProps={dialogDeleteProps} />}
-      {dialogLeaveProps.isOpen && <Dialog dialogProps={dialogLeaveProps} />}
+      {dialogDeleteProps.open && <Dialog dialogProps={dialogDeleteProps} />}
+      {dialogLeaveProps.open && <Dialog dialogProps={dialogLeaveProps} />}
       <Container>
         <Box sx={{ marginTop: "5rem" }}>
           <Typography variant="h4" component="h2">
             Family Settings
           </Typography>
         </Box>
-        <MemorizedFamilyList {...familyListPorps} />
+        {families && <FamilyList {...familyListProps} />}
       </Container>
       <SingleActionFab onClick={openDrawer} />
       <SwipeableDrawer
