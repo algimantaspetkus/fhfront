@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { Box, Typography, Container, SwipeableDrawer } from "@mui/material";
+import { Box, Typography, Container, Drawer } from "@mui/material";
 import TaskListList from "../components/Lists/TaskListList";
 import SingleActionFab from "../components/Fab/SingleActionFab";
 import { useTaskList } from "../hooks/useTaskList";
@@ -38,14 +38,14 @@ export default function TaskListPage() {
         </Box>
       </Container>
       <SingleActionFab onClick={() => console.log("fab click")} />
-      <SwipeableDrawer
+      <Drawer
         anchor={"right"}
         open={false}
         onClose={() => console.log("close")}
         onOpen={() => console.log("open")}
       >
         <Box sx={{ width: "20rem" }}>Drawer</Box>
-      </SwipeableDrawer>
+      </Drawer>
     </>
   );
 }

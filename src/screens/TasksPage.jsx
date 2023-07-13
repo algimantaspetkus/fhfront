@@ -1,18 +1,17 @@
-import { useState, useCallback, useEffect } from "react";
-import { Box, Typography, Container, SwipeableDrawer } from "@mui/material";
+import { useEffect } from "react";
+import { Box, Typography, Container, Drawer } from "@mui/material";
 import TaskList from "../components/Lists/TaskList";
 import SingleActionFab from "../components/Fab/SingleActionFab";
+import CreateTaskForm from "../components/Forms/CreateTaskForm";
 import { useParams } from "react-router-dom";
 import { useTasks } from "../hooks/useTasks";
+import { useDrawer } from "../hooks/useDrawer";
 
 export default function TasksPage() {
   const { taskListId } = useParams();
-  const { tasks, taskList, loading, status, error, getTasks } =
-    useTasks(taskListId);
-
-  const taskListProps = {
-    tasks,
-  };
+  const { drawerOpen, openDrawer, closeDrawer } = useDrawer();
+  const { state, getTasks, setTaskData, createTask } = useTasks(taskListId);
+  const { tasks, taskList } = state;
 
   useEffect(() => {
     getTasks();
@@ -25,9 +24,22 @@ export default function TasksPage() {
           <Typography variant="h4" component="h2">
             {taskList?.listTitle}
           </Typography>
-          <TaskList {...taskListProps} />
+          <TaskList tasks={tasks} /> {/* Use state.tasks directly */}
         </Box>
       </Container>
+      <Drawer
+        anchor={"right"}
+        open={drawerOpen}
+        onClose={closeDrawer}
+        onOpen={openDrawer}
+      >
+        <CreateTaskForm
+          closeDrawer={closeDrawer}
+          setTaskData={setTaskData}
+          createTask={createTask}
+        />
+      </Drawer>
+      <SingleActionFab onClick={openDrawer} />
     </>
   );
 }

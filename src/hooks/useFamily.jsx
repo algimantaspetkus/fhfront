@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useSnackbar } from "notistack";
+import { IconButton } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
 export function useFamily() {
   const [defaultFamily, setDefaultFamily] = useState(
@@ -8,7 +10,7 @@ export function useFamily() {
   const [name, setName] = useState("");
   const [secret, setSecret] = useState("");
   const [loading, setLoading] = useState(false);
-  const { enqueueSnackbar } = useSnackbar();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const server = process.env.REACT_APP_BASE_SERVER;
 
@@ -25,17 +27,38 @@ export function useFamily() {
     })
       .then((res) => {
         if (res.status === 200) {
-          enqueueSnackbar("Family created", { variant: "success" });
+          enqueueSnackbar("Family created", {
+            variant: "success",
+            action: (key) => (
+              <IconButton onClick={() => closeSnackbar(key)} size="small">
+                <CloseIcon sx={{ color: "#ffffff" }} />
+              </IconButton>
+            ),
+          });
           ref.value = "";
           ref.focus();
         } else {
           console.log(res.status);
-          enqueueSnackbar("Couldn't create family", { variant: "error" });
+          enqueueSnackbar("Couldn't create family", {
+            variant: "error",
+            action: (key) => (
+              <IconButton onClick={() => closeSnackbar(key)} size="small">
+                <CloseIcon sx={{ color: "#ffffff" }} />
+              </IconButton>
+            ),
+          });
         }
       })
       .catch((err) => {
         console.log(err);
-        enqueueSnackbar("Couldn't create family", { variant: "error" });
+        enqueueSnackbar("Couldn't create family", {
+          variant: "error",
+          action: (key) => (
+            <IconButton onClick={() => closeSnackbar(key)} size="small">
+              <CloseIcon sx={{ color: "#ffffff" }} />
+            </IconButton>
+          ),
+        });
       })
       .finally(() => setLoading(false));
   }

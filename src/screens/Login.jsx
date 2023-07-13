@@ -4,6 +4,8 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import { useSnackbar } from "notistack";
 import { useNavigate } from "react-router-dom";
 import { useSignIn } from "../hooks/useSignIn";
+import { IconButton } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -11,20 +13,34 @@ export default function Login() {
 
   const pwd = useRef(null);
 
-  const { enqueueSnackbar } = useSnackbar();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const { loading, error, status, signIn } = useSignIn();
   const navigate = useNavigate();
 
   const handleLoginSuccess = useCallback(() => {
-    enqueueSnackbar("Login Success", { variant: "success" });
+    enqueueSnackbar("Logged in succesfully", {
+      variant: "success",
+      action: (key) => (
+        <IconButton onClick={() => closeSnackbar(key)} size="small">
+          <CloseIcon sx={{ color: "#ffffff" }} />
+        </IconButton>
+      ),
+    });
     navigate("/");
-  }, [enqueueSnackbar, navigate]);
+  }, [closeSnackbar, navigate, enqueueSnackbar]);
 
   const handleLoginError = useCallback(() => {
-    enqueueSnackbar(error, { variant: "error" });
+    enqueueSnackbar(error, {
+      variant: "error",
+      action: (key) => (
+        <IconButton onClick={() => closeSnackbar(key)} size="small">
+          <CloseIcon sx={{ color: "#ffffff" }} />
+        </IconButton>
+      ),
+    });
     setPassword("");
     pwd.current?.querySelector("input")?.focus();
-  }, [enqueueSnackbar, error]);
+  }, [enqueueSnackbar, error, closeSnackbar]);
 
   useEffect(() => {
     if (status === "success") {

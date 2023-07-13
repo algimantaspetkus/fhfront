@@ -1,6 +1,4 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import ButtonBase from "@mui/material/ButtonBase";
-import TouchRipple from "@mui/material/ButtonBase/TouchRipple";
 
 export function usePress({ shortPressCallback, longPressCallback, id }) {
   const [isLongPressing, setIsLongPressing] = useState(false);

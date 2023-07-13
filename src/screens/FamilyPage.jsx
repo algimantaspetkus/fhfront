@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import SingleActionFab from "../components/Fab/SingleActionFab";
 import Dialog from "../components/Dialog/Dialog";
-import { Box, Typography, Container, SwipeableDrawer } from "@mui/material";
+import { Box, Typography, Container, Drawer } from "@mui/material";
 import { useUserFamilies } from "../hooks/useUserFamilies";
 import { useFamily } from "../hooks/useFamily";
 import { useDialog } from "../hooks/useDialog";
@@ -95,14 +95,14 @@ export default function FamilyPage() {
         {families && <FamilyList {...familyListProps} />}
       </Container>
       <SingleActionFab onClick={openDrawer} />
-      <SwipeableDrawer
+      <Drawer
         anchor={"right"}
         open={drawerOpen}
         onClose={closeDrawer}
         onOpen={openDrawer}
       >
         <CreateFamilyForm drawerClose={closeDrawer} />
-      </SwipeableDrawer>
+      </Drawer>
     </>
   );
 }
