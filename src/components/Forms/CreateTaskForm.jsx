@@ -1,10 +1,13 @@
 import { Box, TextField, Typography, Container, Slider } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
+import PeoplePicker from "../Picker/PeoplePicker";
+import DateTimePicker from "../Picker/DateTimePicker";
 
 export default function CreateFamilyForm({
   closeDrawer,
   setTaskData,
   createTask,
+  taskListId,
 }) {
   return (
     <Container sx={{ padding: "2rem" }}>
@@ -35,6 +38,8 @@ export default function CreateFamilyForm({
             sx={{ flex: 1 }}
             onChange={(e) => setTaskData("taskDescription", e.target.value)}
           />
+          <PeoplePicker setTaskData={setTaskData} taskListId={taskListId} />
+          <DateTimePicker setTaskData={setTaskData} />
           <Box>
             <Typography gutterBottom>Priority</Typography>
             <Slider

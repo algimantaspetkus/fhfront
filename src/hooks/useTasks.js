@@ -115,7 +115,6 @@ export function useTasks(taskListId) {
     });
 
     socket.on("taskItemAdded", () => {
-      console.log("taskItemAdded");
       getTasks();
     });
 
@@ -195,6 +194,7 @@ export function useTasks(taskListId) {
       });
       await response.json();
       dispatch({ type: "SET_STATUS", payload: "success" });
+      resetState();
     } catch (error) {
       console.error("Error:", error);
       enqueueSnackbar("Failed to create task", {
@@ -210,6 +210,15 @@ export function useTasks(taskListId) {
     } finally {
       dispatch({ type: "SET_LOADING", payload: false });
     }
+  };
+
+  const resetState = () => {
+    dispatch({ type: "SET_TASK_TITLE", payload: "" });
+    dispatch({ type: "SET_TASK_DESCRIPTION", payload: "" });
+    dispatch({ type: "SET_ASSIGNED_TO_USER", payload: "" });
+    dispatch({ type: "SET_DUE_BY", payload: "" });
+    dispatch({ type: "SET_PRIORITY", payload: "" });
+    dispatch({ type: "SET_TAGS", payload: [] });
   };
 
   return {

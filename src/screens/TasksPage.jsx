@@ -34,6 +34,7 @@ export default function TasksPage() {
         onOpen={openDrawer}
       >
         <CreateTaskForm
+          taskListId={taskListId}
           closeDrawer={closeDrawer}
           setTaskData={setTaskData}
           createTask={createTask}
