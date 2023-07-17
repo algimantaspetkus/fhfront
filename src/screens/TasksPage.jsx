@@ -10,7 +10,8 @@ import { useDrawer } from "../hooks/useDrawer";
 export default function TasksPage() {
   const { taskListId } = useParams();
   const { drawerOpen, openDrawer, closeDrawer } = useDrawer();
-  const { state, getTasks, setTaskData, createTask } = useTasks(taskListId);
+  const { state, getTasks, setTaskData, createTask, toggleComplete } =
+    useTasks(taskListId);
   const { tasks, taskList } = state;
 
   useEffect(() => {
@@ -24,15 +25,10 @@ export default function TasksPage() {
           <Typography variant="h4" component="h2">
             {taskList?.listTitle}
           </Typography>
-          <TaskList tasks={tasks} /> {/* Use state.tasks directly */}
+          <TaskList tasks={tasks} toggleComplete={toggleComplete} />
         </Box>
       </Container>
-      <Drawer
-        anchor={"right"}
-        open={drawerOpen}
-        onClose={closeDrawer}
-        onOpen={openDrawer}
-      >
+      <Drawer anchor={"right"} open={drawerOpen} onClose={closeDrawer}>
         <CreateTaskForm
           taskListId={taskListId}
           closeDrawer={closeDrawer}

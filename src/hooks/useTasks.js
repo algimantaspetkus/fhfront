@@ -10,7 +10,6 @@ const initialState = {
   assignedToUser: "",
   dueBy: "",
   priority: "",
-  tags: [],
   taskList: {},
   loading: false,
   error: null,
@@ -43,11 +42,6 @@ function reducer(state, action) {
       return {
         ...state,
         priority: action.payload,
-      };
-    case "SET_TAGS":
-      return {
-        ...state,
-        tags: action.payload,
       };
     case "SET_TASKS":
       return {
@@ -140,9 +134,6 @@ export function useTasks(taskListId) {
       case "priority":
         dispatch({ type: "SET_PRIORITY", payload: payload });
         break;
-      case "tags":
-        dispatch({ type: "SET_TAGS", payload: payload });
-        break;
       default:
         break;
     }
@@ -161,7 +152,6 @@ export function useTasks(taskListId) {
           state.assignedToUser !== "" ? state.assignedToUser : undefined,
         dueBy: state.dueBy !== "" ? state.dueBy : undefined,
         priority: state.priority !== "" ? state.priority : undefined,
-        tags: state.tags.length > 0 ? state.tags : undefined,
       };
 
       const response = await fetch(`${server}/task/addtask`, {
@@ -212,13 +202,39 @@ export function useTasks(taskListId) {
     }
   };
 
+  const toggleComplete = async (taskId, payLoad) => {
+    dispatch({ type: "SET_LOADING", payload: true });
+    try {
+      const requestBody = {
+        taskId: taskId,
+        data: {
+          completed: payLoad,
+        },
+      };
+      fetch(`${server}/task/update`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+        body: JSON.stringify(requestBody),
+      });
+      getTasks();
+    } catch (error) {
+      console.error("Error:", error);
+      dispatch({ type: "SET_ERROR", payload: error });
+      dispatch({ type: "SET_STATUS", payload: "error" });
+    } finally {
+      dispatch({ type: "SET_LOADING", payload: false });
+    }
+  };
+
   const resetState = () => {
     dispatch({ type: "SET_TASK_TITLE", payload: "" });
     dispatch({ type: "SET_TASK_DESCRIPTION", payload: "" });
     dispatch({ type: "SET_ASSIGNED_TO_USER", payload: "" });
     dispatch({ type: "SET_DUE_BY", payload: "" });
     dispatch({ type: "SET_PRIORITY", payload: "" });
-    dispatch({ type: "SET_TAGS", payload: [] });
   };
 
   return {
@@ -226,5 +242,6 @@ export function useTasks(taskListId) {
     getTasks,
     setTaskData,
     createTask,
+    toggleComplete,
   };
 }

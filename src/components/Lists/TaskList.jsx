@@ -11,7 +11,7 @@ import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import { usePress } from "../../hooks/usePress";
 
-export default function TaskList({ tasks }) {
+export default function TaskList({ tasks, toggleComplete }) {
   const longPress = () => {
     return;
   };
@@ -29,6 +29,7 @@ export default function TaskList({ tasks }) {
     >
       {tasks?.map((task) => (
         <TaskListItem
+          toggleComplete={toggleComplete}
           key={task._id}
           task={task}
           longPress={longPress}
@@ -39,7 +40,7 @@ export default function TaskList({ tasks }) {
   );
 }
 
-function TaskListItem({ task, longPress, shortPress }) {
+function TaskListItem({ task, longPress, shortPress, toggleComplete }) {
   const [complete, setComplete] = useState(false);
   const [taskId, setTaskId] = useState(task._id); // Initialize with the task ID
 
@@ -76,9 +77,9 @@ function TaskListItem({ task, longPress, shortPress }) {
           aria-label="checkbox"
           sx={{ marginLeft: "1rem" }}
           {...longPressProps}
-          onClick={() => setTaskId(task._id)}
+          onClick={() => toggleComplete(task._id, !task.completed)}
         >
-          {complete ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
+          {task.completed ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
         </IconButton>
       </ListItemButton>
     </ListItem>
