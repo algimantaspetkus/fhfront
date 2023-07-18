@@ -10,6 +10,7 @@ const initialState = {
   assignedToUser: "",
   dueBy: "",
   priority: "",
+  tasks: [],
   taskList: {},
   loading: false,
   error: null,
@@ -229,6 +230,50 @@ export function useTasks(taskListId) {
     }
   };
 
+  const deleteTask = async (taskId) => {
+    dispatch({ type: "SET_LOADING", payload: true });
+    try {
+      fetch(`${server}/task/${taskId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      });
+      getTasks();
+    } catch (error) {
+      console.error("Error:", error);
+      dispatch({ type: "SET_ERROR", payload: error });
+      dispatch({ type: "SET_STATUS", payload: "error" });
+    } finally {
+      dispatch({ type: "SET_LOADING", payload: false });
+    }
+  };
+
+  const getTask = async (taskId) => {
+    dispatch({ type: "SET_LOADING", payload: true });
+    try {
+      const data = await fetch(`${server}/task/${taskId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      });
+      if (data.status !== 200) {
+        return null;
+      }
+      const task = await data.json();
+      return task;
+    } catch (error) {
+      console.error("Error:", error);
+      dispatch({ type: "SET_ERROR", payload: error });
+      dispatch({ type: "SET_STATUS", payload: "error" });
+    } finally {
+      dispatch({ type: "SET_LOADING", payload: false });
+    }
+  };
+
   const resetState = () => {
     dispatch({ type: "SET_TASK_TITLE", payload: "" });
     dispatch({ type: "SET_TASK_DESCRIPTION", payload: "" });
@@ -239,9 +284,11 @@ export function useTasks(taskListId) {
 
   return {
     state,
+    getTask,
     getTasks,
     setTaskData,
     createTask,
     toggleComplete,
+    deleteTask,
   };
 }

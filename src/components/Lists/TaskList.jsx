@@ -11,7 +11,12 @@ import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import { usePress } from "../../hooks/usePress";
 
-export default function TaskList({ tasks, toggleComplete }) {
+export default function TaskList({
+  tasks,
+  toggleComplete,
+  deleteTask,
+  showTaskDetails,
+}) {
   const longPress = () => {
     return;
   };
@@ -32,17 +37,23 @@ export default function TaskList({ tasks, toggleComplete }) {
           toggleComplete={toggleComplete}
           key={task._id}
           task={task}
-          longPress={longPress}
+          longPress={deleteTask}
           shortPress={shortPress}
+          showTaskDetails={showTaskDetails}
         />
       ))}
     </List>
   );
 }
 
-function TaskListItem({ task, longPress, shortPress, toggleComplete }) {
+function TaskListItem({
+  task,
+  longPress,
+  shortPress,
+  toggleComplete,
+  showTaskDetails,
+}) {
   const [complete, setComplete] = useState(false);
-  const [taskId, setTaskId] = useState(task._id); // Initialize with the task ID
 
   const handleShortPress = () => {
     // Wait for 300ms before updating the complete state
@@ -54,14 +65,27 @@ function TaskListItem({ task, longPress, shortPress, toggleComplete }) {
 
   const handleLongPress = () => {
     console.log("Long press");
-    longPress();
+    longPress(task._id);
   };
 
   const { longPressProps } = usePress({
     shortPressCallback: handleShortPress,
     longPressCallback: handleLongPress,
-    id: taskId,
+    id: task._id,
   });
+
+  const clickHandler = (event) => {
+    const isCheckboxClick =
+      event.target.getAttribute("data-checkbox") === "true";
+    const isCheckboxChildClick =
+      event.target.closest('[data-checkbox="true"]') !== null;
+
+    if (isCheckboxClick || isCheckboxChildClick) {
+      toggleComplete(task._id, !task.completed);
+    } else {
+      showTaskDetails(task._id);
+    }
+  };
 
   return (
     <ListItem
@@ -70,14 +94,13 @@ function TaskListItem({ task, longPress, shortPress, toggleComplete }) {
         padding: 0,
       }}
     >
-      <ListItemButton>
+      <ListItemButton onClick={clickHandler}>
         <ListItemText primary={task.taskTitle} />
         <IconButton
+          data-checkbox="true"
           edge="end"
           aria-label="checkbox"
           sx={{ marginLeft: "1rem" }}
-          {...longPressProps}
-          onClick={() => toggleComplete(task._id, !task.completed)}
         >
           {task.completed ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
         </IconButton>
