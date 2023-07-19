@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import api from "../api";
 
 export function usePeople(taskListId) {
   const [people, setPeople] = useState([]);
@@ -11,24 +12,15 @@ export function usePeople(taskListId) {
   const getByTaskList = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await fetch(
-        `${server}/family/getListMembers/${taskListId}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
+      const response = await api.get(
+        `${server}/family/getListMembers/${taskListId}`
       );
-      const data = await response.json();
-      if (response.ok) {
-        setPeople(data.members);
-        setStatus("success");
-      } else {
-        setError(data.error || "Error fetching people");
+      if (!response.data) {
+        setError("Error fetching people");
         setStatus("error");
       }
+      setPeople(response.data.members);
+      setStatus("success");
     } catch (error) {
       console.error(error);
       setError("Error fetching people");

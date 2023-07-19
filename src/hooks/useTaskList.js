@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import io from "socket.io-client";
+import api from "../api";
 
 export function useTaskList() {
   const defaultFamilyId = localStorage.getItem("defaultFamilyId");
@@ -12,17 +13,11 @@ export function useTaskList() {
 
   const getTaskList = useCallback(async () => {
     try {
-      const response = await fetch(`${server}/tasklist/gettasklists`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
-      });
-      if (!response.ok) {
+      const response = await api.get(`${server}/tasklist/gettasklists`);
+      if (!response.data) {
         throw new Error("Failed to fetch user task list");
       }
-      const data = await response.json();
+      const data = response.data;
       setTaskLists(data.taskList);
       setStatus("success");
     } catch (error) {
@@ -41,10 +36,6 @@ export function useTaskList() {
   useEffect(() => {
     const socket = io(server, {
       query: { room: defaultFamilyId },
-    });
-
-    socket.on("", () => {
-      console.log("socket connected");
     });
 
     socket.on("updateTaskList", () => {

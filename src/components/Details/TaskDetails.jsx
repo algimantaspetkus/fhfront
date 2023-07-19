@@ -11,6 +11,7 @@ export default function TaskDetails({ taskId }) {
   const fetchData = useCallback(
     async (id) => {
       const fetchedTask = await getTask(id);
+      console.log(fetchedTask);
       setTask(fetchedTask?.task);
     },
     [getTask]

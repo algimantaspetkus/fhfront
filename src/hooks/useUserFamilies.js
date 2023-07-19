@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import io from "socket.io-client";
+import api from "../api";
 
 export function useUserFamilies() {
   const server = process.env.REACT_APP_BASE_SERVER;
@@ -15,18 +16,11 @@ export function useUserFamilies() {
     setStatus(null);
 
     try {
-      const response = await fetch(`${server}/family/getfamilies`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
-      });
-      if (!response.ok) {
-        throw new Error("Failed to fetch user families");
+      const response = await api(`${server}/family/getfamilies`);
+      if (!response.data) {
+        throw new Error("Failed to api user families");
       }
-      const data = await response.json();
-      setFamilies(data.families);
+      setFamilies(response.data.families);
       setStatus("success");
     } catch (error) {
       console.error("Error:", error);

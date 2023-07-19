@@ -3,6 +3,7 @@ import io from "socket.io-client";
 import { IconButton } from "@mui/material";
 import { useSnackbar } from "notistack";
 import CloseIcon from "@mui/icons-material/Close";
+import api from "../api";
 
 const initialState = {
   taskTitle: "",
@@ -78,17 +79,11 @@ export function useTasks(taskListId) {
   const getTasks = useCallback(async () => {
     dispatch({ type: "SET_LOADING", payload: true });
     try {
-      const response = await fetch(`${server}/task/tasks/${taskListId}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
-      });
-      if (!response.ok) {
-        throw new Error("Failed to fetch user task list");
+      const response = await api.get(`${server}/task/tasks/${taskListId}`);
+      if (!response.data) {
+        throw new Error("Failed to api user task list");
       }
-      const data = await response.json();
+      const data = response.data;
       dispatch({ type: "SET_TASKS", payload: data.tasks });
       dispatch({ type: "SET_STATUS", payload: "success" });
     } catch (error) {
@@ -103,10 +98,6 @@ export function useTasks(taskListId) {
   useEffect(() => {
     const socket = io(server, {
       query: { room: taskListId },
-    });
-
-    socket.on("", () => {
-      console.log("socket connected");
     });
 
     socket.on("taskItemAdded", () => {
@@ -155,16 +146,9 @@ export function useTasks(taskListId) {
         priority: state.priority !== "" ? state.priority : undefined,
       };
 
-      const response = await fetch(`${server}/task/addtask`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
-        body: JSON.stringify(requestBody),
-      });
+      const response = await api.post(`${server}/task/addtask`, requestBody);
 
-      if (!response.ok) {
+      if (!response?.data) {
         enqueueSnackbar("Failed to create task", {
           variant: "error",
           action: (key) => (
@@ -183,11 +167,9 @@ export function useTasks(taskListId) {
           </IconButton>
         ),
       });
-      await response.json();
       dispatch({ type: "SET_STATUS", payload: "success" });
       resetState();
     } catch (error) {
-      console.error("Error:", error);
       enqueueSnackbar("Failed to create task", {
         variant: "error",
         action: (key) => (
@@ -212,17 +194,9 @@ export function useTasks(taskListId) {
           completed: payLoad,
         },
       };
-      fetch(`${server}/task/update`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
-        body: JSON.stringify(requestBody),
-      });
+      await api.put(`${server}/task/update`, requestBody);
       getTasks();
     } catch (error) {
-      console.error("Error:", error);
       dispatch({ type: "SET_ERROR", payload: error });
       dispatch({ type: "SET_STATUS", payload: "error" });
     } finally {
@@ -233,16 +207,9 @@ export function useTasks(taskListId) {
   const deleteTask = async (taskId) => {
     dispatch({ type: "SET_LOADING", payload: true });
     try {
-      fetch(`${server}/task/${taskId}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
-      });
+      await api.delete(`${server}/task/${taskId}`);
       getTasks();
     } catch (error) {
-      console.error("Error:", error);
       dispatch({ type: "SET_ERROR", payload: error });
       dispatch({ type: "SET_STATUS", payload: "error" });
     } finally {
@@ -253,20 +220,12 @@ export function useTasks(taskListId) {
   const getTask = async (taskId) => {
     dispatch({ type: "SET_LOADING", payload: true });
     try {
-      const data = await fetch(`${server}/task/${taskId}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
-      });
-      if (data.status !== 200) {
+      const response = await api.get(`${server}/task/${taskId}`);
+      if (!response.data) {
         return null;
       }
-      const task = await data.json();
-      return task;
+      return response.data;
     } catch (error) {
-      console.error("Error:", error);
       dispatch({ type: "SET_ERROR", payload: error });
       dispatch({ type: "SET_STATUS", payload: "error" });
     } finally {
