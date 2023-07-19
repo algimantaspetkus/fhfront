@@ -1,10 +1,12 @@
 import {
+  Box,
   List,
   ListItem,
   ListItemButton,
   ListItemText,
   IconButton,
 } from "@mui/material";
+import { PriorityBarsMinified } from "../UI/PriorityBars";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 // import { usePress } from "../../hooks/usePress";
@@ -46,8 +48,8 @@ export default function TaskList({
 
 function TaskListItem({
   task,
-  longPress,
-  shortPress,
+  // longPress,
+  // shortPress,
   toggleComplete,
   showTaskDetails,
 }) {
@@ -86,22 +88,20 @@ function TaskListItem({
   };
 
   return (
-    <ListItem
-      sx={{
-        backgroundColor: `rgba(255, 148, 148,${task.priority / 100})`,
-        padding: 0,
-      }}
-    >
+    <ListItem sx={{ padding: 0 }}>
       <ListItemButton onClick={clickHandler}>
         <ListItemText primary={task.taskTitle} />
-        <IconButton
-          data-checkbox="true"
-          edge="end"
-          aria-label="checkbox"
-          sx={{ marginLeft: "1rem" }}
-        >
-          {task.completed ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
-        </IconButton>
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <PriorityBarsMinified priority={task.priority} />
+          <IconButton
+            data-checkbox="true"
+            edge="end"
+            aria-label="checkbox"
+            sx={{ marginLeft: "1rem" }}
+          >
+            {task.completed ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
+          </IconButton>
+        </Box>
       </ListItemButton>
     </ListItem>
   );

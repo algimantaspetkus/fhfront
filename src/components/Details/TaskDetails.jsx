@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { Container, Box, Typography, TextField } from "@mui/material";
-import PriorityBars from "../UI/PriorityBars";
+import { PriorityBars } from "../UI/PriorityBars";
 import dayjs from "dayjs";
 import { DrawerSkeleton } from "../DrawerSkeleton";
 import { useTasks } from "../../hooks/useTasks";
@@ -35,19 +35,22 @@ export default function TaskDetails({ taskId }) {
       ) : (
         <Box sx={{ marginBottom: "3rem" }}>
           {task && (
-            <Box sx={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+            <Box
+              sx={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}
+            >
               <Typography sx={{ marginBottom: "1rem" }} variant="h5">
                 {task.taskTitle}
               </Typography>
-              <TextField
-                label="Task Description"
-                value={task.taskDescription}
-                multiline
-                rows={4}
-                readOnly
-              />
+              {task.taskDescription && (
+                <TextField
+                  label="Task Description"
+                  value={task.taskDescription}
+                  multiline
+                  rows={4}
+                  readOnly
+                />
+              )}
               {task.priority > 0 && <PriorityBars priority={task.priority} />}
-              <TextField label="Task Priority" value={task.priority} readOnly />
               <TextField
                 label="Created By"
                 value={task?.createdByUser?.displayName}

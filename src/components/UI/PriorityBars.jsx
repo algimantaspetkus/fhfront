@@ -10,10 +10,10 @@ function getColor(totalBars) {
   return red;
 }
 
-export default function PriorityBars({ priority }) {
-  const totalBars = Math.floor(priority / 3.33);
-  const bars = [...Array(totalBars)].map((_, i) => (
-    <Bar key={i} color={getColor(totalBars)} height={`${i}`} />
+export function PriorityBars({ priority }) {
+  const totalBars = Math.max(Math.ceil(priority / 3.33), 1);
+  let bars = [...Array(totalBars)].map((_, i) => (
+    <Bar key={i} color={getColor(totalBars)} height={`${i + 1}px`} />
   ));
 
   return (
@@ -30,10 +30,29 @@ export default function PriorityBars({ priority }) {
   );
 }
 
-function Bar({ color, height }) {
+export function PriorityBarsMinified({ priority }) {
+  const totalBars = Math.max(Math.ceil(priority / 10), 1);
+  const color = Math.floor(priority / 3.33);
+  let bars = [...Array(totalBars)].map((_, i) => (
+    <Bar key={i} color={getColor(color)} height={`${i + 1}px`} />
+  ));
+  if (priority === 0) bars = null;
+
   return (
     <Box
-      sx={{ width: "6px", height: `${height}px`, backgroundColor: color }}
-    ></Box>
+      sx={{
+        display: "flex",
+        gap: "2px",
+        alignItems: "flex-end",
+      }}
+    >
+      {bars && bars}
+    </Box>
+  );
+}
+
+function Bar({ color, height }) {
+  return (
+    <Box sx={{ width: "6px", height: height, backgroundColor: color }}></Box>
   );
 }
