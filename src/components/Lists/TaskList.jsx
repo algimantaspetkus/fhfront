@@ -1,5 +1,3 @@
-// import dayjs from "dayjs";
-import { useState } from "react";
 import {
   List,
   ListItem,
@@ -9,7 +7,7 @@ import {
 } from "@mui/material";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
-import { usePress } from "../../hooks/usePress";
+// import { usePress } from "../../hooks/usePress";
 
 export default function TaskList({
   tasks,
@@ -17,9 +15,9 @@ export default function TaskList({
   deleteTask,
   showTaskDetails,
 }) {
-  const longPress = () => {
-    return;
-  };
+  // const longPress = () => {
+  //   return;
+  // };
 
   const shortPress = () => {
     return;
@@ -53,26 +51,26 @@ function TaskListItem({
   toggleComplete,
   showTaskDetails,
 }) {
-  const [complete, setComplete] = useState(false);
+  // const [complete, setComplete] = useState(false);
 
-  const handleShortPress = () => {
-    // Wait for 300ms before updating the complete state
-    setTimeout(() => {
-      setComplete(!complete);
-      shortPress();
-    }, 1);
-  };
+  // const handleShortPress = () => {
+  //   // Wait for 300ms before updating the complete state
+  //   setTimeout(() => {
+  //     setComplete(!complete);
+  //     shortPress();
+  //   }, 1);
+  // };
 
-  const handleLongPress = () => {
-    console.log("Long press");
-    longPress(task._id);
-  };
+  // const handleLongPress = () => {
+  //   console.log("Long press");
+  //   longPress(task._id);
+  // };
 
-  const { longPressProps } = usePress({
-    shortPressCallback: handleShortPress,
-    longPressCallback: handleLongPress,
-    id: task._id,
-  });
+  // const { longPressProps } = usePress({
+  //   shortPressCallback: handleShortPress,
+  //   longPressCallback: handleLongPress,
+  //   id: task._id,
+  // });
 
   const clickHandler = (event) => {
     const isCheckboxClick =

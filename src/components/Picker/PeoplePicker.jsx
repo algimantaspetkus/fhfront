@@ -17,7 +17,6 @@ export default function PeoplePicker({ taskListId, setTaskData }) {
   return (
     <Autocomplete
       id="asynchronous-demo"
-      sx={{ width: 300 }}
       open={open}
       onChange={(e, value) => setTaskData("assignedToUser", value?._id)}
       onOpen={() => {

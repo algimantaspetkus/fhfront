@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import {
   AppBar,
@@ -32,8 +32,6 @@ const navItems = [
   { title: "Tasks", path: "/tasklists" },
   { title: "Shopping", path: "/shopping" },
   { title: "Wish List", path: "/wishlist" },
-  { title: "Notes", path: "/notes" },
-  { title: "Savings", path: "/savings" },
   { title: "Calendar", path: "/calendar" },
 ];
 
@@ -47,10 +45,12 @@ function DrawerAppBar(props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false); // New state variable
   const navigate = useNavigate();
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
+    setIsDrawerOpen(!isDrawerOpen); // Toggle the drawer state
   };
 
   const handleOpenUserMenu = (event) => {
@@ -63,7 +63,7 @@ function DrawerAppBar(props) {
 
   const handleNavItemClick = (path) => {
     navigate(path);
-    setMobileOpen(false); // Close the drawer on mobile devices
+    setIsDrawerOpen(false); // Close the drawer on mobile devices
   };
 
   const drawer = (
@@ -172,7 +172,7 @@ function DrawerAppBar(props) {
         <Drawer
           container={container}
           variant="temporary"
-          open={mobileOpen}
+          open={isDrawerOpen} // Use the new state variable
           onClose={handleDrawerToggle}
           ModalProps={{
             keepMounted: true,

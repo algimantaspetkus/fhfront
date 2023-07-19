@@ -10,6 +10,7 @@ import { useDrawer } from "../hooks/useDrawer";
 
 export default function TasksPage() {
   const [selectedTask, setSelectedTask] = useState(null);
+  const [key, setKey] = useState(0);
   const { taskListId } = useParams();
   const {
     drawerOpen: ctDrawerOpen,
@@ -34,6 +35,10 @@ export default function TasksPage() {
   useEffect(() => {
     getTasks();
   }, [getTasks]);
+
+  useEffect(() => {
+    setKey((prevKey) => prevKey + 1);
+  }, [tasks]);
 
   function showTaskDetailsHandler(taskId) {
     setSelectedTask(taskId);
@@ -73,7 +78,7 @@ export default function TasksPage() {
         open={tdDrawerOpen}
         onClose={hideTaskDetailsHandler}
       >
-        <TaskDetails taskId={selectedTask} />
+        <TaskDetails taskId={selectedTask} key={key} />
       </Drawer>
       <SingleActionFab onClick={ctOpenDrawer} />
     </>
