@@ -7,10 +7,13 @@ import TaskDetails from "../components/Details/TaskDetails";
 import { useParams } from "react-router-dom";
 import { useTasks } from "../hooks/useTasks";
 import { useDrawer } from "../hooks/useDrawer";
+import { useDispatch } from "react-redux";
+import { setTitle } from "../redux/navigationSlice";
 
 export default function TasksPage() {
   const [selectedTask, setSelectedTask] = useState(null);
   const [key, setKey] = useState(0);
+  const dispatch = useDispatch();
   const { taskListId } = useParams();
   const {
     drawerOpen: ctDrawerOpen,
@@ -31,6 +34,10 @@ export default function TasksPage() {
     deleteTask,
   } = useTasks(taskListId);
   const { tasks, taskList } = state;
+
+  useEffect(() => {
+    dispatch(setTitle(taskList?.listTitle));
+  }, [dispatch, taskList]);
 
   useEffect(() => {
     getTasks();

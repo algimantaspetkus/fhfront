@@ -21,35 +21,36 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { setTitle } from "../redux/navigationSlice";
 
 const drawerWidth = 340;
 const settings = [
-  { title: "Profile", path: "/profile" },
-  { title: "Family", path: "/family" },
+  { title: "Profile", path: "/profile", appBarTitle: "Profile Settings" },
+  { title: "Family", path: "/family", appBarTitle: "Family Settings" },
 ];
 const navItems = [
-  { title: "Dashboard", path: "/dashboard" },
-  { title: "Tasks", path: "/tasklists" },
-  { title: "Shopping", path: "/shopping" },
-  { title: "Wish List", path: "/wishlist" },
-  { title: "Calendar", path: "/calendar" },
+  { title: "Dashboard", path: "/dashboard", appBarTitle: "Dashboard" },
+  { title: "Tasks", path: "/tasklists", appBarTitle: "Tasks" },
+  { title: "Shopping", path: "/shopping", appBarTitle: "Shopping" },
+  { title: "Wish List", path: "/wishlist", appBarTitle: "Wish List" },
+  { title: "Calendar", path: "/calendar", appBarTitle: "Calendar" },
 ];
 
-function logoutHandler() {
-  localStorage.removeItem("token");
-  localStorage.removeItem("displayName");
-  window.location.href = "/login";
-}
-
-function DrawerAppBar(props) {
-  const { window } = props;
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+function DrawerAppBar({ window }) {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false); // New state variable
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const appBarTitle = useSelector((state) => state.navigation.appBarTitle);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  function logoutHandler() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("displayName");
+    navigate("/login");
+  }
+
   const handleDrawerToggle = () => {
-    setMobileOpen((prevState) => !prevState);
     setIsDrawerOpen(!isDrawerOpen); // Toggle the drawer state
   };
 
@@ -61,8 +62,9 @@ function DrawerAppBar(props) {
     setAnchorElUser(null);
   };
 
-  const handleNavItemClick = (path) => {
-    navigate(path);
+  const handleNavItemClick = (item) => {
+    navigate(item.path);
+    dispatch(setTitle(item?.appBarTitle));
     setIsDrawerOpen(false); // Close the drawer on mobile devices
   };
 
@@ -77,7 +79,7 @@ function DrawerAppBar(props) {
           <ListItem key={item.title} disablePadding>
             <ListItemButton
               sx={{ textAlign: "center" }}
-              onClick={() => handleNavItemClick(item.path)}
+              onClick={() => handleNavItemClick(item)}
             >
               <ListItemText primary={item.title} />
             </ListItemButton>
@@ -111,13 +113,20 @@ function DrawerAppBar(props) {
           >
             Family Hub
           </Typography>
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{ flexGrow: 1, display: { sm: "block" } }}
+          >
+            {appBarTitle} {/* Display the appBarTitle in the AppBar */}
+          </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
             {navItems.map((item) => (
               <Button
                 key={item.title}
                 sx={{ color: "#fff" }}
-                onClick={() => handleNavItemClick(item.path)}
+                onClick={() => handleNavItemClick(item)}
               >
                 {item.title}
               </Button>
@@ -152,7 +161,7 @@ function DrawerAppBar(props) {
                 <MenuItem
                   key={setting.title}
                   onClick={() => {
-                    handleNavItemClick(setting.path);
+                    handleNavItemClick(setting);
                     handleCloseUserMenu();
                   }}
                 >
@@ -172,7 +181,7 @@ function DrawerAppBar(props) {
         <Drawer
           container={container}
           variant="temporary"
-          open={isDrawerOpen} // Use the new state variable
+          open={isDrawerOpen}
           onClose={handleDrawerToggle}
           ModalProps={{
             keepMounted: true,

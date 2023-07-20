@@ -13,6 +13,7 @@ import TasksPage from "./TasksPage";
 
 export default function MainLayout() {
   const { getUser } = useGetUser();
+
   useEffect(() => {
     const jwt = localStorage.getItem("token");
     const currentPath = window.location.pathname;

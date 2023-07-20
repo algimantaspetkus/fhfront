@@ -26,8 +26,6 @@ export default function TaskDetails({ taskId }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [taskId]);
 
-  console.log(loading);
-
   return (
     <Container sx={{ padding: "2rem" }}>
       {loading ? (

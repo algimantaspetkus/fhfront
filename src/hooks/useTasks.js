@@ -50,6 +50,11 @@ function reducer(state, action) {
         ...state,
         tasks: action.payload,
       };
+    case "SET_TASK_LIST":
+      return {
+        ...state,
+        taskList: action.payload,
+      };
     case "SET_LOADING":
       return {
         ...state,
@@ -85,6 +90,7 @@ export function useTasks(taskListId) {
       }
       const data = response.data;
       dispatch({ type: "SET_TASKS", payload: data.tasks });
+      dispatch({ type: "SET_TASK_LIST", payload: data.taskList });
       dispatch({ type: "SET_STATUS", payload: "success" });
     } catch (error) {
       console.error("Error:", error);
