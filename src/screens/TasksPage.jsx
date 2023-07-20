@@ -4,9 +4,11 @@ import TaskList from "../components/Lists/TaskList";
 import SingleActionFab from "../components/Fab/SingleActionFab";
 import CreateTaskForm from "../components/Forms/CreateTaskForm";
 import TaskDetails from "../components/Details/TaskDetails";
+import Dialog from "../components/Dialog/Dialog";
 import { useParams } from "react-router-dom";
 import { useTasks } from "../hooks/useTasks";
 import { useDrawer } from "../hooks/useDrawer";
+import { useDialog } from "../hooks/useDialog";
 import { useDispatch } from "react-redux";
 import { setTitle } from "../redux/navigationSlice";
 
@@ -15,6 +17,7 @@ export default function TasksPage() {
   const [key, setKey] = useState(0);
   const dispatch = useDispatch();
   const { taskListId } = useParams();
+
   const {
     drawerOpen: ctDrawerOpen,
     openDrawer: ctOpenDrawer,
@@ -27,6 +30,7 @@ export default function TasksPage() {
   } = useDrawer();
   const {
     state,
+    getTask,
     getTasks,
     setTaskData,
     createTask,
@@ -34,6 +38,24 @@ export default function TasksPage() {
     deleteTask,
   } = useTasks(taskListId);
   const { tasks, taskList } = state;
+
+  const { dialogProps, handleClickOpen } = useDialog({
+    content:
+      "Are you sure you want to delete this task? This action cannot be undone.",
+    title: "Delete Family",
+    buttons: [
+      { title: "Cancel" },
+      {
+        autofocus: true,
+        title: "Delete",
+        callback: () => {
+          console.log(selectedTask);
+          deleteTask(selectedTask);
+          tdCloseDrawer();
+        },
+      },
+    ],
+  });
 
   useEffect(() => {
     dispatch(setTitle(taskList?.listTitle));
@@ -85,8 +107,15 @@ export default function TasksPage() {
         open={tdDrawerOpen}
         onClose={hideTaskDetailsHandler}
       >
-        <TaskDetails taskId={selectedTask} key={key} />
+        <TaskDetails
+          taskId={selectedTask}
+          getTask={getTask}
+          toggleComplete={toggleComplete}
+          deleteTask={handleClickOpen}
+          key={key}
+        />
       </Drawer>
+      {dialogProps.open && <Dialog dialogProps={dialogProps} />}
       <SingleActionFab onClick={ctOpenDrawer} />
     </>
   );

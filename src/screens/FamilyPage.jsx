@@ -27,7 +27,7 @@ export default function FamilyPage() {
       { title: "Cancel" },
       {
         autofocus: true,
-        title: "Disable",
+        title: "Delete",
         callback: () => disableFamily(activeFamilyId),
       },
     ],

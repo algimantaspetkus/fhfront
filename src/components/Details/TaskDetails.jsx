@@ -1,14 +1,17 @@
 import { useState, useEffect, useCallback } from "react";
-import { Container, Box, Typography, TextField } from "@mui/material";
+import { Container, Box, Typography, TextField, Button } from "@mui/material";
 import { PriorityBars } from "../UI/PriorityBars";
 import dayjs from "dayjs";
 import { DrawerSkeleton } from "../DrawerSkeleton";
-import { useTasks } from "../../hooks/useTasks";
 
-export default function TaskDetails({ taskId }) {
+export default function TaskDetails({
+  taskId,
+  deleteTask,
+  getTask,
+  toggleComplete,
+}) {
   const [loading, setLoading] = useState(true);
   const [task, setTask] = useState(null);
-  const { getTask } = useTasks();
 
   const fetchData = useCallback(
     async (id) => {
@@ -80,6 +83,17 @@ export default function TaskDetails({ taskId }) {
                   readOnly
                 />
               )}
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <Button
+                  variant="text"
+                  onClick={() => toggleComplete(task._id, !task.completed)}
+                >
+                  {task.completed ? "Un-Complete" : "Complete"}
+                </Button>
+                <Button variant="text" color="error" onClick={deleteTask}>
+                  Delete
+                </Button>
+              </Box>
             </Box>
           )}
         </Box>
