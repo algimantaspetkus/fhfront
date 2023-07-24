@@ -8,7 +8,7 @@ import Box from "@mui/material/Box";
 import Login from "./Login";
 import DashboardPage from "./DashboardPage";
 import TaskListsPage from "./TaskListsPage";
-import FamilyPage from "./FamilyPage";
+import GroupPage from "./GroupPage";
 import TasksPage from "./TasksPage";
 
 export default function MainLayout() {
@@ -28,10 +28,10 @@ export default function MainLayout() {
       window.location.replace("/");
     } else if (
       jwt &&
-      currentPath !== "/family" &&
-      !localStorage.getItem("defaultFamilyId")
+      currentPath !== "/froup" &&
+      !localStorage.getItem("defaultGroupId")
     ) {
-      window.location.replace("/family");
+      window.location.replace("/froup");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -39,9 +39,11 @@ export default function MainLayout() {
   return (
     <>
       <Router>
-        <header>
-          <AppBar />
-        </header>
+        {window.location.pathname !== "/login/" ? (
+          <header>
+            <AppBar />
+          </header>
+        ) : null}
         <Box component={"main"}>
           <Routes>
             <Route path="/" element={<DashboardPage />} />
@@ -51,7 +53,7 @@ export default function MainLayout() {
               element={<TasksPage />}
             />
             <Route path="/login" element={<Login />} />
-            <Route path="/family" element={<FamilyPage />} />
+            <Route path="/froup" element={<GroupPage />} />
           </Routes>
         </Box>
       </Router>

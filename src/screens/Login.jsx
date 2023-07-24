@@ -136,6 +136,12 @@ export default function Login() {
         >
           Login
         </LoadingButton>
+        <Typography
+          variant="p"
+          sx={{ fontSize: "12px", margin: 0, padding: 0 }}
+        >
+          Do not have an account? Click here to register.
+        </Typography>
       </Box>
     </Box>
   );

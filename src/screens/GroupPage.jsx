@@ -2,16 +2,16 @@ import { useEffect, useState, useCallback } from "react";
 import SingleActionFab from "../components/Fab/SingleActionFab";
 import Dialog from "../components/Dialog/Dialog";
 import { Box, Typography, Container, Drawer } from "@mui/material";
-import { useUserFamilies } from "../hooks/useUserFamilies";
-import { useFamily } from "../hooks/useFamily";
+import { useUserGroups } from "../hooks/useUserGroups";
+import { useGroup } from "../hooks/useGroup";
 import { useDialog } from "../hooks/useDialog";
 import { useDrawer } from "../hooks/useDrawer";
-import CreateFamilyForm from "../components/Forms/CreateFamilyForm";
-import FamilyList from "../components/Lists/FamilyList";
+import CreateGroupForm from "../components/Forms/CreateGroupForm";
+import GroupList from "../components/Lists/GroupList";
 
-export default function FamilyPage() {
-  const { families } = useUserFamilies();
-  const [activeFamilyId, setActiveFamilyId] = useState(null);
+export default function GroupPage() {
+  const { groups } = useUserGroups();
+  const [activeGroupId, setActiveGroupId] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
 
   const { drawerOpen, openDrawer, closeDrawer } = useDrawer();
@@ -21,43 +21,43 @@ export default function FamilyPage() {
     handleClickOpen: setDialogDeleteOpen,
   } = useDialog({
     content:
-      "Are you sure you want to delete this family? This action cannot be undone.",
-    title: "Delete Family",
+      "Are you sure you want to delete this group? This action cannot be undone.",
+    title: "Delete Group",
     buttons: [
       { title: "Cancel" },
       {
         autofocus: true,
         title: "Delete",
-        callback: () => disableFamily(activeFamilyId),
+        callback: () => disableGroup(activeGroupId),
       },
     ],
   });
 
   const { dialogProps: dialogLeaveProps, handleClickOpen: setDialogLeaveOpen } =
     useDialog({
-      content: "Are you sure you want to leave this family?",
-      title: "Leave Family",
+      content: "Are you sure you want to leave this group?",
+      title: "Leave Group",
       buttons: [
         { title: "Cancel" },
         {
           autofocus: true,
           title: "Leave",
-          callback: () => leaveFamily(activeFamilyId),
+          callback: () => leaveGroup(activeGroupId),
         },
       ],
     });
 
   const {
-    defaultFamily,
-    updateDefaultFamily,
-    disableFamily,
-    leaveFamily,
-    getFamilySecret,
-  } = useFamily();
+    defaultGroup,
+    updateDefaultGroup,
+    disableGroup,
+    leaveGroup,
+    getGroupSecret,
+  } = useGroup();
 
-  const handleClick = useCallback((event, familyId) => {
+  const handleClick = useCallback((event, groupId) => {
     event.stopPropagation();
-    setActiveFamilyId(familyId);
+    setActiveGroupId(groupId);
     setAnchorEl(event.currentTarget);
   }, []);
 
@@ -65,22 +65,22 @@ export default function FamilyPage() {
     setAnchorEl(null);
   };
 
-  const familyListProps = {
-    families,
-    defaultFamily,
+  const groupListProps = {
+    groups,
+    defaultGroup,
     handleClick,
     anchorEl,
-    activeFamilyId,
+    activeGroupId,
     handleClose,
-    updateDefaultFamily,
+    updateDefaultGroup,
     setDialogDeleteOpen,
     setDialogLeaveOpen,
-    getFamilySecret,
+    getGroupSecret,
   };
 
   useEffect(() => {
-    setActiveFamilyId(defaultFamily);
-  }, [defaultFamily]);
+    setActiveGroupId(defaultGroup);
+  }, [defaultGroup]);
 
   return (
     <>
@@ -89,10 +89,10 @@ export default function FamilyPage() {
       <Container>
         <Box sx={{ marginTop: "5rem" }}>
           <Typography variant="h4" component="h2">
-            Family Settings
+            Group Settings
           </Typography>
         </Box>
-        {families && <FamilyList {...familyListProps} />}
+        {groups && <GroupList {...groupListProps} />}
       </Container>
       <SingleActionFab onClick={openDrawer} />
       <Drawer
@@ -101,7 +101,7 @@ export default function FamilyPage() {
         onClose={closeDrawer}
         onOpen={openDrawer}
       >
-        <CreateFamilyForm drawerClose={closeDrawer} />
+        <CreateGroupForm drawerClose={closeDrawer} />
       </Drawer>
     </>
   );

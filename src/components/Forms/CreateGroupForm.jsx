@@ -1,15 +1,11 @@
 import { useRef } from "react";
 import { Box, TextField, Typography, Container } from "@mui/material";
-import { useFamily } from "../../hooks/useFamily";
+import { useGroup } from "../../hooks/useGroup";
 import LoadingButton from "@mui/lab/LoadingButton";
 
-export default function CreateFamilyForm({ drawerClose }) {
-  const {
-    createFamily,
-    setFamilyNameHandler,
-    joinFamily,
-    setFamilySecretHandler,
-  } = useFamily();
+export default function CreateGroupForm({ drawerClose }) {
+  const { createGroup, setGroupNameHandler, joinGroup, setGroupSecretHandler } =
+    useGroup();
   const name = useRef(null);
   const secret = useRef(null);
 
@@ -17,22 +13,22 @@ export default function CreateFamilyForm({ drawerClose }) {
     <Container sx={{ padding: "2rem" }}>
       <Box sx={{ marginBottom: "3rem" }}>
         <Typography sx={{ marginBottom: "1rem" }} variant="h5">
-          Create a Family
+          Create a Group
         </Typography>
         <Box
           component="form"
           sx={{ display: "flex", gap: "1rem" }}
           onSubmit={(event) => {
-            createFamily(event, name.current?.querySelector("input"));
+            createGroup(event, name.current?.querySelector("input"));
             drawerClose();
           }}
         >
           <TextField
             ref={name}
-            label="Family Name"
+            label="Group Name"
             variant="outlined"
             sx={{ flex: 1 }}
-            onChange={(e) => setFamilyNameHandler(e)}
+            onChange={(e) => setGroupNameHandler(e)}
             required
           />
           <LoadingButton
@@ -48,13 +44,13 @@ export default function CreateFamilyForm({ drawerClose }) {
 
       <Box sx={{ marginBottom: "3rem" }}>
         <Typography sx={{ marginBottom: "1rem" }} variant="h5">
-          Join a Family
+          Join a Group
         </Typography>
         <Box
           component="form"
           sx={{ display: "flex", gap: "1rem" }}
           onSubmit={(event) => {
-            joinFamily(event, secret.current?.querySelector("input"));
+            joinGroup(event, secret.current?.querySelector("input"));
             drawerClose();
           }}
         >
@@ -63,7 +59,7 @@ export default function CreateFamilyForm({ drawerClose }) {
             label="Invitation Code"
             variant="outlined"
             sx={{ flex: 1 }}
-            onChange={(e) => setFamilySecretHandler(e)}
+            onChange={(e) => setGroupSecretHandler(e)}
             required
           />
           <LoadingButton

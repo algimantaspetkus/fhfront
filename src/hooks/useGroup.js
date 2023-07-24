@@ -4,9 +4,9 @@ import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import api from "../api";
 
-export function useFamily() {
-  const [defaultFamily, setDefaultFamily] = useState(
-    localStorage.getItem("defaultFamilyId")
+export function useGroup() {
+  const [defaultGroup, setDefaultGroup] = useState(
+    localStorage.getItem("defaultGroupId")
   );
   const [name, setName] = useState("");
   const [secret, setSecret] = useState("");
@@ -15,13 +15,13 @@ export function useFamily() {
 
   const server = process.env.REACT_APP_BASE_SERVER;
 
-  async function createFamily(event, ref) {
+  async function createGroup(event, ref) {
     event.preventDefault();
     setLoading(true);
     try {
-      const response = await api.post(`${server}/family/addfamily`, { name });
+      const response = await api.post(`${server}/group/addgroup`, { name });
       if (response.status === 200) {
-        enqueueSnackbar("Family created", {
+        enqueueSnackbar("Group created", {
           variant: "success",
           action: (key) => (
             <IconButton onClick={() => closeSnackbar(key)} size="small">
@@ -33,7 +33,7 @@ export function useFamily() {
         ref.focus();
       } else {
         console.log(response.status);
-        enqueueSnackbar("Couldn't create family", {
+        enqueueSnackbar("Couldn't create group", {
           variant: "error",
           action: (key) => (
             <IconButton onClick={() => closeSnackbar(key)} size="small">
@@ -44,7 +44,7 @@ export function useFamily() {
       }
     } catch (error) {
       console.log(error);
-      enqueueSnackbar("Couldn't create family", {
+      enqueueSnackbar("Couldn't create group", {
         variant: "error",
         action: (key) => (
           <IconButton onClick={() => closeSnackbar(key)} size="small">
@@ -57,74 +57,74 @@ export function useFamily() {
     }
   }
 
-  async function disableFamily(familyId) {
+  async function disableGroup(groupId) {
     setLoading(true);
     try {
-      const response = await api.post(`${server}/family/disablefamily`, {
-        familyId,
+      const response = await api.post(`${server}/group/disablegroup`, {
+        groupId,
       });
       if (response.status === 200) {
-        enqueueSnackbar("Family disabled", { variant: "success" });
+        enqueueSnackbar("Group disabled", { variant: "success" });
       } else {
         console.log(response.status);
-        enqueueSnackbar("Couldn't disable family", { variant: "error" });
+        enqueueSnackbar("Couldn't disable group", { variant: "error" });
       }
     } catch (error) {
       console.log(error);
-      enqueueSnackbar("Couldn't disable family", { variant: "error" });
+      enqueueSnackbar("Couldn't disable group", { variant: "error" });
     } finally {
       setLoading(false);
     }
   }
 
-  async function leaveFamily(familyId) {
+  async function leaveGroup(groupId) {
     setLoading(true);
     try {
-      const response = await api.post(`${server}/family/leavefamily`, {
-        familyId,
+      const response = await api.post(`${server}/group/leavegroup`, {
+        groupId,
       });
       if (response.status === 200) {
-        enqueueSnackbar("Family left", { variant: "success" });
+        enqueueSnackbar("Group left", { variant: "success" });
       } else {
         console.log(response.status);
-        enqueueSnackbar("Couldn't leave family", { variant: "error" });
+        enqueueSnackbar("Couldn't leave group", { variant: "error" });
       }
     } catch (error) {
       console.log(error);
-      enqueueSnackbar("Couldn't leave family", { variant: "error" });
+      enqueueSnackbar("Couldn't leave group", { variant: "error" });
     } finally {
       setLoading(false);
     }
   }
 
-  async function updateDefaultFamily(id) {
+  async function updateDefaultGroup(id) {
     setLoading(true);
     try {
-      const response = await api.put(`${server}/user/updatedefaultfamily`, {
-        defaultFamilyId: id,
+      const response = await api.put(`${server}/user/updatedefaultgroup`, {
+        defaultGroupId: id,
       });
       if (response.status === 200) {
-        localStorage.setItem("defaultFamilyId", id);
-        setDefaultFamily(id);
-        enqueueSnackbar("Default family changed", { variant: "success" });
+        localStorage.setItem("defaultGroupId", id);
+        setDefaultGroup(id);
+        enqueueSnackbar("Default group changed", { variant: "success" });
       } else {
-        enqueueSnackbar("Couldn't change default family", { variant: "error" });
+        enqueueSnackbar("Couldn't change default group", { variant: "error" });
       }
     } catch (error) {
-      enqueueSnackbar("Couldn't change default family", { variant: "error" });
+      enqueueSnackbar("Couldn't change default group", { variant: "error" });
     } finally {
       setLoading(false);
     }
   }
 
-  async function getFamilySecret(familyId) {
+  async function getGroupSecret(groupId) {
     setLoading(true);
     try {
       const response = await api.get(
-        `${server}/family/getfamilysecret/${familyId}`
+        `${server}/group/getgroupsecret/${groupId}`
       );
       if (!response?.data?.secret) {
-        enqueueSnackbar("Couldn't get family secret", { variant: "error" });
+        enqueueSnackbar("Couldn't get group secret", { variant: "error" });
       }
       enqueueSnackbar("Invitation code copied to clipboard", {
         variant: "success",
@@ -132,52 +132,52 @@ export function useFamily() {
       navigator.clipboard.writeText(response.data.secret);
     } catch (error) {
       console.log(error);
-      enqueueSnackbar("Couldn't get family secret", { variant: "error" });
+      enqueueSnackbar("Couldn't get group secret", { variant: "error" });
     } finally {
       setLoading(false);
     }
   }
 
-  async function joinFamily(event, ref) {
+  async function joinGroup(event, ref) {
     event.preventDefault();
     setLoading(true);
     try {
-      const response = await api.post(`${server}/family/joinfamily`, {
+      const response = await api.post(`${server}/group/joingroup`, {
         secret,
       });
       if (response.status === 200) {
-        enqueueSnackbar("Family joined", { variant: "success" });
+        enqueueSnackbar("Group joined", { variant: "success" });
         ref.value = "";
         ref.focus();
       } else {
-        enqueueSnackbar("Couldn't join family", { variant: "error" });
+        enqueueSnackbar("Couldn't join group", { variant: "error" });
       }
     } catch (error) {
       console.log(error);
-      enqueueSnackbar("Couldn't join family", { variant: "error" });
+      enqueueSnackbar("Couldn't join group", { variant: "error" });
     } finally {
       setLoading(false);
     }
   }
 
-  const setFamilyNameHandler = (event) => {
+  const setGroupNameHandler = (event) => {
     setName(event.target.value);
   };
 
-  const setFamilySecretHandler = (event) => {
+  const setGroupSecretHandler = (event) => {
     setSecret(event.target.value);
   };
 
   return {
-    createFamily,
-    disableFamily,
-    leaveFamily,
-    setFamilyNameHandler,
-    setFamilySecretHandler,
-    updateDefaultFamily,
-    getFamilySecret,
-    joinFamily,
+    createGroup,
+    disableGroup,
+    leaveGroup,
+    setGroupNameHandler,
+    setGroupSecretHandler,
+    updateDefaultGroup,
+    getGroupSecret,
+    joinGroup,
     loading,
-    defaultFamily,
+    defaultGroup,
   };
 }

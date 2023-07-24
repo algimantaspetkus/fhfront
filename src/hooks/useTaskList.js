@@ -3,7 +3,7 @@ import io from "socket.io-client";
 import api from "../api";
 
 export function useTaskList() {
-  const defaultFamilyId = localStorage.getItem("defaultFamilyId");
+  const defaultGroupId = localStorage.getItem("defaultGroupId");
   const [taskLists, setTaskLists] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -35,7 +35,7 @@ export function useTaskList() {
 
   useEffect(() => {
     const socket = io(server, {
-      query: { room: defaultFamilyId },
+      query: { room: defaultGroupId },
     });
 
     socket.on("updateTaskList", () => {
@@ -46,7 +46,7 @@ export function useTaskList() {
     return () => {
       socket.disconnect();
     };
-  }, [server, defaultFamilyId, getTaskList]);
+  }, [server, defaultGroupId, getTaskList]);
 
   return { loading, status, error, getTaskList, taskLists };
 }

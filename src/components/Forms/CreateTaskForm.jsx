@@ -3,7 +3,7 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import PeoplePicker from "../Picker/PeoplePicker";
 import DateTimePicker from "../Picker/DateTimePicker";
 
-export default function CreateFamilyForm({
+export default function CreateGroupForm({
   closeDrawer,
   setTaskData,
   createTask,

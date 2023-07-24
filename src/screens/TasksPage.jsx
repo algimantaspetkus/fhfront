@@ -42,7 +42,7 @@ export default function TasksPage() {
   const { dialogProps, handleClickOpen } = useDialog({
     content:
       "Are you sure you want to delete this task? This action cannot be undone.",
-    title: "Delete Family",
+    title: "Delete Group",
     buttons: [
       { title: "Cancel" },
       {

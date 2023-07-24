@@ -11,32 +11,32 @@ import {
 } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 
-export default function FamilyList({
-  families,
-  defaultFamily,
+export default function GroupList({
+  groups,
+  defaultGroup,
   handleClick,
   anchorEl,
-  activeFamilyId,
+  activeGroupId,
   handleClose,
-  updateDefaultFamily,
+  updateDefaultGroup,
   setDialogDeleteOpen,
   setDialogLeaveOpen,
-  getFamilySecret,
+  getGroupSecret,
 }) {
   return (
     <List>
-      {families?.map((family) => (
-        <ListItem key={family.familyId._id}>
+      {groups?.map((group) => (
+        <ListItem key={group.groupId._id}>
           <ListItemText
-            primary={family.familyId.name}
-            secondary={`${family.role
-              .charAt(0)
-              .toUpperCase()}${family.role.slice(1)} - Joined on ${dayjs(
-              family.createdAt
-            ).format("YYYY-MM-DD HH:mm:ss")}`}
+            primary={group.groupId.name}
+            secondary={`${group.role.charAt(0).toUpperCase()}${group.role.slice(
+              1
+            )} - Joined on ${dayjs(group.createdAt).format(
+              "YYYY-MM-DD HH:mm:ss"
+            )}`}
           />
           <Box sx={{ display: "flex", alignItems: "center" }}>
-            {defaultFamily === family.familyId._id && (
+            {defaultGroup === group.groupId._id && (
               <Chip
                 label="Active"
                 sx={{ marginRight: "1rem" }}
@@ -45,22 +45,22 @@ export default function FamilyList({
             )}
 
             <IconButton
-              aria-controls={`menu-icon-${family.familyId._id}`}
+              aria-controls={`menu-icon-${group.groupId._id}`}
               aria-haspopup="true"
-              onClick={(event) => handleClick(event, family.familyId._id)}
+              onClick={(event) => handleClick(event, group.groupId._id)}
             >
               <MoreVertIcon />
             </IconButton>
           </Box>
           <Menu
-            id={`menu-${family.familyId._id}`}
+            id={`menu-${group.groupId._id}`}
             anchorEl={anchorEl}
-            open={activeFamilyId === family.familyId._id && Boolean(anchorEl)}
+            open={activeGroupId === group.groupId._id && Boolean(anchorEl)}
             onClose={handleClose}
           >
             <MenuItem
               onClick={() => {
-                updateDefaultFamily(family.familyId._id);
+                updateDefaultGroup(group.groupId._id);
                 handleClose();
               }}
             >
@@ -69,7 +69,7 @@ export default function FamilyList({
             {/* <MenuItem onClick={handleClose}>Manage Members</MenuItem> */}
             {/* <MenuItem onClick={handleClose}>Edit</MenuItem> */}
             <MenuItem
-              disabled={family.role !== "owner"}
+              disabled={group.role !== "owner"}
               onClick={() => {
                 setDialogDeleteOpen();
                 handleClose();
@@ -78,7 +78,7 @@ export default function FamilyList({
               Disable
             </MenuItem>
             <MenuItem
-              disabled={family.role === "owner"}
+              disabled={group.role === "owner"}
               onClick={() => {
                 setDialogLeaveOpen();
                 handleClose();
@@ -87,9 +87,9 @@ export default function FamilyList({
               Leave
             </MenuItem>
             <MenuItem
-              disabled={family.role !== "owner"}
+              disabled={group.role !== "owner"}
               onClick={() => {
-                getFamilySecret(family.familyId._id);
+                getGroupSecret(group.groupId._id);
                 handleClose();
               }}
             >

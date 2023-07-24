@@ -23,19 +23,19 @@ export function useGetUser() {
         localStorage.setItem("displayName", data.displayName);
         localStorage.setItem("avatar", data.avatar);
         setStatus("success");
-        if (data.defaultFamilyId) {
-          localStorage.setItem("defaultFamilyId", data.defaultFamilyId);
+        if (data.defaultGroupId) {
+          localStorage.setItem("defaultGroupId", data.defaultGroupId);
         } else {
-          localStorage.removeItem("defaultFamilyId");
-          if (window.location.pathname !== "/family") {
-            window.location.href = "/family";
+          localStorage.removeItem("defaultGroupId");
+          if (window.location.pathname !== "/group") {
+            window.location.href = "/group";
           }
         }
       } else {
         localStorage.removeItem("token");
         localStorage.removeItem("displayName");
         localStorage.removeItem("avatar");
-        localStorage.removeItem("defaultFamilyId");
+        localStorage.removeItem("defaultGroupId");
         window.location.href = "/login";
       }
     } catch (error) {

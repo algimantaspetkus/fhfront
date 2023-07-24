@@ -13,7 +13,7 @@ export function usePeople(taskListId) {
     setLoading(true);
     try {
       const response = await api.get(
-        `${server}/family/getListMembers/${taskListId}`
+        `${server}/group/getListMembers/${taskListId}`
       );
       if (!response.data) {
         setError("Error fetching people");

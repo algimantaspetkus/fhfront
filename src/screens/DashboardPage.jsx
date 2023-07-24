@@ -5,7 +5,7 @@ export default function DashboardPage() {
     <Container>
       <Box sx={{ marginTop: "5rem" }}>
         <Typography variant="h4" component="h2">
-          Family Page
+          Group Page
         </Typography>
       </Box>
     </Container>

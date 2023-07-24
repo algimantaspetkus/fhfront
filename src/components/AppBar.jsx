@@ -27,7 +27,7 @@ import { setTitle } from "../redux/navigationSlice";
 const drawerWidth = 340;
 const settings = [
   { title: "Profile", path: "/profile", appBarTitle: "Profile Settings" },
-  { title: "Family", path: "/family", appBarTitle: "Family Settings" },
+  { title: "Group", path: "/group", appBarTitle: "Group Settings" },
 ];
 const navItems = [
   { title: "Dashboard", path: "/dashboard", appBarTitle: "Dashboard" },
@@ -71,7 +71,7 @@ function DrawerAppBar({ window }) {
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
       <Typography variant="h6" sx={{ my: 2 }}>
-        Family Hub
+        Group Hub
       </Typography>
       <Divider />
       <List>
@@ -111,7 +111,7 @@ function DrawerAppBar({ window }) {
             component="div"
             sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
           >
-            Family Hub
+            Group Hub
           </Typography>
           <Typography
             variant="h6"
