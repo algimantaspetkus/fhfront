@@ -53,7 +53,7 @@ export default function TaskList({
             open={activeTaskListId === taskList._id && Boolean(anchorEl)}
             onClose={handleClose}
           >
-            <MenuItem onClick={handleClose}>Mark as Complete</MenuItem>
+            <MenuItem onClick={handleClose}>Make Public</MenuItem>
             <MenuItem onClick={handleClose}>Disable</MenuItem>
           </Menu>
         </ListItem>

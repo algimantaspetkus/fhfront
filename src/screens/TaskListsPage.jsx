@@ -3,11 +3,14 @@ import { Box, Typography, Container, Drawer } from "@mui/material";
 import TaskListList from "../components/Lists/TaskListList";
 import SingleActionFab from "../components/Fab/SingleActionFab";
 import { useTaskList } from "../hooks/useTaskList";
+import { useDrawer } from "../hooks/useDrawer";
+import CreateTaskListForm from "../components/Forms/CreateTaskListForm";
 
 export default function TaskListPage() {
-  const { taskLists } = useTaskList();
+  const { taskLists, setTaskListData, createTaskList } = useTaskList();
   const [activeTaskListId, setActiveTaskListId] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
+  const { openDrawer, closeDrawer, drawerOpen } = useDrawer();
 
   const handleClick = useCallback((event, taskListId) => {
     event.stopPropagation();
@@ -37,13 +40,13 @@ export default function TaskListPage() {
           <TaskListList {...taskListProps} />
         </Box>
       </Container>
-      <SingleActionFab onClick={() => console.log("fab click")} />
-      <Drawer
-        anchor={"right"}
-        open={false}
-        onClose={() => console.log("close")}
-      >
-        <Box sx={{ width: "20rem" }}>Drawer</Box>
+      <SingleActionFab onClick={openDrawer} />
+      <Drawer anchor={"right"} open={drawerOpen} onClose={closeDrawer}>
+        <CreateTaskListForm
+          closeDrawer={closeDrawer}
+          setTaskListData={setTaskListData}
+          createTaskList={createTaskList}
+        />
       </Drawer>
     </>
   );

@@ -11,6 +11,8 @@ export function useTaskList() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [status, setStatus] = useState(null);
+  const [taskListTitle, setTaskListTitle] = useState("");
+  const [takListIsPrivate, setTaskListIsPrivate] = useState(false);
 
   const server = process.env.REACT_APP_BASE_SERVER;
 
@@ -51,5 +53,52 @@ export function useTaskList() {
     };
   }, [server, defaultGroupId, getTaskList]);
 
-  return { loading, status, error, getTaskList, taskLists };
+  const setTaskListData = (type, payload) => {
+    switch (type) {
+      case "taskListTitle":
+        setTaskListTitle(payload);
+        break;
+      case "taskListIsPrivate":
+        setTaskListIsPrivate(payload);
+        break;
+      case "reset":
+        setTaskListTitle("");
+        setTaskListIsPrivate(false);
+        break;
+      default:
+        break;
+    }
+  };
+
+  const createTaskList = async (event) => {
+    event.preventDefault();
+    setLoading(true);
+    try {
+      const response = await api.post(`${server}/tasklist/addtasklist`, {
+        listTitle: taskListTitle,
+        isPrivate: takListIsPrivate,
+      });
+      if (!response.data) {
+        throw new Error("Failed to create task list");
+      } else {
+        getTaskList();
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      setError("Authentication error");
+      setStatus("error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return {
+    loading,
+    status,
+    error,
+    getTaskList,
+    taskLists,
+    setTaskListData,
+    createTaskList,
+  };
 }

@@ -1,4 +1,11 @@
-import { Box, TextField, Typography, Container, Slider } from "@mui/material";
+import {
+  Box,
+  TextField,
+  Typography,
+  Container,
+  FormControlLabel,
+  Switch,
+} from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 
 export default function CreateGroupForm({
@@ -21,29 +28,22 @@ export default function CreateGroupForm({
           }}
         >
           <TextField
-            label="Task Title"
+            label="List Title"
             variant="outlined"
             sx={{ flex: 1 }}
-            onChange={(e) => setTaskListData("taskTitle", e.target.value)}
+            onChange={(e) => setTaskListData("taskListTitle", e.target.value)}
             required
           />
-          <TextField
-            label="Task Description"
-            variant="outlined"
-            multiline
-            rows={4}
-            sx={{ flex: 1 }}
-            onChange={(e) => setTaskListData("taskDescription", e.target.value)}
+          <FormControlLabel
+            control={
+              <Switch
+                onChange={(_, value) =>
+                  setTaskListData("taskListIsPrivate", value)
+                }
+              />
+            }
+            label="Private"
           />
-          <Box>
-            <Typography gutterBottom>Priority</Typography>
-            <Slider
-              defaultValue={0}
-              aria-label="Priority"
-              valueLabelDisplay="auto"
-              onChange={(_, priority) => setTaskListData("priority", priority)}
-            />
-          </Box>
           <LoadingButton type="submit" variant="outlined">
             Create
           </LoadingButton>
