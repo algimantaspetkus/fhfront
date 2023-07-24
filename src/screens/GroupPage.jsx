@@ -6,6 +6,7 @@ import { useUserGroups } from "../hooks/useUserGroups";
 import { useGroup } from "../hooks/useGroup";
 import { useDialog } from "../hooks/useDialog";
 import { useDrawer } from "../hooks/useDrawer";
+import { useSelector } from "react-redux";
 import CreateGroupForm from "../components/Forms/CreateGroupForm";
 import GroupList from "../components/Lists/GroupList";
 
@@ -13,6 +14,9 @@ export default function GroupPage() {
   const { groups } = useUserGroups();
   const [activeGroupId, setActiveGroupId] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
+  const defaultGroupId = useSelector(
+    (state) => state.userSettings.defaultGroupId
+  );
 
   const { drawerOpen, openDrawer, closeDrawer } = useDrawer();
 
@@ -79,8 +83,8 @@ export default function GroupPage() {
   };
 
   useEffect(() => {
-    setActiveGroupId(defaultGroup);
-  }, [defaultGroup]);
+    setActiveGroupId(defaultGroupId);
+  }, [defaultGroupId]);
 
   return (
     <>
@@ -95,12 +99,7 @@ export default function GroupPage() {
         {groups && <GroupList {...groupListProps} />}
       </Container>
       <SingleActionFab onClick={openDrawer} />
-      <Drawer
-        anchor={"right"}
-        open={drawerOpen}
-        onClose={closeDrawer}
-        onOpen={openDrawer}
-      >
+      <Drawer anchor={"right"} open={drawerOpen} onClose={closeDrawer}>
         <CreateGroupForm drawerClose={closeDrawer} />
       </Drawer>
     </>

@@ -7,6 +7,8 @@ import { useAuth } from "../hooks/useAuth";
 import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
+const server = process.env.REACT_APP_BASE_SERVER;
+
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -77,7 +79,7 @@ export default function Login() {
           left: 0,
           right: 0,
           bottom: 0,
-          backgroundImage: "url(./background.jpg)",
+          backgroundImage: `url(${server}/images/background.jpg)`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           filter: "blur(2px)",

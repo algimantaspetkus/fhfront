@@ -1,10 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
+import { useSelector } from "react-redux";
 import io from "socket.io-client";
 import api from "../api";
 
 export function useUserGroups() {
   const server = process.env.REACT_APP_BASE_SERVER;
-  const userId = localStorage.getItem("userId");
+  const userId = useSelector((state) => state.userSettings.userId);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [status, setStatus] = useState(null);

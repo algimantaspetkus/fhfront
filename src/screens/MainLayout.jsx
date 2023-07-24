@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { useGetUser } from "../hooks/useGetUser";
 import React from "react";
 import AppBar from "../components/AppBar";
@@ -14,6 +15,10 @@ import TasksPage from "./TasksPage";
 
 export default function MainLayout() {
   const { getUser } = useGetUser();
+  const defaultGroupId = useSelector(
+    (state) => state.userSettings.defaultGroupId
+  );
+  const userId = useSelector((state) => state.userSettings.userId);
 
   useEffect(() => {
     const jwt = localStorage.getItem("token");
@@ -27,11 +32,7 @@ export default function MainLayout() {
       window.location.replace("/login/");
     } else if (jwt && currentPath === "/login/") {
       window.location.replace("/");
-    } else if (
-      jwt &&
-      currentPath !== "/group" &&
-      !localStorage.getItem("defaultGroupId")
-    ) {
+    } else if (jwt && currentPath !== "/group" && !defaultGroupId) {
       window.location.replace("/group");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -40,7 +41,7 @@ export default function MainLayout() {
   return (
     <>
       <Router>
-        {window.location.pathname !== "/login/" ? (
+        {userId ? (
           <header>
             <AppBar />
           </header>

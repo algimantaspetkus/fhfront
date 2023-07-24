@@ -1,10 +1,20 @@
 import { useState } from "react";
 import api from "../api";
+import { useDispatch } from "react-redux";
+import {
+  setToken,
+  setUserId,
+  setDisplayName,
+  setAvatar,
+  setDefaultGroupId,
+} from "../redux/userSettingsSlice";
 
 export function useAuth() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [status, setStatus] = useState(null);
+
+  const dispatch = useDispatch();
 
   const server = process.env.REACT_APP_BASE_SERVER;
 
@@ -23,15 +33,14 @@ export function useAuth() {
         setStatus("error");
       }
       if (data.token) {
-        localStorage.setItem("userId", data.userId);
         localStorage.setItem("token", data.token);
-        localStorage.setItem("displayName", data.displayName);
-        localStorage.setItem("avatar", data.avatar);
+        dispatch(setToken(data.token));
+        dispatch(setUserId(data.userId));
+        dispatch(setDisplayName(data.displayName));
+        dispatch(setAvatar(data.avatar));
+        dispatch(setDefaultGroupId(data.defaultGroupId));
         setStatus("success");
-        if (data.defaultGroupId) {
-          localStorage.setItem("defaultGroupId", data.defaultGroupId);
-        } else {
-          localStorage.removeItem("defaultGroupId");
+        if (!data.defaultGroupId) {
           window.location.href = "/groupsettings";
         }
       }

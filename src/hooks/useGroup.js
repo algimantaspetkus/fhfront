@@ -1,17 +1,20 @@
 import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { setDefaultGroupId } from "../redux/userSettingsSlice";
 import { useSnackbar } from "notistack";
 import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import api from "../api";
 
 export function useGroup() {
-  const [defaultGroup, setDefaultGroup] = useState(
-    localStorage.getItem("defaultGroupId")
+  const defaultGroup = useSelector(
+    (state) => state.userSettings.defaultGroupId
   );
   const [name, setName] = useState("");
   const [secret, setSecret] = useState("");
   const [loading, setLoading] = useState(false);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const dispatch = useDispatch();
 
   const server = process.env.REACT_APP_BASE_SERVER;
 
@@ -31,8 +34,8 @@ export function useGroup() {
         });
         ref.value = "";
         ref.focus();
+        updateDefaultGroup(response.data.groupId);
       } else {
-        console.log(response.status);
         enqueueSnackbar("Couldn't create group", {
           variant: "error",
           action: (key) => (
@@ -66,11 +69,10 @@ export function useGroup() {
       if (response.status === 200) {
         enqueueSnackbar("Group disabled", { variant: "success" });
       } else {
-        console.log(response.status);
         enqueueSnackbar("Couldn't disable group", { variant: "error" });
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       enqueueSnackbar("Couldn't disable group", { variant: "error" });
     } finally {
       setLoading(false);
@@ -86,11 +88,10 @@ export function useGroup() {
       if (response.status === 200) {
         enqueueSnackbar("Group left", { variant: "success" });
       } else {
-        console.log(response.status);
         enqueueSnackbar("Couldn't leave group", { variant: "error" });
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       enqueueSnackbar("Couldn't leave group", { variant: "error" });
     } finally {
       setLoading(false);
@@ -104,8 +105,7 @@ export function useGroup() {
         defaultGroupId: id,
       });
       if (response.status === 200) {
-        localStorage.setItem("defaultGroupId", id);
-        setDefaultGroup(id);
+        dispatch(setDefaultGroupId(id));
         enqueueSnackbar("Default group changed", { variant: "success" });
       } else {
         enqueueSnackbar("Couldn't change default group", { variant: "error" });
@@ -131,7 +131,7 @@ export function useGroup() {
       });
       navigator.clipboard.writeText(response.data.secret);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       enqueueSnackbar("Couldn't get group secret", { variant: "error" });
     } finally {
       setLoading(false);
@@ -153,7 +153,7 @@ export function useGroup() {
         enqueueSnackbar("Couldn't join group", { variant: "error" });
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       enqueueSnackbar("Couldn't join group", { variant: "error" });
     } finally {
       setLoading(false);

@@ -1,10 +1,19 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import {
+  resetState,
+  setUserId,
+  setDisplayName,
+  setAvatar,
+  setDefaultGroupId,
+} from "../redux/userSettingsSlice";
 import api from "../api";
 
 export function useGetUser() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [status, setStatus] = useState(null);
+  const dispatch = useDispatch();
 
   const server = process.env.REACT_APP_BASE_SERVER;
 
@@ -20,22 +29,17 @@ export function useGetUser() {
         setStatus("error");
       }
       if (!data.error) {
-        localStorage.setItem("displayName", data.displayName);
-        localStorage.setItem("avatar", data.avatar);
+        dispatch(setUserId(data._id));
+        dispatch(setDisplayName(data.displayName));
+        dispatch(setAvatar(data.avatar));
+        dispatch(setDefaultGroupId(data.defaultGroupId));
         setStatus("success");
-        if (data.defaultGroupId) {
-          localStorage.setItem("defaultGroupId", data.defaultGroupId);
-        } else {
-          localStorage.removeItem("defaultGroupId");
-          if (window.location.pathname !== "/group") {
-            window.location.href = "/group";
-          }
+        if (!data.defaultGroupId) {
+          window.location.href = "/groupsettings";
         }
       } else {
         localStorage.removeItem("token");
-        localStorage.removeItem("displayName");
-        localStorage.removeItem("avatar");
-        localStorage.removeItem("defaultGroupId");
+        dispatch(resetState());
         window.location.href = "/login";
       }
     } catch (error) {

@@ -1,9 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
+import { useSelector } from "react-redux";
 import io from "socket.io-client";
 import api from "../api";
 
 export function useTaskList() {
-  const defaultGroupId = localStorage.getItem("defaultGroupId");
+  const defaultGroupId = useSelector(
+    (state) => state.userSettings.defaultGroupId
+  );
   const [taskLists, setTaskLists] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);

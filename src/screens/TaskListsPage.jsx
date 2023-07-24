@@ -42,7 +42,6 @@ export default function TaskListPage() {
         anchor={"right"}
         open={false}
         onClose={() => console.log("close")}
-        onOpen={() => console.log("open")}
       >
         <Box sx={{ width: "20rem" }}>Drawer</Box>
       </Drawer>

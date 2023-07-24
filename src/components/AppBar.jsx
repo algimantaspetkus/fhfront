@@ -23,6 +23,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setTitle } from "../redux/navigationSlice";
+import { resetState } from "../redux/userSettingsSlice";
 
 const drawerWidth = 340;
 const settings = [
@@ -30,7 +31,7 @@ const settings = [
   { title: "Group", path: "/group", appBarTitle: "Group Settings" },
 ];
 const navItems = [
-  { title: "Dashboard", path: "/dashboard", appBarTitle: "Dashboard" },
+  { title: "Dashboard", path: "/", appBarTitle: "Dashboard" },
   { title: "Tasks", path: "/tasklists", appBarTitle: "Tasks" },
   { title: "Shopping", path: "/shopping", appBarTitle: "Shopping" },
   { title: "Wish List", path: "/wishlist", appBarTitle: "Wish List" },
@@ -41,12 +42,14 @@ function DrawerAppBar({ window }) {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const appBarTitle = useSelector((state) => state.navigation.appBarTitle);
+  const displayName = useSelector((state) => state.userSettings.displayName);
+  const avatar = useSelector((state) => state.userSettings.avatar);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   function logoutHandler() {
     localStorage.removeItem("token");
-    localStorage.removeItem("displayName");
+    dispatch(resetState());
     navigate("/login");
   }
 
@@ -136,8 +139,8 @@ function DrawerAppBar({ window }) {
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar
-                  alt={localStorage.getItem("displayName")}
-                  src={`http://localhost:8080${localStorage.getItem("avatar")}`}
+                  alt={displayName}
+                  src={`http://localhost:8080${avatar}`}
                 />
               </IconButton>
             </Tooltip>
