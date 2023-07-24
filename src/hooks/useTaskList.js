@@ -2,9 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
 import io from "socket.io-client";
 import api from "../api";
-import { IconButton } from "@mui/material";
-import { useSnackbar } from "notistack";
-import CloseIcon from "@mui/icons-material/Close";
+import { useSnackbarMessage } from "./useSnackbarMessage";
 
 export function useTaskList() {
   const defaultGroupId = useSelector(
@@ -12,11 +10,9 @@ export function useTaskList() {
   );
   const [taskLists, setTaskLists] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [status, setStatus] = useState(null);
   const [taskListTitle, setTaskListTitle] = useState("");
   const [takListIsPrivate, setTaskListIsPrivate] = useState(false);
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const { sendMessage } = useSnackbarMessage();
 
   const server = process.env.REACT_APP_BASE_SERVER;
 
@@ -24,19 +20,19 @@ export function useTaskList() {
     try {
       const response = await api.get(`${server}/tasklist/gettasklists`);
       if (!response.data) {
-        throw new Error("Failed to fetch user task list");
+        sendMessage("Failed to get task lists", "error");
       }
       const data = response.data;
       setTaskLists(data.taskList);
-      setStatus("success");
     } catch (error) {
-      console.error("Error:", error);
-      setError("Authentication error");
-      setStatus("error");
+      sendMessage(
+        error?.response?.data?.error || "Failed to make task list public",
+        "error"
+      );
     } finally {
       setLoading(false);
     }
-  }, [server]);
+  }, [sendMessage, server]);
 
   useEffect(() => {
     getTaskList();
@@ -79,39 +75,15 @@ export function useTaskList() {
         taskListId,
       });
       if (!response.data) {
-        enqueueSnackbar(
-          error?.response?.data?.error || "Failed to make task list public",
-          {
-            variant: "error",
-            action: (key) => (
-              <IconButton onClick={() => closeSnackbar(key)} size="small">
-                <CloseIcon sx={{ color: "#ffffff" }} />
-              </IconButton>
-            ),
-          }
-        );
+        sendMessage("Failed to make task list public", "error");
       }
       const data = response.data;
       setTaskLists(data.taskList);
-      enqueueSnackbar("Task List made public", {
-        variant: "success",
-        action: (key) => (
-          <IconButton onClick={() => closeSnackbar(key)} size="small">
-            <CloseIcon sx={{ color: "#ffffff" }} />
-          </IconButton>
-        ),
-      });
+      sendMessage("Task List made public", "success");
     } catch (error) {
-      enqueueSnackbar(
+      sendMessage(
         error?.response?.data?.error || "Failed to make task list public",
-        {
-          variant: "error",
-          action: (key) => (
-            <IconButton onClick={() => closeSnackbar(key)} size="small">
-              <CloseIcon sx={{ color: "#ffffff" }} />
-            </IconButton>
-          ),
-        }
+        "error"
       );
     } finally {
       setLoading(false);
@@ -124,39 +96,15 @@ export function useTaskList() {
         taskListId,
       });
       if (!response.data) {
-        enqueueSnackbar(
-          error?.response?.data?.error || "Failed to delete task list",
-          {
-            variant: "error",
-            action: (key) => (
-              <IconButton onClick={() => closeSnackbar(key)} size="small">
-                <CloseIcon sx={{ color: "#ffffff" }} />
-              </IconButton>
-            ),
-          }
-        );
+        sendMessage("Failed to delete task list", "error");
       }
       const data = response.data;
       setTaskLists(data.taskList);
-      enqueueSnackbar("Task List deleted", {
-        variant: "success",
-        action: (key) => (
-          <IconButton onClick={() => closeSnackbar(key)} size="small">
-            <CloseIcon sx={{ color: "#ffffff" }} />
-          </IconButton>
-        ),
-      });
+      sendMessage("Task List deleted", "success");
     } catch (error) {
-      enqueueSnackbar(
+      sendMessage(
         error?.response?.data?.error || "Failed to delete task list",
-        {
-          variant: "error",
-          action: (key) => (
-            <IconButton onClick={() => closeSnackbar(key)} size="small">
-              <CloseIcon sx={{ color: "#ffffff" }} />
-            </IconButton>
-          ),
-        }
+        "error"
       );
     } finally {
       setLoading(false);
@@ -172,39 +120,15 @@ export function useTaskList() {
         isPrivate: takListIsPrivate,
       });
       if (!response.data) {
-        enqueueSnackbar(
-          error?.response?.data?.error || "Failed to create task list",
-          {
-            variant: "error",
-            action: (key) => (
-              <IconButton onClick={() => closeSnackbar(key)} size="small">
-                <CloseIcon sx={{ color: "#ffffff" }} />
-              </IconButton>
-            ),
-          }
-        );
+        sendMessage("Failed to create task list", "error");
       } else {
-        enqueueSnackbar("Task List created", {
-          variant: "success",
-          action: (key) => (
-            <IconButton onClick={() => closeSnackbar(key)} size="small">
-              <CloseIcon sx={{ color: "#ffffff" }} />
-            </IconButton>
-          ),
-        });
+        sendMessage("Task List created", "success");
         getTaskList();
       }
     } catch (error) {
-      enqueueSnackbar(
+      sendMessage(
         error?.response?.data?.error || "Failed to create task list",
-        {
-          variant: "error",
-          action: (key) => (
-            <IconButton onClick={() => closeSnackbar(key)} size="small">
-              <CloseIcon sx={{ color: "#ffffff" }} />
-            </IconButton>
-          ),
-        }
+        "error"
       );
     } finally {
       setLoading(false);
@@ -213,8 +137,6 @@ export function useTaskList() {
 
   return {
     loading,
-    status,
-    error,
     getTaskList,
     taskLists,
     setTaskListData,

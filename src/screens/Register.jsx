@@ -1,57 +1,41 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { TextField, Box, Typography } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { useSnackbar } from "notistack";
+import { useSnackbarMessage } from "../hooks/useSnackbarMessage";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
-import { IconButton } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
 
 const server = process.env.REACT_APP_BASE_SERVER;
 
 export default function Login() {
+  const { sendMessage } = useSnackbarMessage();
   const [email, setEmail] = useState("");
   const [displayName, setDispllayName] = useState("");
   const [password, setPassword] = useState("");
 
   const pwd = useRef(null);
 
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const { loading, error, status, signUp } = useAuth();
   const navigate = useNavigate();
 
-  const handleLoginSuccess = useCallback(() => {
-    enqueueSnackbar("Registered succesfully", {
-      variant: "success",
-      action: (key) => (
-        <IconButton onClick={() => closeSnackbar(key)} size="small">
-          <CloseIcon sx={{ color: "#ffffff" }} />
-        </IconButton>
-      ),
-    });
+  const handleRegistrationSuccess = useCallback(() => {
+    sendMessage("Registered succesfully", "success");
     navigate("/login");
-  }, [closeSnackbar, navigate, enqueueSnackbar]);
+  }, [sendMessage, navigate]);
 
-  const handleLoginError = useCallback(() => {
-    enqueueSnackbar(error, {
-      variant: "error",
-      action: (key) => (
-        <IconButton onClick={() => closeSnackbar(key)} size="small">
-          <CloseIcon sx={{ color: "#ffffff" }} />
-        </IconButton>
-      ),
-    });
+  const handleRegistrationError = useCallback(() => {
+    sendMessage(error || "Registeration failed", "error");
     setPassword("");
-  }, [enqueueSnackbar, error, closeSnackbar]);
+  }, [sendMessage, error]);
 
   useEffect(() => {
     if (status === "success") {
-      handleLoginSuccess();
+      handleRegistrationSuccess();
     }
     if (status === "error") {
-      handleLoginError();
+      handleRegistrationError();
     }
-  }, [status, handleLoginSuccess, handleLoginError]);
+  }, [status, handleRegistrationSuccess, handleRegistrationError]);
 
   const singUpHandler = useCallback(
     (event) => {

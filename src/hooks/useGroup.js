@@ -1,19 +1,17 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setDefaultGroupId } from "../redux/userSettingsSlice";
-import { useSnackbar } from "notistack";
-import { IconButton } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
+import { useSnackbarMessage } from "./useSnackbarMessage";
 import api from "../api";
 
 export function useGroup() {
+  const { sendMessage } = useSnackbarMessage();
   const defaultGroup = useSelector(
     (state) => state.userSettings.defaultGroupId
   );
   const [name, setName] = useState("");
   const [secret, setSecret] = useState("");
   const [loading, setLoading] = useState(false);
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const dispatch = useDispatch();
 
   const server = process.env.REACT_APP_BASE_SERVER;
@@ -24,37 +22,18 @@ export function useGroup() {
     try {
       const response = await api.post(`${server}/group/addgroup`, { name });
       if (response.status === 200) {
-        enqueueSnackbar("Group created", {
-          variant: "success",
-          action: (key) => (
-            <IconButton onClick={() => closeSnackbar(key)} size="small">
-              <CloseIcon sx={{ color: "#ffffff" }} />
-            </IconButton>
-          ),
-        });
+        sendMessage("Group created", "success");
         ref.value = "";
         ref.focus();
         updateDefaultGroup(response.data.groupId);
       } else {
-        enqueueSnackbar("Couldn't create group", {
-          variant: "error",
-          action: (key) => (
-            <IconButton onClick={() => closeSnackbar(key)} size="small">
-              <CloseIcon sx={{ color: "#ffffff" }} />
-            </IconButton>
-          ),
-        });
+        sendMessage("Failed to create a group", "error");
       }
     } catch (error) {
-      console.log(error);
-      enqueueSnackbar("Couldn't create group", {
-        variant: "error",
-        action: (key) => (
-          <IconButton onClick={() => closeSnackbar(key)} size="small">
-            <CloseIcon sx={{ color: "#ffffff" }} />
-          </IconButton>
-        ),
-      });
+      sendMessage(
+        error?.response?.data?.error || "Failed to create a group",
+        "error"
+      );
     } finally {
       setLoading(false);
     }
@@ -67,13 +46,15 @@ export function useGroup() {
         groupId,
       });
       if (response.status === 200) {
-        enqueueSnackbar("Group disabled", { variant: "success" });
+        sendMessage("Group delete", "success");
       } else {
-        enqueueSnackbar("Couldn't disable group", { variant: "error" });
+        sendMessage("Failed to delete group", "error");
       }
     } catch (error) {
-      console.error(error);
-      enqueueSnackbar("Couldn't disable group", { variant: "error" });
+      sendMessage(
+        error?.response?.data?.error || "Failed to delete group",
+        "error"
+      );
     } finally {
       setLoading(false);
     }
@@ -86,13 +67,15 @@ export function useGroup() {
         groupId,
       });
       if (response.status === 200) {
-        enqueueSnackbar("Group left", { variant: "success" });
+        sendMessage("Group left", "success");
       } else {
-        enqueueSnackbar("Couldn't leave group", { variant: "error" });
+        sendMessage("Failed to leave group", "error");
       }
     } catch (error) {
-      console.error(error);
-      enqueueSnackbar("Couldn't leave group", { variant: "error" });
+      sendMessage(
+        error?.response?.data?.error || "Failed to leave group",
+        "error"
+      );
     } finally {
       setLoading(false);
     }
@@ -106,12 +89,14 @@ export function useGroup() {
       });
       if (response.status === 200) {
         dispatch(setDefaultGroupId(id));
-        enqueueSnackbar("Default group changed", { variant: "success" });
+        sendMessage("Default group changed", "success");
       } else {
-        enqueueSnackbar("Couldn't change default group", { variant: "error" });
       }
     } catch (error) {
-      enqueueSnackbar("Couldn't change default group", { variant: "error" });
+      sendMessage(
+        error?.response?.data?.error || "Failed to change default group",
+        "error"
+      );
     } finally {
       setLoading(false);
     }
@@ -124,15 +109,15 @@ export function useGroup() {
         `${server}/group/getgroupsecret/${groupId}`
       );
       if (!response?.data?.secret) {
-        enqueueSnackbar("Couldn't get group secret", { variant: "error" });
+        sendMessage("Failed to get invitation code", "error");
       }
-      enqueueSnackbar("Invitation code copied to clipboard", {
-        variant: "success",
-      });
+      sendMessage("Invitation code copied to clipboard", "success");
       navigator.clipboard.writeText(response.data.secret);
     } catch (error) {
-      console.error(error);
-      enqueueSnackbar("Couldn't get group secret", { variant: "error" });
+      sendMessage(
+        error?.response?.data?.error || "Failed to get invitation code",
+        "error"
+      );
     } finally {
       setLoading(false);
     }
@@ -146,15 +131,17 @@ export function useGroup() {
         secret,
       });
       if (response.status === 200) {
-        enqueueSnackbar("Group joined", { variant: "success" });
+        sendMessage("Group joined", "success");
         ref.value = "";
         ref.focus();
       } else {
-        enqueueSnackbar("Couldn't join group", { variant: "error" });
+        sendMessage("Failed to join group", "error");
       }
     } catch (error) {
-      console.error(error);
-      enqueueSnackbar("Couldn't join group", { variant: "error" });
+      sendMessage(
+        error?.response?.data?.error || "Failed to join group",
+        "error"
+      );
     } finally {
       setLoading(false);
     }

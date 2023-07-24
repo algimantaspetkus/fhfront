@@ -1,8 +1,6 @@
 import { useReducer, useCallback, useEffect } from "react";
 import io from "socket.io-client";
-import { IconButton } from "@mui/material";
-import { useSnackbar } from "notistack";
-import CloseIcon from "@mui/icons-material/Close";
+import { useSnackbarMessage } from "./useSnackbarMessage";
 import api from "../api";
 
 const initialState = {
@@ -77,7 +75,7 @@ function reducer(state, action) {
 
 export function useTasks(taskListId) {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const { sendMessage } = useSnackbarMessage();
 
   const server = process.env.REACT_APP_BASE_SERVER;
 
@@ -86,20 +84,23 @@ export function useTasks(taskListId) {
     try {
       const response = await api.get(`${server}/task/tasks/${taskListId}`);
       if (!response.data) {
-        throw new Error("Failed to api user task list");
+        sendMessage("Failed to get tasks", "error");
       }
       const data = response.data;
       dispatch({ type: "SET_TASKS", payload: data.tasks });
       dispatch({ type: "SET_TASK_LIST", payload: data.taskList });
       dispatch({ type: "SET_STATUS", payload: "success" });
     } catch (error) {
-      console.error("Error:", error);
+      sendMessage(
+        error?.response?.data?.error || "Failed to get tasks",
+        "error"
+      );
       dispatch({ type: "SET_ERROR", payload: error });
       dispatch({ type: "SET_STATUS", payload: "error" });
     } finally {
       dispatch({ type: "SET_LOADING", payload: false });
     }
-  }, [taskListId, server]);
+  }, [taskListId, server, sendMessage]);
 
   useEffect(() => {
     const socket = io(server, {
@@ -155,35 +156,16 @@ export function useTasks(taskListId) {
       const response = await api.post(`${server}/task/addtask`, requestBody);
 
       if (!response?.data) {
-        enqueueSnackbar("Failed to create task", {
-          variant: "error",
-          action: (key) => (
-            <IconButton onClick={() => closeSnackbar(key)} size="small">
-              <CloseIcon sx={{ color: "#ffffff" }} />
-            </IconButton>
-          ),
-        });
-        throw new Error("Failed to create task");
+        sendMessage("Failed to create task", "error");
       }
-      enqueueSnackbar("Task created", {
-        variant: "success",
-        action: (key) => (
-          <IconButton onClick={() => closeSnackbar(key)} size="small">
-            <CloseIcon sx={{ color: "#ffffff" }} />
-          </IconButton>
-        ),
-      });
+      sendMessage("Task created", "success");
       dispatch({ type: "SET_STATUS", payload: "success" });
       resetState();
     } catch (error) {
-      enqueueSnackbar("Failed to create task", {
-        variant: "error",
-        action: (key) => (
-          <IconButton onClick={() => closeSnackbar(key)} size="small">
-            <CloseIcon sx={{ color: "#ffffff" }} />
-          </IconButton>
-        ),
-      });
+      sendMessage(
+        error?.response?.data?.error || "Failed to create task",
+        "error"
+      );
       dispatch({ type: "SET_ERROR", payload: error });
       dispatch({ type: "SET_STATUS", payload: "error" });
     } finally {
@@ -214,10 +196,15 @@ export function useTasks(taskListId) {
     dispatch({ type: "SET_LOADING", payload: true });
     try {
       await api.delete(`${server}/task/${taskId}`);
+      sendMessage("Task deleted", "success");
       getTasks();
     } catch (error) {
       dispatch({ type: "SET_ERROR", payload: error });
       dispatch({ type: "SET_STATUS", payload: "error" });
+      sendMessage(
+        error?.response?.data?.error || "Failed to delete task",
+        "error"
+      );
     } finally {
       dispatch({ type: "SET_LOADING", payload: false });
     }
