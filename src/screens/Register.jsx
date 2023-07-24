@@ -9,16 +9,17 @@ import CloseIcon from "@mui/icons-material/Close";
 
 export default function Login() {
   const [email, setEmail] = useState("");
+  const [displayName, setDispllayName] = useState("");
   const [password, setPassword] = useState("");
 
   const pwd = useRef(null);
 
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-  const { loading, error, status, signIn } = useAuth();
+  const { loading, error, status, signUp } = useAuth();
   const navigate = useNavigate();
 
   const handleLoginSuccess = useCallback(() => {
-    enqueueSnackbar("Logged in succesfully", {
+    enqueueSnackbar("Registered succesfully", {
       variant: "success",
       action: (key) => (
         <IconButton onClick={() => closeSnackbar(key)} size="small">
@@ -26,7 +27,7 @@ export default function Login() {
         </IconButton>
       ),
     });
-    navigate("/");
+    navigate("/login");
   }, [closeSnackbar, navigate, enqueueSnackbar]);
 
   const handleLoginError = useCallback(() => {
@@ -39,7 +40,6 @@ export default function Login() {
       ),
     });
     setPassword("");
-    pwd.current?.querySelector("input")?.focus();
   }, [enqueueSnackbar, error, closeSnackbar]);
 
   useEffect(() => {
@@ -51,12 +51,12 @@ export default function Login() {
     }
   }, [status, handleLoginSuccess, handleLoginError]);
 
-  const signInHandler = useCallback(
+  const singUpHandler = useCallback(
     (event) => {
       event.preventDefault();
-      signIn(email, password);
+      signUp(email, displayName, password);
     },
-    [email, password, signIn]
+    [email, password, displayName, signUp]
   );
 
   return (
@@ -85,10 +85,9 @@ export default function Login() {
         }}
       ></div>
 
-      {/* Login Form */}
       <Box
         component="form"
-        onSubmit={signInHandler}
+        onSubmit={singUpHandler}
         sx={{
           boxSizing: "border-box",
           width: "90%",
@@ -108,7 +107,7 @@ export default function Login() {
           },
         }}
       >
-        <Typography variant="h4">Login</Typography>
+        <Typography variant="h4">Register</Typography>
         <TextField
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -116,6 +115,15 @@ export default function Login() {
           variant="outlined"
           sx={{ width: "100%" }}
           type="email"
+          required
+        />
+        <TextField
+          value={displayName}
+          onChange={(e) => setDispllayName(e.target.value)}
+          label="Display Name"
+          variant="outlined"
+          sx={{ width: "100%" }}
+          type="text"
           required
         />
         <TextField
@@ -140,15 +148,15 @@ export default function Login() {
           variant="p"
           sx={{ fontSize: "12px", margin: 0, padding: 0 }}
         >
-          Do not have an account? Click{" "}
+          Already have an account? Click{" "}
           <Typography
             variant="span"
             sx={{ cursor: "pointer", color: "blue" }}
-            onClick={() => navigate("/register")}
+            onClick={() => navigate("/login")}
           >
             here
           </Typography>{" "}
-          to register.
+          to sign in.
         </Typography>
       </Box>
     </Box>

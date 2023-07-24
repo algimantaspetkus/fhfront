@@ -6,6 +6,7 @@ import AppBar from "../components/AppBar";
 import Box from "@mui/material/Box";
 
 import Login from "./Login";
+import Register from "./Register";
 import DashboardPage from "./DashboardPage";
 import TaskListsPage from "./TaskListsPage";
 import GroupPage from "./GroupPage";
@@ -28,10 +29,10 @@ export default function MainLayout() {
       window.location.replace("/");
     } else if (
       jwt &&
-      currentPath !== "/froup" &&
+      currentPath !== "/group" &&
       !localStorage.getItem("defaultGroupId")
     ) {
-      window.location.replace("/froup");
+      window.location.replace("/group");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -53,7 +54,8 @@ export default function MainLayout() {
               element={<TasksPage />}
             />
             <Route path="/login" element={<Login />} />
-            <Route path="/froup" element={<GroupPage />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/group" element={<GroupPage />} />
           </Routes>
         </Box>
       </Router>

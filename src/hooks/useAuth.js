@@ -1,7 +1,7 @@
 import { useState } from "react";
 import api from "../api";
 
-export function useSignIn() {
+export function useAuth() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [status, setStatus] = useState(null);
@@ -51,6 +51,7 @@ export function useSignIn() {
     try {
       const response = await api.post(`${server}/auth/signup`, {
         email,
+        displayName,
         password,
       });
       const data = response.data;
@@ -58,10 +59,10 @@ export function useSignIn() {
         setError(data.error);
         setStatus("error");
       }
-      console.log(data);
+      setStatus("success");
     } catch (error) {
       console.error("Error:", error);
-      setError("Authentication error");
+      setError("Registration failed");
       setStatus("error");
     } finally {
       setLoading(false);
