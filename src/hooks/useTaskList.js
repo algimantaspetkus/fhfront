@@ -2,6 +2,9 @@ import { useState, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
 import io from "socket.io-client";
 import api from "../api";
+import { IconButton } from "@mui/material";
+import { useSnackbar } from "notistack";
+import CloseIcon from "@mui/icons-material/Close";
 
 export function useTaskList() {
   const defaultGroupId = useSelector(
@@ -13,6 +16,7 @@ export function useTaskList() {
   const [status, setStatus] = useState(null);
   const [taskListTitle, setTaskListTitle] = useState("");
   const [takListIsPrivate, setTaskListIsPrivate] = useState(false);
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const server = process.env.REACT_APP_BASE_SERVER;
 
@@ -44,7 +48,6 @@ export function useTaskList() {
     });
 
     socket.on("updateTaskList", () => {
-      console.log("updateTaskList");
       getTaskList();
     });
 
@@ -70,6 +73,96 @@ export function useTaskList() {
     }
   };
 
+  const makeTaskListPublic = async (taskListId) => {
+    try {
+      const response = await api.put(`${server}/tasklist/makepublic`, {
+        taskListId,
+      });
+      if (!response.data) {
+        enqueueSnackbar(
+          error?.response?.data?.error || "Failed to make task list public",
+          {
+            variant: "error",
+            action: (key) => (
+              <IconButton onClick={() => closeSnackbar(key)} size="small">
+                <CloseIcon sx={{ color: "#ffffff" }} />
+              </IconButton>
+            ),
+          }
+        );
+      }
+      const data = response.data;
+      setTaskLists(data.taskList);
+      enqueueSnackbar("Task List made public", {
+        variant: "success",
+        action: (key) => (
+          <IconButton onClick={() => closeSnackbar(key)} size="small">
+            <CloseIcon sx={{ color: "#ffffff" }} />
+          </IconButton>
+        ),
+      });
+    } catch (error) {
+      enqueueSnackbar(
+        error?.response?.data?.error || "Failed to make task list public",
+        {
+          variant: "error",
+          action: (key) => (
+            <IconButton onClick={() => closeSnackbar(key)} size="small">
+              <CloseIcon sx={{ color: "#ffffff" }} />
+            </IconButton>
+          ),
+        }
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const disableTaskList = async (taskListId) => {
+    try {
+      const response = await api.put(`${server}/tasklist/disabletasklist`, {
+        taskListId,
+      });
+      if (!response.data) {
+        enqueueSnackbar(
+          error?.response?.data?.error || "Failed to delete task list",
+          {
+            variant: "error",
+            action: (key) => (
+              <IconButton onClick={() => closeSnackbar(key)} size="small">
+                <CloseIcon sx={{ color: "#ffffff" }} />
+              </IconButton>
+            ),
+          }
+        );
+      }
+      const data = response.data;
+      setTaskLists(data.taskList);
+      enqueueSnackbar("Task List deleted", {
+        variant: "success",
+        action: (key) => (
+          <IconButton onClick={() => closeSnackbar(key)} size="small">
+            <CloseIcon sx={{ color: "#ffffff" }} />
+          </IconButton>
+        ),
+      });
+    } catch (error) {
+      enqueueSnackbar(
+        error?.response?.data?.error || "Failed to delete task list",
+        {
+          variant: "error",
+          action: (key) => (
+            <IconButton onClick={() => closeSnackbar(key)} size="small">
+              <CloseIcon sx={{ color: "#ffffff" }} />
+            </IconButton>
+          ),
+        }
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const createTaskList = async (event) => {
     event.preventDefault();
     setLoading(true);
@@ -79,14 +172,40 @@ export function useTaskList() {
         isPrivate: takListIsPrivate,
       });
       if (!response.data) {
-        throw new Error("Failed to create task list");
+        enqueueSnackbar(
+          error?.response?.data?.error || "Failed to create task list",
+          {
+            variant: "error",
+            action: (key) => (
+              <IconButton onClick={() => closeSnackbar(key)} size="small">
+                <CloseIcon sx={{ color: "#ffffff" }} />
+              </IconButton>
+            ),
+          }
+        );
       } else {
+        enqueueSnackbar("Task List created", {
+          variant: "success",
+          action: (key) => (
+            <IconButton onClick={() => closeSnackbar(key)} size="small">
+              <CloseIcon sx={{ color: "#ffffff" }} />
+            </IconButton>
+          ),
+        });
         getTaskList();
       }
     } catch (error) {
-      console.error("Error:", error);
-      setError("Authentication error");
-      setStatus("error");
+      enqueueSnackbar(
+        error?.response?.data?.error || "Failed to create task list",
+        {
+          variant: "error",
+          action: (key) => (
+            <IconButton onClick={() => closeSnackbar(key)} size="small">
+              <CloseIcon sx={{ color: "#ffffff" }} />
+            </IconButton>
+          ),
+        }
+      );
     } finally {
       setLoading(false);
     }
@@ -100,5 +219,7 @@ export function useTaskList() {
     taskLists,
     setTaskListData,
     createTaskList,
+    makeTaskListPublic,
+    disableTaskList,
   };
 }

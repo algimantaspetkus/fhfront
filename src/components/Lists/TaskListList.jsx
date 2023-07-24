@@ -22,6 +22,8 @@ export default function TaskList({
   anchorEl,
   handleClose,
   activeTaskListId,
+  deleteTaskList,
+  makePublic,
 }) {
   const navigate = useNavigate();
   return (
@@ -53,8 +55,23 @@ export default function TaskList({
             open={activeTaskListId === taskList._id && Boolean(anchorEl)}
             onClose={handleClose}
           >
-            <MenuItem onClick={handleClose}>Make Public</MenuItem>
-            <MenuItem onClick={handleClose}>Disable</MenuItem>
+            <MenuItem
+              disabled={!taskList.isPrivate}
+              onClick={() => {
+                makePublic(taskList._id);
+                handleClose();
+              }}
+            >
+              Make Public
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                deleteTaskList(taskList._id);
+                handleClose();
+              }}
+            >
+              Delete
+            </MenuItem>
           </Menu>
         </ListItem>
       ))}

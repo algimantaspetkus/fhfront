@@ -31,6 +31,8 @@ export default function CreateGroupForm({
             label="List Title"
             variant="outlined"
             sx={{ flex: 1 }}
+            maxRows={32}
+            minLength={3}
             onChange={(e) => setTaskListData("taskListTitle", e.target.value)}
             required
           />

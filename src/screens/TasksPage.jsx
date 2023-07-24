@@ -39,23 +39,24 @@ export default function TasksPage() {
   } = useTasks(taskListId);
   const { tasks, taskList } = state;
 
-  const { dialogProps, handleClickOpen } = useDialog({
-    content:
-      "Are you sure you want to delete this task? This action cannot be undone.",
-    title: "Delete Group",
-    buttons: [
-      { title: "Cancel" },
-      {
-        autofocus: true,
-        title: "Delete",
-        callback: () => {
-          console.log(selectedTask);
-          deleteTask(selectedTask);
-          tdCloseDrawer();
+  const { dialogProps: dialogPropsTask, handleClickOpen: handleClickOpenTask } =
+    useDialog({
+      content:
+        "Are you sure you want to delete this task? This action cannot be undone.",
+      title: "Delete Task",
+      buttons: [
+        { title: "Cancel" },
+        {
+          autofocus: true,
+          title: "Delete",
+          callback: () => {
+            console.log(selectedTask);
+            deleteTask(selectedTask);
+            tdCloseDrawer();
+          },
         },
-      },
-    ],
-  });
+      ],
+    });
 
   useEffect(() => {
     dispatch(setTitle(taskList?.listTitle));
@@ -111,11 +112,11 @@ export default function TasksPage() {
           taskId={selectedTask}
           getTask={getTask}
           toggleComplete={toggleComplete}
-          deleteTask={handleClickOpen}
+          deleteTask={handleClickOpenTask}
           key={key}
         />
       </Drawer>
-      {dialogProps.open && <Dialog dialogProps={dialogProps} />}
+      {dialogPropsTask.open && <Dialog dialogProps={dialogPropsTask} />}
       <SingleActionFab onClick={ctOpenDrawer} />
     </>
   );
