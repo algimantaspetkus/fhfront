@@ -31,7 +31,7 @@ const settings = [
   { title: "Group", path: "/group", appBarTitle: "Group Settings" },
 ];
 const navItems = [
-  { title: "Dashboard", path: "/", appBarTitle: "Dashboard" },
+  { title: "Dashboard", path: "/dashboard", appBarTitle: "Dashboard" },
   { title: "Tasks", path: "/tasklists", appBarTitle: "Tasks" },
   { title: "Shopping", path: "/shopping", appBarTitle: "Shopping" },
   { title: "Wish List", path: "/wishlist", appBarTitle: "Wish List" },
@@ -121,7 +121,7 @@ function DrawerAppBar({ window }) {
             component="div"
             sx={{ flexGrow: 1, display: { sm: "block" } }}
           >
-            {appBarTitle} {/* Display the appBarTitle in the AppBar */}
+            {appBarTitle}
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", sm: "block" } }}>

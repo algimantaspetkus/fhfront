@@ -40,8 +40,8 @@ export function useAuth() {
         dispatch(setAvatar(data.avatar));
         dispatch(setDefaultGroupId(data.defaultGroupId));
         setStatus("success");
-        if (!data.defaultGroupId) {
-          window.location.href = "/groupsettings";
+        if (!data.defaultGroupId && window.location.pathname !== "/group") {
+          window.location.href = "/group";
         }
       }
     } catch (error) {

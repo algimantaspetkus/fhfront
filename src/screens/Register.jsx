@@ -146,7 +146,7 @@ export default function Login() {
           loading={loading}
           variant="outlined"
         >
-          Login
+          Register
         </LoadingButton>
         <Typography
           variant="p"

@@ -34,8 +34,8 @@ export function useGetUser() {
         dispatch(setAvatar(data.avatar));
         dispatch(setDefaultGroupId(data.defaultGroupId));
         setStatus("success");
-        if (!data.defaultGroupId) {
-          window.location.href = "/groupsettings";
+        if (!data.defaultGroupId && window.location.pathname !== "/group") {
+          window.location.href = "/group";
         }
       } else {
         localStorage.removeItem("token");

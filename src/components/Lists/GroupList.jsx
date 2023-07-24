@@ -24,7 +24,16 @@ export default function GroupList({
   getGroupSecret,
 }) {
   return (
-    <List>
+    <List
+      sx={{
+        maxHeight: {
+          xs: "70vh",
+          md: " 80vh",
+          overflow: "visible",
+        },
+        overflow: "auto",
+      }}
+    >
       {groups?.map((group) => (
         <ListItem key={group.groupId._id}>
           <ListItemText

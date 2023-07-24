@@ -28,7 +28,7 @@ export default function TaskList({
   return (
     <List
       sx={{
-        maxHeight: { xs: "70vh", overflow: "visible", sm: "unset" },
+        maxHeight: { xs: "70vh", md: "80vh", overflow: "visible" },
         overflow: "auto",
       }}
     >
