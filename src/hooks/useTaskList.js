@@ -36,7 +36,8 @@ export function useTaskList() {
 
   useEffect(() => {
     getTaskList();
-  }, [getTaskList]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     const socket = io(server, {
@@ -50,7 +51,8 @@ export function useTaskList() {
     return () => {
       socket.disconnect();
     };
-  }, [server, defaultGroupId, getTaskList]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [server, defaultGroupId]);
 
   const setTaskListData = (type, payload) => {
     switch (type) {

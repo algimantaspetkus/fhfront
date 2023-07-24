@@ -2,29 +2,37 @@ import { useEffect, useState } from "react";
 
 export function useDrawer() {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [shouldHandleBack, setShouldHandleBack] = useState(true);
+
   useEffect(() => {
     const handleBackButton = (event) => {
-      if (drawerOpen) {
-        event.preventDefault();
-        setDrawerOpen(false);
+      if (shouldHandleBack) {
+        if (drawerOpen) {
+          event.preventDefault();
+          closeDrawer();
+        }
       } else {
-        window.history.back();
+        setShouldHandleBack(true);
       }
     };
 
-    window.history.pushState(null, document.title, window.location.href);
+    if (drawerOpen) {
+      window.history.pushState({ drawerOpen: true }, "");
+    }
+
     window.addEventListener("popstate", handleBackButton);
 
     return () => {
       window.removeEventListener("popstate", handleBackButton);
     };
-  }, [drawerOpen]);
+  }, [drawerOpen, shouldHandleBack]);
 
   function openDrawer() {
     setDrawerOpen(true);
   }
 
   function closeDrawer() {
+    setShouldHandleBack(false);
     setDrawerOpen(false);
   }
 

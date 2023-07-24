@@ -103,6 +103,11 @@ export function useTasks(taskListId) {
   }, [taskListId, server, sendMessage]);
 
   useEffect(() => {
+    getTasks();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
     const socket = io(server, {
       query: { room: taskListId },
     });
@@ -114,7 +119,7 @@ export function useTasks(taskListId) {
     return () => {
       socket.disconnect();
     };
-  }, [server, taskListId, getTasks]);
+  }, [server, taskListId]);
 
   const setTaskData = (type, payload) => {
     switch (type) {

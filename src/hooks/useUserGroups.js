@@ -36,7 +36,8 @@ export function useUserGroups() {
 
   useEffect(() => {
     getUserGroups();
-  }, [getUserGroups]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     const socket = io(server, {

@@ -31,7 +31,6 @@ export default function TasksPage() {
   const {
     state,
     getTask,
-    getTasks,
     setTaskData,
     createTask,
     toggleComplete,
@@ -61,10 +60,6 @@ export default function TasksPage() {
   useEffect(() => {
     dispatch(setTitle(taskList?.listTitle));
   }, [dispatch, taskList]);
-
-  useEffect(() => {
-    getTasks();
-  }, [getTasks]);
 
   useEffect(() => {
     setKey((prevKey) => prevKey + 1);

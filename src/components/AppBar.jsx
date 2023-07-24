@@ -34,7 +34,6 @@ const navItems = [
   { title: "Dashboard", path: "/dashboard", appBarTitle: "Dashboard" },
   { title: "Tasks", path: "/tasklists", appBarTitle: "Tasks" },
   { title: "Shopping", path: "/shopping", appBarTitle: "Shopping" },
-  { title: "Wish List", path: "/wishlist", appBarTitle: "Wish List" },
   { title: "Calendar", path: "/calendar", appBarTitle: "Calendar" },
 ];
 
