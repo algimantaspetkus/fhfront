@@ -1,5 +1,6 @@
 import { Box, Container, Typography, Button } from "@mui/material";
 import UpdateAvatarForm from "../components/Forms/UpdateAvatarForm";
+import UpdateDisplayName from "../components/Forms/UpdateDisplayName";
 
 export default function Profile() {
   return (
@@ -9,11 +10,17 @@ export default function Profile() {
           Profile Settings
         </Typography>
       </Box>
-      <Box variant="form" sx={{ marginTop: "2rem" }}>
-        <Typography variant="h6" component="h3">
+      <Box sx={{ marginTop: "2rem" }}>
+        <Typography variant="h6" sx={{ marginBottom: "1rem" }}>
           Change Profile Picture
         </Typography>
         <UpdateAvatarForm />
+      </Box>
+      <Box sx={{ marginTop: "2rem" }}>
+        <Typography variant="h6" sx={{ marginBottom: "1rem" }}>
+          Change Display Name
+        </Typography>
+        <UpdateDisplayName />
       </Box>
     </Container>
   );

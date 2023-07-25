@@ -1,5 +1,5 @@
-import { useState, useRef } from "react";
-import { useDispatch } from "react-redux";
+import { useState, useRef, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import {
   resetState,
   setUserId,
@@ -15,11 +15,17 @@ export function useGetUser() {
   const [loading, setLoading] = useState(false);
   const [showClearButton, setShowClearButton] = useState(false);
   const [fileName, setFileName] = useState("");
+  const [newDisplayName, setNewDisplayName] = useState("");
   const { sendMessage } = useSnackbarMessage();
   const dispatch = useDispatch();
   const fileInputRef = useRef(null);
+  const displayName = useSelector((state) => state.userSettings.displayName);
 
   const server = process.env.REACT_APP_BASE_SERVER;
+
+  useEffect(() => {
+    setNewDisplayName(displayName);
+  }, [displayName, setNewDisplayName]);
 
   async function getUser() {
     setLoading(true);
@@ -44,6 +50,7 @@ export function useGetUser() {
         window.location.href = "/login";
       }
     } catch (error) {
+      console.log(error);
       sendMessage("Error getting user", "error");
     } finally {
       setLoading(false);
@@ -57,11 +64,12 @@ export function useGetUser() {
       formData.append("avatar", fileInputRef.current.files[0]);
       api
         .put("/user/updateavatar", formData)
-        .then((response) => {
+        .then(() => {
+          sendMessage("Avatar updated", "success");
           getUser();
         })
-        .catch((error) => {
-          console.error("File upload error:", error);
+        .catch(() => {
+          sendMessage("Failed to update avatar", "error");
         });
 
       setFileName("");
@@ -70,14 +78,34 @@ export function useGetUser() {
     }
   }
 
+  async function updateDisplayName(event) {
+    event.preventDefault();
+    if (newDisplayName.length > 2) {
+      api
+        .put("/user/updatedisplayname", {
+          displayName: newDisplayName,
+        })
+        .then(() => {
+          sendMessage("Display name updated", "success");
+          getUser();
+        })
+        .catch(() => {
+          sendMessage("Failed to update display name", "error");
+        });
+    }
+  }
+
   return {
     loading,
     fileInputRef,
     showClearButton,
     fileName,
+    displayName: newDisplayName,
+    setDisplayName: setNewDisplayName,
     setFileName,
     setShowClearButton,
     getUser,
     updateAvatar,
+    updateDisplayName,
   };
 }

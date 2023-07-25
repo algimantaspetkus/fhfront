@@ -1,5 +1,5 @@
 import { useGetUser } from "../../hooks/useGetUser";
-import { Button } from "@mui/material";
+import { Button, Box } from "@mui/material";
 import FileInput from "../FileInput/FileInput";
 
 export default function UpdateAvatarForm() {
@@ -37,7 +37,7 @@ export default function UpdateAvatarForm() {
   };
 
   return (
-    <form onSubmit={updateAvatar}>
+    <Box component="form" onSubmit={updateAvatar}>
       <FileInput
         fileInputRef={fileInputRef}
         handleFileInputChange={handleFileInputChange}
@@ -53,6 +53,6 @@ export default function UpdateAvatarForm() {
       >
         Submit
       </Button>
-    </form>
+    </Box>
   );
 }
