@@ -51,7 +51,8 @@ export function useUserGroups() {
     return () => {
       socket.disconnect();
     };
-  }, [server, userId, getUserGroups]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [server, userId]);
 
   return { loading, status, error, getUserGroups, groups };
 }

@@ -119,6 +119,7 @@ export function useTasks(taskListId) {
     return () => {
       socket.disconnect();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [server, taskListId]);
 
   const setTaskData = (type, payload) => {

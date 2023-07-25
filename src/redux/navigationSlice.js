@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   appBarTitle: "Dashboard",
+  appBarKey: 0,
 };
 
 const navigationSlice = createSlice({
@@ -11,8 +12,11 @@ const navigationSlice = createSlice({
     setTitle: (state, action) => {
       state.appBarTitle = action.payload;
     },
+    incrementKey: (state) => {
+      state.appBarKey += 1;
+    },
   },
 });
 
-export const { setTitle } = navigationSlice.actions;
+export const { setTitle, incrementKey } = navigationSlice.actions;
 export default navigationSlice.reducer;

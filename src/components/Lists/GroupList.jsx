@@ -28,7 +28,8 @@ export default function GroupList({
       sx={{
         maxHeight: {
           xs: "70vh",
-          md: " 80vh",
+          sm: "72vh",
+          md: "76vh",
           overflow: "visible",
         },
         overflow: "auto",
@@ -75,8 +76,6 @@ export default function GroupList({
             >
               Set active
             </MenuItem>
-            {/* <MenuItem onClick={handleClose}>Manage Members</MenuItem> */}
-            {/* <MenuItem onClick={handleClose}>Edit</MenuItem> */}
             <MenuItem
               disabled={group.role !== "owner"}
               onClick={() => {

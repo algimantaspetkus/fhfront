@@ -9,26 +9,12 @@ import {
 import { PriorityBarsMinified } from "../UI/PriorityBars";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
-// import { usePress } from "../../hooks/usePress";
 
-export default function TaskList({
-  tasks,
-  toggleComplete,
-  deleteTask,
-  showTaskDetails,
-}) {
-  // const longPress = () => {
-  //   return;
-  // };
-
-  const shortPress = () => {
-    return;
-  };
-
+export default function TaskList({ tasks, toggleComplete, showTaskDetails }) {
   return (
     <List
       sx={{
-        maxHeight: { xs: "70vh", md: "80vh", overflow: "visible" },
+        maxHeight: { xs: "68vh", sm: "72vh", md: "76vh", overflow: "visible" },
         overflow: "auto",
       }}
     >
@@ -37,8 +23,6 @@ export default function TaskList({
           toggleComplete={toggleComplete}
           key={task._id}
           task={task}
-          longPress={deleteTask}
-          shortPress={shortPress}
           showTaskDetails={showTaskDetails}
         />
       ))}
@@ -46,34 +30,7 @@ export default function TaskList({
   );
 }
 
-function TaskListItem({
-  task,
-  // longPress,
-  // shortPress,
-  toggleComplete,
-  showTaskDetails,
-}) {
-  // const [complete, setComplete] = useState(false);
-
-  // const handleShortPress = () => {
-  //   // Wait for 300ms before updating the complete state
-  //   setTimeout(() => {
-  //     setComplete(!complete);
-  //     shortPress();
-  //   }, 1);
-  // };
-
-  // const handleLongPress = () => {
-  //   console.log("Long press");
-  //   longPress(task._id);
-  // };
-
-  // const { longPressProps } = usePress({
-  //   shortPressCallback: handleShortPress,
-  //   longPressCallback: handleLongPress,
-  //   id: task._id,
-  // });
-
+function TaskListItem({ task, toggleComplete, showTaskDetails }) {
   const clickHandler = (event) => {
     const isCheckboxClick =
       event.target.getAttribute("data-checkbox") === "true";

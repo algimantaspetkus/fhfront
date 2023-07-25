@@ -37,12 +37,15 @@ const navItems = [
   { title: "Calendar", path: "/calendar", appBarTitle: "Calendar" },
 ];
 
+const server = process.env.REACT_APP_BASE_SERVER;
+
 function DrawerAppBar({ window }) {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const appBarTitle = useSelector((state) => state.navigation.appBarTitle);
   const displayName = useSelector((state) => state.userSettings.displayName);
   const avatar = useSelector((state) => state.userSettings.avatar);
+  const appBarKey = useSelector((state) => state.navigation.appBarKey);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -138,8 +141,9 @@ function DrawerAppBar({ window }) {
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar
+                  key={appBarKey}
                   alt={displayName}
-                  src={`http://localhost:8080${avatar}`}
+                  src={`${server}${avatar}`}
                 />
               </IconButton>
             </Tooltip>

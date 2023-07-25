@@ -7,6 +7,7 @@ import AppBar from "../components/AppBar";
 import Box from "@mui/material/Box";
 
 import Login from "./Login";
+import Profile from "./Profile";
 import Register from "./Register";
 import DashboardPage from "./DashboardPage";
 import TaskListsPage from "./TaskListsPage";
@@ -56,6 +57,7 @@ export default function MainLayout() {
             />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/group" element={<GroupPage />} />
           </Routes>
         </Box>

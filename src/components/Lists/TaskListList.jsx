@@ -27,7 +27,12 @@ export default function TaskList({
 }) {
   const navigate = useNavigate();
   return (
-    <List>
+    <List
+      sx={{
+        maxHeight: { xs: "70vh", sm: "72vh", md: "76vh", overflow: "visible" },
+        overflow: "auto",
+      }}
+    >
       {taskLists?.map((taskList) => (
         <ListItem key={taskList._id}>
           <ListItemButton onClick={() => navigate(`${taskList._id}/tasks`)}>
