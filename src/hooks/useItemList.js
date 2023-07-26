@@ -4,11 +4,11 @@ import io from "socket.io-client";
 import api from "../api";
 import { useSnackbarMessage } from "./useSnackbarMessage";
 
-export function useTaskList() {
+export function useItemList() {
   const defaultGroupId = useSelector(
     (state) => state.userSettings.defaultGroupId
   );
-  const [taskLists, setTaskLists] = useState([]);
+  const [itemList, setItemList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [taskListTitle, setTaskListTitle] = useState("");
   const [takListIsPrivate, setTaskListIsPrivate] = useState(false);
@@ -23,7 +23,7 @@ export function useTaskList() {
         sendMessage("Failed to get task lists", "error");
       }
       const data = response.data;
-      setTaskLists(data.taskList);
+      setItemList(data.itemList);
     } catch (error) {
       sendMessage(
         error?.response?.data?.error || "Failed to make task list public",
@@ -80,7 +80,7 @@ export function useTaskList() {
         sendMessage("Failed to make task list public", "error");
       }
       const data = response.data;
-      setTaskLists(data.taskList);
+      setItemList(data.taskList);
       sendMessage("Task List made public", "success");
     } catch (error) {
       sendMessage(
@@ -101,7 +101,7 @@ export function useTaskList() {
         sendMessage("Failed to delete task list", "error");
       }
       const data = response.data;
-      setTaskLists(data.taskList);
+      setItemList(data.taskList);
       sendMessage("Task List deleted", "success");
     } catch (error) {
       sendMessage(
@@ -140,7 +140,7 @@ export function useTaskList() {
   return {
     loading,
     getTaskList,
-    taskLists,
+    itemList,
     setTaskListData,
     createTaskList,
     makeTaskListPublic,

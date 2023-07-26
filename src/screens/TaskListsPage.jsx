@@ -1,21 +1,21 @@
 import { useState, useCallback } from "react";
 import Dialog from "../components/Dialog/Dialog";
 import { Box, Typography, Container, Drawer } from "@mui/material";
-import TaskListList from "../components/Lists/TaskListList";
+import ItemList from "../components/Lists/ItemList";
 import SingleActionFab from "../components/Fab/SingleActionFab";
-import { useTaskList } from "../hooks/useTaskList";
+import { useItemList } from "../hooks/useItemList";
 import { useDrawer } from "../hooks/useDrawer";
 import { useDialog } from "../hooks/useDialog";
 import CreateTaskListForm from "../components/Forms/CreateTaskListForm";
 
 export default function TaskListPage() {
   const {
-    taskLists,
+    itemList,
     setTaskListData,
     createTaskList,
     makeTaskListPublic,
     disableTaskList,
-  } = useTaskList();
+  } = useItemList();
   const [activeTaskListId, setActiveTaskListId] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
   const { openDrawer, closeDrawer, drawerOpen } = useDrawer();
@@ -69,7 +69,7 @@ export default function TaskListPage() {
   };
 
   const taskListProps = {
-    taskLists,
+    itemList,
     handleClick,
     anchorEl,
     handleClose,
@@ -83,7 +83,7 @@ export default function TaskListPage() {
           <Typography variant="h4" component="h2">
             TaskList page
           </Typography>
-          <TaskListList
+          <ItemList
             {...taskListProps}
             deleteTaskList={handleClickOpenTaskListDelete}
             makePublic={handleClickOpenTaskListPublic}

@@ -17,7 +17,7 @@ import LockIcon from "@mui/icons-material/Lock";
 import { useNavigate } from "react-router-dom";
 
 export default function TaskList({
-  taskLists,
+  itemList,
   handleClick,
   anchorEl,
   handleClose,
@@ -33,7 +33,7 @@ export default function TaskList({
         overflow: "auto",
       }}
     >
-      {taskLists?.map((taskList) => (
+      {itemList?.map((taskList) => (
         <ListItem key={taskList._id}>
           <ListItemButton onClick={() => navigate(`${taskList._id}/tasks`)}>
             <ListItemAvatar>
