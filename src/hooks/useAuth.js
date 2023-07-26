@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import api from "../api";
 import { useDispatch } from "react-redux";
 import {
@@ -8,19 +8,19 @@ import {
   setAvatar,
   setDefaultGroupId,
 } from "../redux/userSettingsSlice";
+import { useSnackbarMessage } from "./useSnackbarMessage";
+import { resetState } from "../redux/userSettingsSlice";
 
 export function useAuth() {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [status, setStatus] = useState(null);
+  const { sendMessage } = useSnackbarMessage();
 
   const dispatch = useDispatch();
+  const passwordRef = useRef(null);
 
   const server = process.env.REACT_APP_BASE_SERVER;
 
-  async function signIn(email, password) {
-    setError(null);
-    setStatus(null);
+  async function signIn(email, password, callBack, pwdRef) {
     setLoading(true);
     try {
       const response = await api.post(`${server}/auth/login`, {
@@ -29,8 +29,8 @@ export function useAuth() {
       });
       const data = response.data;
       if (data.error) {
-        setError(data.error);
-        setStatus("error");
+        sendMessage(data.error, "error");
+        pwdRef.focus();
       }
       if (data.token) {
         localStorage.setItem("token", data.token);
@@ -39,23 +39,22 @@ export function useAuth() {
         dispatch(setDisplayName(data.displayName));
         dispatch(setAvatar(data.avatar));
         dispatch(setDefaultGroupId(data.defaultGroupId));
-        setStatus("success");
+        sendMessage("Login successful", "success");
         if (!data.defaultGroupId && window.location.pathname !== "/group") {
-          window.location.href = "/group";
+          callBack("/group");
+        } else {
+          callBack("/");
         }
       }
     } catch (error) {
-      console.error("Error:", error);
-      setError("Authentication error");
-      setStatus("error");
+      sendMessage("Login failed", "error");
+      pwdRef.focus();
     } finally {
       setLoading(false);
     }
   }
 
   async function signUp(email, displayName, password) {
-    setError(null);
-    setStatus(null);
     setLoading(true);
     try {
       const response = await api.post(`${server}/auth/signup`, {
@@ -65,17 +64,21 @@ export function useAuth() {
       });
       const data = response.data;
       if (data.error) {
-        setError(data.error);
-        setStatus("error");
+        sendMessage(data.error, "error");
       }
-      setStatus("success");
+      sendMessage("Registration successful", "success");
     } catch (error) {
-      console.error("Error:", error);
-      setError("Registration failed");
-      setStatus("error");
+      sendMessage("Registration failed", "error");
     } finally {
       setLoading(false);
     }
   }
-  return { loading, status, error, signIn, signUp };
+
+  function signOut(callBack) {
+    localStorage.removeItem("token");
+    dispatch(resetState());
+    callBack();
+  }
+
+  return { loading, signIn, signUp, signOut, passwordRef };
 }

@@ -1,6 +1,6 @@
 import { useGetUser } from "../../hooks/useGetUser";
 import { Button, Box } from "@mui/material";
-import FileInput from "../FileInput/FileInput";
+import FileInput from "../Inputs/FileInput";
 
 export default function UpdateAvatarForm() {
   const {

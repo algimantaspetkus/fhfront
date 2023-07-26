@@ -23,7 +23,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setTitle } from "../redux/navigationSlice";
-import { resetState } from "../redux/userSettingsSlice";
+import { useAuth } from "../hooks/useAuth";
 
 const drawerWidth = 340;
 const settings = [
@@ -40,20 +40,19 @@ const navItems = [
 const server = process.env.REACT_APP_BASE_SERVER;
 
 function DrawerAppBar({ window }) {
+  const navigate = useNavigate();
+
+  const signOutCallback = () => {
+    navigate("/login");
+  };
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const appBarTitle = useSelector((state) => state.navigation.appBarTitle);
   const displayName = useSelector((state) => state.userSettings.displayName);
   const avatar = useSelector((state) => state.userSettings.avatar);
   const appBarKey = useSelector((state) => state.navigation.appBarKey);
+  const { signOut } = useAuth();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  function logoutHandler() {
-    localStorage.removeItem("token");
-    dispatch(resetState());
-    navigate("/login");
-  }
 
   const handleDrawerToggle = () => {
     setIsDrawerOpen(!isDrawerOpen); // Toggle the drawer state
@@ -175,7 +174,10 @@ function DrawerAppBar({ window }) {
                 </MenuItem>
               ))}
               <MenuItem key={"logout"} onClick={handleCloseUserMenu}>
-                <Typography onClick={logoutHandler} textAlign="center">
+                <Typography
+                  onClick={() => signOut(signOutCallback)}
+                  textAlign="center"
+                >
                   Logout
                 </Typography>
               </MenuItem>

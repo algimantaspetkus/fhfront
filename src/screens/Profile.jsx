@@ -1,6 +1,7 @@
-import { Box, Container, Typography, Button } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import UpdateAvatarForm from "../components/Forms/UpdateAvatarForm";
-import UpdateDisplayName from "../components/Forms/UpdateDisplayName";
+import UpdateDisplayNameForm from "../components/Forms/UpdateDisplayNameForm";
+import UpdatePasswordForm from "../components/Forms/UpdatePasswordForm";
 
 export default function Profile() {
   return (
@@ -20,7 +21,13 @@ export default function Profile() {
         <Typography variant="h6" sx={{ marginBottom: "1rem" }}>
           Change Display Name
         </Typography>
-        <UpdateDisplayName />
+        <UpdateDisplayNameForm />
+      </Box>
+      <Box sx={{ marginTop: "2rem" }}>
+        <Typography variant="h6" sx={{ marginBottom: "1rem" }}>
+          Change Password
+        </Typography>
+        <UpdatePasswordForm />
       </Box>
     </Container>
   );

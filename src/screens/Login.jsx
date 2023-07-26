@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { TextField, Box, Typography } from "@mui/material";
+import PasswordInput from "../components/Inputs/PasswordInput";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { useSnackbarMessage } from "../hooks/useSnackbarMessage";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 
@@ -10,40 +10,19 @@ const server = process.env.REACT_APP_BASE_SERVER;
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { sendMessage } = useSnackbarMessage();
 
-  const pwd = useRef(null);
-
-  const { loading, error, status, signIn } = useAuth();
+  const { loading, signIn, passwordRef } = useAuth();
   const navigate = useNavigate();
 
-  const handleLoginSuccess = useCallback(() => {
-    sendMessage("Logged in succesfully", "success");
-    navigate("/");
-  }, [sendMessage, navigate]);
+  const signInHandler = (event) => {
+    event.preventDefault();
+    const passwordRef = event.target.querySelector("#Password");
+    signIn(email, password, navigate, passwordRef);
+  };
 
-  const handleLoginError = useCallback(() => {
-    sendMessage(error || "Login failed", "error");
-    setPassword("");
-    pwd.current?.querySelector("input")?.focus();
-  }, [sendMessage, error]);
-
-  useEffect(() => {
-    if (status === "success") {
-      handleLoginSuccess();
-    }
-    if (status === "error") {
-      handleLoginError();
-    }
-  }, [status, handleLoginSuccess, handleLoginError]);
-
-  const signInHandler = useCallback(
-    (event) => {
-      event.preventDefault();
-      signIn(email, password);
-    },
-    [email, password, signIn]
-  );
+  function setPasswordHandler(_, value) {
+    setPassword(value);
+  }
 
   return (
     <Box
@@ -104,15 +83,11 @@ export default function Login() {
           type="email"
           required
         />
-        <TextField
-          ref={pwd}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+        <PasswordInput
           label="Password"
-          variant="outlined"
-          sx={{ width: "100%" }}
-          type="password"
-          required
+          inputRef={passwordRef}
+          fullWidth
+          onChange={setPasswordHandler}
         />
         <LoadingButton
           disabled={loading || !email || !password}

@@ -11,8 +11,21 @@ import { incrementKey } from "../redux/navigationSlice";
 import { useSnackbarMessage } from "./useSnackbarMessage";
 import api from "../api";
 
+function toCamelCase(inputString) {
+  const words = inputString.split(" ");
+  const firstWord = words[0].toLowerCase();
+  const camelCaseWords = words
+    .slice(1)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join("");
+  return firstWord + camelCaseWords;
+}
+
 export function useGetUser() {
   const [loading, setLoading] = useState(false);
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [showClearButton, setShowClearButton] = useState(false);
   const [fileName, setFileName] = useState("");
   const [newDisplayName, setNewDisplayName] = useState("");
@@ -95,6 +108,50 @@ export function useGetUser() {
     }
   }
 
+  function setPassword(type, value) {
+    const transformedType = toCamelCase(type);
+    switch (transformedType) {
+      case "oldPassword":
+        setOldPassword(value);
+        break;
+      case "newPassword":
+        setNewPassword(value);
+        break;
+      case "confirmNewPassword":
+        setConfirmNewPassword(value);
+        break;
+      default:
+        break;
+    }
+  }
+
+  async function changePassword(event, callBack) {
+    event.preventDefault();
+    if (newPassword === confirmNewPassword) {
+      try {
+        const response = await api.put("/user/updatepassword", {
+          oldPassword,
+          newPassword,
+        });
+        const data = response.data;
+        if (data.error) {
+          sendMessage(data.error, "error");
+        }
+        if (!data.error) {
+          sendMessage("Password updated, please Sign In", "success");
+          callBack();
+        }
+      } catch (error) {
+        sendMessage(
+          error?.response?.data?.error || "Error updating password",
+          "error"
+        );
+      }
+    } else {
+      sendMessage("New passwords do not match", "error");
+    }
+  }
+
   return {
     loading,
     fileInputRef,
@@ -107,5 +164,7 @@ export function useGetUser() {
     getUser,
     updateAvatar,
     updateDisplayName,
+    setPassword,
+    changePassword,
   };
 }
