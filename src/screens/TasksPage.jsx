@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Box, Typography, Container, Drawer } from "@mui/material";
-import TaskList from "../components/Lists/TaskList";
+import TaskItemsList from "../components/Lists/TaskItemsList";
 import SingleActionFab from "../components/Fab/SingleActionFab";
 import CreateTaskForm from "../components/Forms/CreateTaskForm";
 import TaskDetails from "../components/Details/TaskDetails";
@@ -81,7 +81,7 @@ export default function TasksPage() {
           <Typography variant="h4" component="h2">
             {taskList?.listTitle}
           </Typography>
-          <TaskList
+          <TaskItemsList
             tasks={tasks}
             toggleComplete={toggleComplete}
             deleteTask={deleteTask}

@@ -10,7 +10,11 @@ import { PriorityBarsMinified } from "../UI/PriorityBars";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 
-export default function TaskList({ tasks, toggleComplete, showTaskDetails }) {
+export default function TaskItemsList({
+  tasks,
+  toggleComplete,
+  showTaskDetails,
+}) {
   return (
     <List
       sx={{

@@ -14,6 +14,7 @@ import TaskListsPage from "./TaskListsPage";
 import ShoppingListPage from "./ShoppingListPage";
 import GroupPage from "./GroupPage";
 import TasksPage from "./TasksPage";
+import ShoppingItemsPage from "./ShoppingItemsPage";
 
 export default function MainLayout() {
   const { getUser } = useGetUser();
@@ -52,10 +53,14 @@ export default function MainLayout() {
           <Routes>
             <Route path="/" element={<DashboardPage />} />
             <Route path="/tasklists" element={<TaskListsPage />} exact />
-            <Route path="/shoppinglist" element={<ShoppingListPage />} exact />
+            <Route path="/shoppinglists" element={<ShoppingListPage />} exact />
             <Route
               path="/tasklists/:itemListId/tasks"
               element={<TasksPage />}
+            />
+            <Route
+              path="/shoppinglists/:itemListId/shoppingitems"
+              element={<ShoppingItemsPage />}
             />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />

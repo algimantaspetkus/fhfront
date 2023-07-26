@@ -85,6 +85,7 @@ export default function ShoppingListPage() {
           </Typography>
           <ItemList
             {...shoppingListProps}
+            type="shoppingitems"
             deleteShoppingList={handleClickOpenShoppingListDelete}
             makePublic={handleClickOpenShoppingListPublic}
           />

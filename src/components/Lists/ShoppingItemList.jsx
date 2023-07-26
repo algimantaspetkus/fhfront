@@ -5,16 +5,18 @@ import {
   ListItemButton,
   ListItemText,
   IconButton,
+  Chip,
 } from "@mui/material";
-import { PriorityBarsMinified } from "../UI/PriorityBars";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
 
 export default function ShoppingItemList({
-  shoppingItems,
+  items,
   toggleComplete,
-  showShoppingItemDetails,
+  showItemDetails,
 }) {
+  console.log(items);
   return (
     <List
       sx={{
@@ -22,23 +24,19 @@ export default function ShoppingItemList({
         overflow: "auto",
       }}
     >
-      {shoppingItems?.map((shoppingItem) => (
-        <ShoppingItemListItem
+      {items?.map((item) => (
+        <ShoppingListItem
           toggleComplete={toggleComplete}
-          key={shoppingItem._id}
-          shoppingItem={shoppingItem}
-          showShoppingItemDetails={showShoppingItemDetails}
+          key={item._id}
+          item={item}
+          showItemDetails={showItemDetails}
         />
       ))}
     </List>
   );
 }
 
-function ShoppingItemListItem({
-  shoppingItem,
-  toggleComplete,
-  showShoppingItemDetails,
-}) {
+function ShoppingListItem({ item, toggleComplete, showItemDetails }) {
   const clickHandler = (event) => {
     const isCheckboxClick =
       event.target.getAttribute("data-checkbox") === "true";
@@ -46,29 +44,28 @@ function ShoppingItemListItem({
       event.target.closest('[data-checkbox="true"]') !== null;
 
     if (isCheckboxClick || isCheckboxChildClick) {
-      toggleComplete(shoppingItem._id, !shoppingItem.completed);
+      toggleComplete(item._id, !item.completed);
     } else {
-      showShoppingItemDetails(shoppingItem._id);
+      showItemDetails(item._id);
     }
   };
 
   return (
     <ListItem sx={{ padding: 0 }}>
       <ListItemButton onClick={clickHandler}>
-        <ListItemText primary={shoppingItem.shoppingItemTitle} />
+        {item.required && (
+          <PriorityHighIcon sx={{ color: "#FF5733", marginRight: "1rem" }} />
+        )}
+        <ListItemText primary={item.itemTitle} />
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          <PriorityBarsMinified priority={shoppingItem.priority} />
+          {item.type && <Chip label={item.type} color="primary" />}
           <IconButton
             data-checkbox="true"
             edge="end"
             aria-label="checkbox"
             sx={{ marginLeft: "1rem" }}
           >
-            {shoppingItem.completed ? (
-              <CheckBoxIcon />
-            ) : (
-              <CheckBoxOutlineBlankIcon />
-            )}
+            {item.completed ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
           </IconButton>
         </Box>
       </ListItemButton>

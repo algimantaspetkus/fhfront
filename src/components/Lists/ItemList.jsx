@@ -24,6 +24,7 @@ export default function TaskList({
   activeitemListId,
   deleteTaskList,
   makePublic,
+  type,
 }) {
   const navigate = useNavigate();
   return (
@@ -33,37 +34,35 @@ export default function TaskList({
         overflow: "auto",
       }}
     >
-      {itemList?.map((taskList) => (
-        <ListItem key={taskList._id}>
-          <ListItemButton onClick={() => navigate(`${taskList._id}/tasks`)}>
+      {itemList?.map((list) => (
+        <ListItem key={list._id}>
+          <ListItemButton onClick={() => navigate(`${list._id}/${type}`)}>
             <ListItemAvatar>
-              <Avatar>
-                {taskList.isPrivate ? <LockIcon /> : <ShareIcon />}
-              </Avatar>
+              <Avatar>{list.isPrivate ? <LockIcon /> : <ShareIcon />}</Avatar>
             </ListItemAvatar>
-            <ListItemText primary={taskList.listTitle} />
+            <ListItemText primary={list.listTitle} />
           </ListItemButton>
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <IconButton
-              aria-controls={`menu-${taskList._id}`}
+              aria-controls={`menu-${list._id}`}
               aria-haspopup="true"
               onClick={(event) => {
-                handleClick(event, taskList._id);
+                handleClick(event, list._id);
               }}
             >
               <MoreVertIcon />
             </IconButton>
           </Box>
           <Menu
-            id={`menu-${taskList._id}`}
+            id={`menu-${list._id}`}
             anchorEl={anchorEl}
-            open={activeitemListId === taskList._id && Boolean(anchorEl)}
+            open={activeitemListId === list._id && Boolean(anchorEl)}
             onClose={handleClose}
           >
             <MenuItem
-              disabled={!taskList.isPrivate}
+              disabled={!list.isPrivate}
               onClick={() => {
-                makePublic(taskList._id);
+                makePublic(list._id);
                 handleClose();
               }}
             >
@@ -71,7 +70,7 @@ export default function TaskList({
             </MenuItem>
             <MenuItem
               onClick={() => {
-                deleteTaskList(taskList._id);
+                deleteTaskList(list._id);
                 handleClose();
               }}
             >
