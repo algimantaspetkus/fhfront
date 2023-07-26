@@ -49,7 +49,6 @@ export default function TasksPage() {
           autofocus: true,
           title: "Delete",
           callback: () => {
-            console.log(selectedTask);
             deleteTask(selectedTask);
             tdCloseDrawer();
           },

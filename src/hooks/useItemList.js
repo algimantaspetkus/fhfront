@@ -4,87 +4,92 @@ import io from "socket.io-client";
 import api from "../api";
 import { useSnackbarMessage } from "./useSnackbarMessage";
 
-export function useItemList() {
+export function useItemList(type) {
+  const route = type + "list";
   const defaultGroupId = useSelector(
     (state) => state.userSettings.defaultGroupId
   );
   const [itemList, setItemList] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [taskListTitle, setTaskListTitle] = useState("");
-  const [takListIsPrivate, setTaskListIsPrivate] = useState(false);
+  const [itemListTitle, setItemListTitle] = useState("");
+  const [takListIsPrivate, setItemListIsPrivate] = useState(false);
   const { sendMessage } = useSnackbarMessage();
 
   const server = process.env.REACT_APP_BASE_SERVER;
 
-  const getTaskList = useCallback(async () => {
+  const getItemList = useCallback(async () => {
     try {
-      const response = await api.get(`${server}/tasklist/gettasklists`);
+      const response = await api.get(`${server}/${route}/list`);
       if (!response.data) {
-        sendMessage("Failed to get task lists", "error");
+        sendMessage("Failed to get item lists", "error");
       }
       const data = response.data;
       setItemList(data.itemList);
     } catch (error) {
       sendMessage(
-        error?.response?.data?.error || "Failed to make task list public",
+        error?.response?.data?.error || "Failed to make item list public",
         "error"
       );
     } finally {
       setLoading(false);
     }
-  }, [sendMessage, server]);
+  }, [sendMessage, server, route]);
 
   useEffect(() => {
-    getTaskList();
+    getItemList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    const socket = io(server, {
-      query: { room: defaultGroupId },
-    });
+    if (defaultGroupId && defaultGroupId !== "notset") {
+      const socket = io(server, {
+        query: { room: defaultGroupId },
+      });
 
-    socket.on("updateTaskList", () => {
-      getTaskList();
-    });
-
-    return () => {
-      socket.disconnect();
-    };
+      socket.on(
+        `update${type[0].toUpperCase() + type.slice(1, type.length)}List`,
+        () => {
+          getItemList();
+        }
+      );
+      return () => {
+        socket.disconnect();
+      };
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [server, defaultGroupId]);
 
-  const setTaskListData = (type, payload) => {
+  const setItemListData = (type, payload) => {
     switch (type) {
-      case "taskListTitle":
-        setTaskListTitle(payload);
+      case "itemListTitle":
+        setItemListTitle(payload);
         break;
-      case "taskListIsPrivate":
-        setTaskListIsPrivate(payload);
+      case "itemListIsPrivate":
+        setItemListIsPrivate(payload);
         break;
       case "reset":
-        setTaskListTitle("");
-        setTaskListIsPrivate(false);
+        setItemListTitle("");
+        setItemListIsPrivate(false);
         break;
       default:
         break;
     }
   };
 
-  const makeTaskListPublic = async (itemListId) => {
+  const makeItemListPublic = async (itemListId) => {
     try {
-      const response = await api.put(`${server}/tasklist/makepublic`, {
+      const response = await api.put(`${server}/${route}/makepublic`, {
         itemListId,
       });
       if (!response.data) {
-        sendMessage("Failed to make task list public", "error");
+        sendMessage("Failed to make list public", "error");
       }
       const data = response.data;
-      setItemList(data.taskList);
-      sendMessage("Task List made public", "success");
+      setItemList(data.itemList);
+      sendMessage("List made public", "success");
     } catch (error) {
       sendMessage(
-        error?.response?.data?.error || "Failed to make task list public",
+        error?.response?.data?.error || "Failed to make list public",
         "error"
       );
     } finally {
@@ -92,20 +97,20 @@ export function useItemList() {
     }
   };
 
-  const disableTaskList = async (itemListId) => {
+  const disableItemList = async (itemListId) => {
     try {
-      const response = await api.put(`${server}/tasklist/disabletasklist`, {
+      const response = await api.put(`${server}/${route}/disable`, {
         itemListId,
       });
       if (!response.data) {
-        sendMessage("Failed to delete task list", "error");
+        sendMessage("Failed to delete list", "error");
       }
       const data = response.data;
-      setItemList(data.taskList);
-      sendMessage("Task List deleted", "success");
+      setItemList(data.itemList);
+      sendMessage("List deleted", "success");
     } catch (error) {
       sendMessage(
-        error?.response?.data?.error || "Failed to delete task list",
+        error?.response?.data?.error || "Failed to delete list",
         "error"
       );
     } finally {
@@ -113,23 +118,23 @@ export function useItemList() {
     }
   };
 
-  const createTaskList = async (event) => {
+  const createItemList = async (event) => {
     event.preventDefault();
     setLoading(true);
     try {
-      const response = await api.post(`${server}/tasklist/addtasklist`, {
-        listTitle: taskListTitle,
+      const response = await api.post(`${server}/${route}/add`, {
+        listTitle: itemListTitle,
         isPrivate: takListIsPrivate,
       });
       if (!response.data) {
-        sendMessage("Failed to create task list", "error");
+        sendMessage("Failed to create list", "error");
       } else {
-        sendMessage("Task List created", "success");
-        getTaskList();
+        sendMessage("List created", "success");
+        getItemList();
       }
     } catch (error) {
       sendMessage(
-        error?.response?.data?.error || "Failed to create task list",
+        error?.response?.data?.error || "Failed to create list",
         "error"
       );
     } finally {
@@ -139,11 +144,11 @@ export function useItemList() {
 
   return {
     loading,
-    getTaskList,
+    getItemList,
     itemList,
-    setTaskListData,
-    createTaskList,
-    makeTaskListPublic,
-    disableTaskList,
+    setItemListData,
+    createItemList,
+    makeItemListPublic,
+    disableItemList,
   };
 }

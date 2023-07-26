@@ -10,8 +10,8 @@ import LoadingButton from "@mui/lab/LoadingButton";
 
 export default function CreateGroupForm({
   closeDrawer,
-  setTaskListData,
-  createTaskList,
+  setItemListData,
+  createItemList,
 }) {
   return (
     <Container sx={{ padding: "2rem" }}>
@@ -23,7 +23,7 @@ export default function CreateGroupForm({
           component="form"
           sx={{ display: "flex", flexDirection: "column", gap: "1rem" }}
           onSubmit={(event) => {
-            createTaskList(event);
+            createItemList(event);
             closeDrawer();
           }}
         >
@@ -33,14 +33,14 @@ export default function CreateGroupForm({
             sx={{ flex: 1 }}
             maxRows={32}
             minLength={3}
-            onChange={(e) => setTaskListData("taskListTitle", e.target.value)}
+            onChange={(e) => setItemListData("itemListTitle", e.target.value)}
             required
           />
           <FormControlLabel
             control={
               <Switch
                 onChange={(_, value) =>
-                  setTaskListData("taskListIsPrivate", value)
+                  setItemListData("itemListIsPrivate", value)
                 }
               />
             }

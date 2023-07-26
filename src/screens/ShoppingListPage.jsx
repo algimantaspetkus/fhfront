@@ -8,25 +8,25 @@ import { useDrawer } from "../hooks/useDrawer";
 import { useDialog } from "../hooks/useDialog";
 import CreateItemListForm from "../components/Forms/CreateItemListForm";
 
-export default function TaskListPage() {
+export default function ShoppingListPage() {
   const {
     itemList,
     setItemListData,
     createItemList,
     makeItemListPublic,
     disableItemList,
-  } = useItemList("task");
+  } = useItemList("shopping");
   const [activeitemListId, setActiveitemListId] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
   const { openDrawer, closeDrawer, drawerOpen } = useDrawer();
 
   const {
-    dialogProps: dialogPropsTaskListDelete,
-    handleClickOpen: handleClickOpenTaskListDelete,
+    dialogProps: dialogPropsShoppingListDelete,
+    handleClickOpen: handleClickOpenShoppingListDelete,
   } = useDialog({
     content:
-      "Are you sure you want to delete this task list? This action cannot be undone.",
-    title: "Delete Task List",
+      "Are you sure you want to delete this shopping list? This action cannot be undone.",
+    title: "Delete Shopping List",
     buttons: [
       { title: "Cancel" },
       {
@@ -40,12 +40,12 @@ export default function TaskListPage() {
   });
 
   const {
-    dialogProps: dialogPropsTaskListPublic,
-    handleClickOpen: handleClickOpenTaskListPublic,
+    dialogProps: dialogPropsShoppingListPublic,
+    handleClickOpen: handleClickOpenShoppingListPublic,
   } = useDialog({
     content:
-      "Are you sure you want to make this list this task list public? This action cannot be undone.",
-    title: "Make Task List Public",
+      "Are you sure you want to make this list this shopping list public? This action cannot be undone.",
+    title: "Make Shopping List Public",
     buttons: [
       { title: "Cancel" },
       {
@@ -68,7 +68,7 @@ export default function TaskListPage() {
     setAnchorEl(null);
   };
 
-  const taskListProps = {
+  const shoppingListProps = {
     itemList,
     handleClick,
     anchorEl,
@@ -81,12 +81,12 @@ export default function TaskListPage() {
       <Container>
         <Box sx={{ marginTop: "5rem" }}>
           <Typography variant="h4" component="h2">
-            TaskList page
+            ShoppingList page
           </Typography>
           <ItemList
-            {...taskListProps}
-            deleteTaskList={handleClickOpenTaskListDelete}
-            makePublic={handleClickOpenTaskListPublic}
+            {...shoppingListProps}
+            deleteShoppingList={handleClickOpenShoppingListDelete}
+            makePublic={handleClickOpenShoppingListPublic}
           />
         </Box>
       </Container>
@@ -98,11 +98,11 @@ export default function TaskListPage() {
           createItemList={createItemList}
         />
       </Drawer>
-      {dialogPropsTaskListDelete.open && (
-        <Dialog dialogProps={dialogPropsTaskListDelete} />
+      {dialogPropsShoppingListDelete.open && (
+        <Dialog dialogProps={dialogPropsShoppingListDelete} />
       )}
-      {dialogPropsTaskListPublic.open && (
-        <Dialog dialogProps={dialogPropsTaskListPublic} />
+      {dialogPropsShoppingListPublic.open && (
+        <Dialog dialogProps={dialogPropsShoppingListPublic} />
       )}
     </>
   );

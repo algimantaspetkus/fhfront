@@ -33,7 +33,7 @@ const settings = [
 const navItems = [
   { title: "Dashboard", path: "/dashboard", appBarTitle: "Dashboard" },
   { title: "Tasks", path: "/tasklists", appBarTitle: "Tasks" },
-  { title: "Shopping", path: "/shopping", appBarTitle: "Shopping" },
+  { title: "Shopping", path: "/shoppinglist", appBarTitle: "Shopping" },
   { title: "Calendar", path: "/calendar", appBarTitle: "Calendar" },
 ];
 

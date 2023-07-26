@@ -11,6 +11,7 @@ import Profile from "./Profile";
 import Register from "./Register";
 import DashboardPage from "./DashboardPage";
 import TaskListsPage from "./TaskListsPage";
+import ShoppingListPage from "./ShoppingListPage";
 import GroupPage from "./GroupPage";
 import TasksPage from "./TasksPage";
 
@@ -51,6 +52,7 @@ export default function MainLayout() {
           <Routes>
             <Route path="/" element={<DashboardPage />} />
             <Route path="/tasklists" element={<TaskListsPage />} exact />
+            <Route path="/shoppinglist" element={<ShoppingListPage />} exact />
             <Route
               path="/tasklists/:itemListId/tasks"
               element={<TasksPage />}
