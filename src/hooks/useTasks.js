@@ -73,7 +73,7 @@ function reducer(state, action) {
   }
 }
 
-export function useTasks(taskListId) {
+export function useTasks(itemListId) {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { sendMessage } = useSnackbarMessage();
 
@@ -82,7 +82,7 @@ export function useTasks(taskListId) {
   const getTasks = useCallback(async () => {
     dispatch({ type: "SET_LOADING", payload: true });
     try {
-      const response = await api.get(`${server}/task/tasks/${taskListId}`);
+      const response = await api.get(`${server}/task/tasks/${itemListId}`);
       if (!response.data) {
         sendMessage("Failed to get tasks", "error");
       }
@@ -100,7 +100,7 @@ export function useTasks(taskListId) {
     } finally {
       dispatch({ type: "SET_LOADING", payload: false });
     }
-  }, [taskListId, server, sendMessage]);
+  }, [itemListId, server, sendMessage]);
 
   useEffect(() => {
     getTasks();
@@ -109,7 +109,7 @@ export function useTasks(taskListId) {
 
   useEffect(() => {
     const socket = io(server, {
-      query: { room: taskListId },
+      query: { room: itemListId },
     });
 
     socket.on("taskItemAdded", () => {
@@ -120,7 +120,7 @@ export function useTasks(taskListId) {
       socket.disconnect();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [server, taskListId]);
+  }, [server, itemListId]);
 
   const setTaskData = (type, payload) => {
     switch (type) {
@@ -149,7 +149,7 @@ export function useTasks(taskListId) {
     dispatch({ type: "SET_LOADING", payload: true });
     try {
       const requestBody = {
-        taskListId: taskListId,
+        itemListId: itemListId,
         taskTitle: state.taskTitle !== "" ? state.taskTitle : undefined,
         taskDescription:
           state.taskDescription !== "" ? state.taskDescription : undefined,

@@ -16,7 +16,7 @@ export default function TaskListPage() {
     makeTaskListPublic,
     disableTaskList,
   } = useItemList();
-  const [activeTaskListId, setActiveTaskListId] = useState(null);
+  const [activeitemListId, setActiveitemListId] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
   const { openDrawer, closeDrawer, drawerOpen } = useDrawer();
 
@@ -33,7 +33,7 @@ export default function TaskListPage() {
         autofocus: true,
         title: "Delete",
         callback: () => {
-          disableTaskList(activeTaskListId);
+          disableTaskList(activeitemListId);
         },
       },
     ],
@@ -52,16 +52,16 @@ export default function TaskListPage() {
         autofocus: true,
         title: "Make Public",
         callback: () => {
-          makeTaskListPublic(activeTaskListId);
+          makeTaskListPublic(activeitemListId);
         },
       },
     ],
   });
 
-  const handleClick = useCallback((event, taskListId) => {
+  const handleClick = useCallback((event, itemListId) => {
     event.stopPropagation();
     setAnchorEl(event.currentTarget);
-    setActiveTaskListId(taskListId);
+    setActiveitemListId(itemListId);
   }, []);
 
   const handleClose = () => {
@@ -73,7 +73,7 @@ export default function TaskListPage() {
     handleClick,
     anchorEl,
     handleClose,
-    activeTaskListId,
+    activeitemListId,
   };
 
   return (

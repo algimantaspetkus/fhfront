@@ -71,10 +71,10 @@ export function useItemList() {
     }
   };
 
-  const makeTaskListPublic = async (taskListId) => {
+  const makeTaskListPublic = async (itemListId) => {
     try {
       const response = await api.put(`${server}/tasklist/makepublic`, {
-        taskListId,
+        itemListId,
       });
       if (!response.data) {
         sendMessage("Failed to make task list public", "error");
@@ -92,10 +92,10 @@ export function useItemList() {
     }
   };
 
-  const disableTaskList = async (taskListId) => {
+  const disableTaskList = async (itemListId) => {
     try {
       const response = await api.put(`${server}/tasklist/disabletasklist`, {
-        taskListId,
+        itemListId,
       });
       if (!response.data) {
         sendMessage("Failed to delete task list", "error");

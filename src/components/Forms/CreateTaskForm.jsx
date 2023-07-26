@@ -7,7 +7,7 @@ export default function CreateGroupForm({
   closeDrawer,
   setTaskData,
   createTask,
-  taskListId,
+  itemListId,
 }) {
   return (
     <Container sx={{ padding: "2rem" }}>
@@ -38,7 +38,7 @@ export default function CreateGroupForm({
             sx={{ flex: 1 }}
             onChange={(e) => setTaskData("taskDescription", e.target.value)}
           />
-          <PeoplePicker setTaskData={setTaskData} taskListId={taskListId} />
+          <PeoplePicker setTaskData={setTaskData} itemListId={itemListId} />
           <DateTimePicker setTaskData={setTaskData} />
           <Box>
             <Typography gutterBottom>Priority</Typography>

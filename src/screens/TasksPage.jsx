@@ -16,7 +16,7 @@ export default function TasksPage() {
   const [selectedTask, setSelectedTask] = useState(null);
   const [key, setKey] = useState(0);
   const dispatch = useDispatch();
-  const { taskListId } = useParams();
+  const { itemListId } = useParams();
 
   const {
     drawerOpen: ctDrawerOpen,
@@ -35,7 +35,7 @@ export default function TasksPage() {
     createTask,
     toggleComplete,
     deleteTask,
-  } = useTasks(taskListId);
+  } = useTasks(itemListId);
   const { tasks, taskList } = state;
 
   const { dialogProps: dialogPropsTask, handleClickOpen: handleClickOpenTask } =
@@ -92,7 +92,7 @@ export default function TasksPage() {
       </Container>
       <Drawer anchor={"right"} open={ctDrawerOpen} onClose={ctCloseDrawer}>
         <CreateTaskForm
-          taskListId={taskListId}
+          itemListId={itemListId}
           closeDrawer={ctCloseDrawer}
           setTaskData={setTaskData}
           createTask={createTask}

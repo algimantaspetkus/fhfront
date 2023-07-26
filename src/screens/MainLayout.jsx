@@ -52,7 +52,7 @@ export default function MainLayout() {
             <Route path="/" element={<DashboardPage />} />
             <Route path="/tasklists" element={<TaskListsPage />} exact />
             <Route
-              path="/tasklists/:taskListId/tasks"
+              path="/tasklists/:itemListId/tasks"
               element={<TasksPage />}
             />
             <Route path="/login" element={<Login />} />

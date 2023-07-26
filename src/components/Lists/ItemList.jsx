@@ -21,7 +21,7 @@ export default function TaskList({
   handleClick,
   anchorEl,
   handleClose,
-  activeTaskListId,
+  activeitemListId,
   deleteTaskList,
   makePublic,
 }) {
@@ -57,7 +57,7 @@ export default function TaskList({
           <Menu
             id={`menu-${taskList._id}`}
             anchorEl={anchorEl}
-            open={activeTaskListId === taskList._id && Boolean(anchorEl)}
+            open={activeitemListId === taskList._id && Boolean(anchorEl)}
             onClose={handleClose}
           >
             <MenuItem
