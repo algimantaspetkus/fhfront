@@ -4,8 +4,10 @@ import {
   ListItem,
   ListItemButton,
   ListItemText,
+  ListSubheader,
   IconButton,
-  Chip,
+  Divider,
+  Typography,
 } from "@mui/material";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
@@ -16,7 +18,23 @@ export default function ShoppingItemList({
   toggleComplete,
   showItemDetails,
 }) {
-  console.log(items);
+  // Sort the items by type and name
+  const sortedItems = items.slice().sort((a, b) => {
+    if (!a.type && b.type) return 1;
+    if (a.type && !b.type) return -1;
+    if (!a.type && !b.type) return a.itemTitle.localeCompare(b.itemTitle);
+    return (
+      a.type.localeCompare(b.type) || a.itemTitle.localeCompare(b.itemTitle)
+    );
+  });
+
+  // Group the items by type
+  const groupedItems = sortedItems.reduce((groups, item) => {
+    const key = item.type || "Not Grouped";
+    groups[key] = [...(groups[key] || []), item];
+    return groups;
+  }, {});
+
   return (
     <List
       sx={{
@@ -24,13 +42,27 @@ export default function ShoppingItemList({
         overflow: "auto",
       }}
     >
-      {items?.map((item) => (
-        <ShoppingListItem
-          toggleComplete={toggleComplete}
-          key={item._id}
-          item={item}
-          showItemDetails={showItemDetails}
-        />
+      {Object.entries(groupedItems).map(([type, items]) => (
+        <Box key={type}>
+          <ListSubheader
+            sx={{
+              fontSize: "1.2rem", // Increase the font size of the subheader
+              padding: "1rem 0",
+            }}
+          >
+            {type}
+          </ListSubheader>
+          {items.map((item) => (
+            <Box key={item._id}>
+              <ShoppingListItem
+                toggleComplete={toggleComplete}
+                item={item}
+                showItemDetails={showItemDetails}
+              />
+            </Box>
+          ))}
+          <Divider sx={{ my: 0.5 }} /> {/* Add a separator between items */}
+        </Box>
       ))}
     </List>
   );
@@ -58,7 +90,11 @@ function ShoppingListItem({ item, toggleComplete, showItemDetails }) {
         )}
         <ListItemText primary={item.itemTitle} />
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          {item.type && <Chip label={item.type} color="primary" />}
+          {item.quantity && (
+            <Typography variant="body2" sx={{ marginRight: "1rem" }}>
+              {item.quantity}
+            </Typography>
+          )}
           <IconButton
             data-checkbox="true"
             edge="end"

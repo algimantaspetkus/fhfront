@@ -4,21 +4,21 @@ import Autocomplete from "@mui/material/Autocomplete";
 import CircularProgress from "@mui/material/CircularProgress";
 import { usePeople } from "../../hooks/usePeople";
 
-export default function PeoplePicker({ itemListId, setTaskData }) {
+export default function PeoplePicker({ itemListId, setItemData }) {
   const [open, setOpen] = React.useState(false);
-  const { people, getByTaskList, loading } = usePeople(itemListId);
+  const { people, getByListId, loading } = usePeople(itemListId);
 
   React.useEffect(() => {
     if (open) {
-      getByTaskList();
+      getByListId();
     }
-  }, [open, getByTaskList, itemListId]);
+  }, [open, getByListId, itemListId]);
 
   return (
     <Autocomplete
       id="asynchronous-demo"
       open={open}
-      onChange={(e, value) => setTaskData("assignedToUser", value?._id)}
+      onChange={(e, value) => setItemData("assignedToUser", value?._id)}
       onOpen={() => {
         setOpen(true);
       }}

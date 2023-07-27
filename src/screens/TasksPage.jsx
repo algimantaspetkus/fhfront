@@ -1,42 +1,49 @@
 import { useState, useEffect } from "react";
 import { Box, Typography, Container, Drawer } from "@mui/material";
 import TaskItemsList from "../components/Lists/TaskItemsList";
-import SingleActionFab from "../components/Fab/SingleActionFab";
+import SpeedDialFab from "../components/Fab/SpeedDialFab";
 import CreateTaskForm from "../components/Forms/CreateTaskForm";
 import TaskDetails from "../components/Details/TaskDetails";
-import Dialog from "../components/Dialog/Dialog";
+import Dialog from "../components/FeedBack/Dialog";
 import { useParams } from "react-router-dom";
-import { useTasks } from "../hooks/useTasks";
+import { useTaskItems } from "../hooks/useTaskItems";
 import { useDrawer } from "../hooks/useDrawer";
 import { useDialog } from "../hooks/useDialog";
 import { useDispatch } from "react-redux";
 import { setTitle } from "../redux/navigationSlice";
+import { useFilter } from "../hooks/useFilter";
 
 export default function TasksPage() {
-  const [selectedTask, setSelectedTask] = useState(null);
+  const [selectedItem, setSelectedItem] = useState(null);
   const [key, setKey] = useState(0);
   const dispatch = useDispatch();
   const { itemListId } = useParams();
 
   const {
-    drawerOpen: ctDrawerOpen,
-    openDrawer: ctOpenDrawer,
-    closeDrawer: ctCloseDrawer,
+    drawerOpen: createDrawerOpen,
+    openDrawer: createOpenDrawer,
+    closeDrawer: createCloseDrawer,
   } = useDrawer();
+
   const {
-    drawerOpen: tdDrawerOpen,
-    openDrawer: tdOpenDrawer,
-    closeDrawer: tdCloseDrawer,
+    drawerOpen: detailsDrawerOpen,
+    openDrawer: detailsOpenDrawer,
+    closeDrawer: detailsCloseDrawer,
   } = useDrawer();
+
+  const { filterCompleted, toggleFilterCompleted } = useFilter(
+    "filterCompletedTaskItems"
+  );
+
   const {
     state,
-    getTask,
-    setTaskData,
-    createTask,
+    getItem,
+    setItemData,
+    createItem,
     toggleComplete,
-    deleteTask,
-  } = useTasks(itemListId);
-  const { tasks, taskList } = state;
+    deleteItem,
+  } = useTaskItems(itemListId);
+  const { items, itemList } = state;
 
   const { dialogProps: dialogPropsTask, handleClickOpen: handleClickOpenTask } =
     useDialog({
@@ -49,29 +56,29 @@ export default function TasksPage() {
           autofocus: true,
           title: "Delete",
           callback: () => {
-            deleteTask(selectedTask);
-            tdCloseDrawer();
+            deleteItem(selectedItem);
+            detailsCloseDrawer();
           },
         },
       ],
     });
 
   useEffect(() => {
-    dispatch(setTitle(taskList?.listTitle));
-  }, [dispatch, taskList]);
+    dispatch(setTitle(itemList?.listTitle));
+  }, [dispatch, itemList]);
 
   useEffect(() => {
     setKey((prevKey) => prevKey + 1);
-  }, [tasks]);
+  }, [items]);
 
-  function showTaskDetailsHandler(taskId) {
-    setSelectedTask(taskId);
-    tdOpenDrawer();
+  function showTaskDetailsHandler(itemId) {
+    setSelectedItem(itemId);
+    detailsOpenDrawer();
   }
 
   function hideTaskDetailsHandler() {
-    setSelectedTask(null);
-    tdCloseDrawer();
+    setSelectedItem(null);
+    detailsCloseDrawer();
   }
 
   return (
@@ -79,39 +86,52 @@ export default function TasksPage() {
       <Container>
         <Box sx={{ marginTop: "5rem" }}>
           <Typography variant="h4" component="h2">
-            {taskList?.listTitle}
+            {itemList?.listTitle}
           </Typography>
           <TaskItemsList
-            tasks={tasks}
+            items={items.filter((item) => {
+              if (filterCompleted) {
+                return item.completed === false;
+              }
+              return true;
+            })}
             toggleComplete={toggleComplete}
-            deleteTask={deleteTask}
-            showTaskDetails={showTaskDetailsHandler}
+            deleteItem={deleteItem}
+            showItemDetails={showTaskDetailsHandler}
           />
         </Box>
       </Container>
-      <Drawer anchor={"right"} open={ctDrawerOpen} onClose={ctCloseDrawer}>
+      <Drawer
+        anchor={"right"}
+        open={createDrawerOpen}
+        onClose={createCloseDrawer}
+      >
         <CreateTaskForm
           itemListId={itemListId}
-          closeDrawer={ctCloseDrawer}
-          setTaskData={setTaskData}
-          createTask={createTask}
+          closeDrawer={createCloseDrawer}
+          setItemData={setItemData}
+          createItem={createItem}
         />
       </Drawer>
       <Drawer
         anchor={"right"}
-        open={tdDrawerOpen}
+        open={detailsDrawerOpen}
         onClose={hideTaskDetailsHandler}
       >
         <TaskDetails
-          taskId={selectedTask}
-          getTask={getTask}
+          itemId={selectedItem}
+          getItem={getItem}
           toggleComplete={toggleComplete}
-          deleteTask={handleClickOpenTask}
+          deleteItem={handleClickOpenTask}
           key={key}
         />
       </Drawer>
       {dialogPropsTask.open && <Dialog dialogProps={dialogPropsTask} />}
-      <SingleActionFab onClick={ctOpenDrawer} />
+      <SpeedDialFab
+        addItem={createOpenDrawer}
+        toggleFilterCompleted={toggleFilterCompleted}
+        filterCompleted={filterCompleted}
+      />
     </>
   );
 }

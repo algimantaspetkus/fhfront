@@ -8,6 +8,8 @@ const initialState = {
   itemDescription: "",
   itemType: "",
   itemRequired: "",
+  itemUrl: "",
+  itemQuantity: "",
   items: [],
   itemList: {},
   loading: false,
@@ -29,6 +31,16 @@ function reducer(state, action) {
       return {
         ...state,
         itemType: action.payload,
+      };
+    case "SET_ITEM_URL":
+      return {
+        ...state,
+        itemUrl: action.payload,
+      };
+    case "SET_ITEM_QUANTITY":
+      return {
+        ...state,
+        itemQuantity: action.payload,
       };
     case "SET_ITEM_REQUIRED":
       return {
@@ -71,7 +83,6 @@ export function useShoppingItems(itemListId) {
         sendMessage("Failed to get shopping items", "error");
       }
       const data = response.data;
-      console.log(data);
       dispatch({ type: "SET_ITEMS", payload: data.shoppingItems });
       dispatch({ type: "SET_ITEM_LIST", payload: data.itemList });
     } catch (error) {
@@ -118,6 +129,12 @@ export function useShoppingItems(itemListId) {
       case "itemRequired":
         dispatch({ type: "SET_ITEM_REQUIRED", payload: payload });
         break;
+      case "itemUrl":
+        dispatch({ type: "SET_ITEM_URL", payload: payload });
+        break;
+      case "itemQuantity":
+        dispatch({ type: "SET_ITEM_QUANTITY", payload: payload });
+        break;
       default:
         break;
     }
@@ -134,6 +151,8 @@ export function useShoppingItems(itemListId) {
           state.itemDescription !== "" ? state.itemDescription : undefined,
         type: state.itemType !== "" ? state.itemType : undefined,
         required: state.itemRequired !== "" ? state.itemRequired : undefined,
+        url: state.itemUrl !== "" ? state.itemUrl : undefined,
+        quantity: state.itemQuantity !== "" ? state.itemQuantity : undefined,
       };
 
       const response = await api.post(
@@ -217,6 +236,8 @@ export function useShoppingItems(itemListId) {
     dispatch({ type: "SET_ITEM_DESCRIPTION", payload: "" });
     dispatch({ type: "SET_ITEM_TYPE", payload: "" });
     dispatch({ type: "SET_ITEM_REQUIRED", payload: "" });
+    dispatch({ type: "SET_ITEM_URL", payload: "" });
+    dispatch({ type: "SET_ITEM_QUANTITY", payload: "" });
   };
 
   return {

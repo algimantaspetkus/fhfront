@@ -5,8 +5,8 @@ import DateTimePicker from "../Picker/DateTimePicker";
 
 export default function CreateGroupForm({
   closeDrawer,
-  setTaskData,
-  createTask,
+  setItemData,
+  createItem,
   itemListId,
 }) {
   return (
@@ -19,7 +19,7 @@ export default function CreateGroupForm({
           component="form"
           sx={{ display: "flex", flexDirection: "column", gap: "1rem" }}
           onSubmit={(event) => {
-            createTask(event);
+            createItem(event);
             closeDrawer();
           }}
         >
@@ -27,7 +27,7 @@ export default function CreateGroupForm({
             label="Task Title"
             variant="outlined"
             sx={{ flex: 1 }}
-            onChange={(e) => setTaskData("taskTitle", e.target.value)}
+            onChange={(e) => setItemData("taskTitle", e.target.value)}
             required
           />
           <TextField
@@ -36,17 +36,17 @@ export default function CreateGroupForm({
             multiline
             rows={4}
             sx={{ flex: 1 }}
-            onChange={(e) => setTaskData("taskDescription", e.target.value)}
+            onChange={(e) => setItemData("taskDescription", e.target.value)}
           />
-          <PeoplePicker setTaskData={setTaskData} itemListId={itemListId} />
-          <DateTimePicker setTaskData={setTaskData} />
+          <PeoplePicker setItemData={setItemData} itemListId={itemListId} />
+          <DateTimePicker setItemData={setItemData} />
           <Box>
             <Typography gutterBottom>Priority</Typography>
             <Slider
               defaultValue={0}
               aria-label="Priority"
               valueLabelDisplay="auto"
-              onChange={(_, priority) => setTaskData("priority", priority)}
+              onChange={(_, priority) => setItemData("priority", priority)}
             />
           </Box>
           <LoadingButton

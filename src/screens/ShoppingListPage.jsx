@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import Dialog from "../components/Dialog/Dialog";
+import Dialog from "../components/FeedBack/Dialog";
 import { Box, Typography, Container, Drawer } from "@mui/material";
 import ItemList from "../components/Lists/ItemList";
 import SingleActionFab from "../components/Fab/SingleActionFab";

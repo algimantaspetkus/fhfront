@@ -23,7 +23,7 @@ export function useAuth() {
   async function signIn(email, password, callBack, pwdRef) {
     setLoading(true);
     try {
-      const response = await api.post(`${server}/auth/login`, {
+      const response = await api.post(`${server}/auth/signin`, {
         email,
         password,
       });

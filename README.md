@@ -1,70 +1,71 @@
-# Getting Started with Create React App
+# Introduction
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+GroupHub is an application built on React and Node.js that allows various groups of people, such as families, friend circles, and clubs, to create private groups. Within these groups, users can collaborate and manage task lists, shopping lists, event details, and other shared information efficiently and securely.
 
-## Available Scripts
+# Getting Started
 
-In the project directory, you can run:
+## Requirements
 
-### `npm start`
+- The latest version of [Node.js](https://nodejs.org/en) `(at least v18.15.0)`
+- [MongoDB](https://www.mongodb.com/)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Back End application
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Navigate to the place you want your backend application to be, clone it and then install the required packages
 
-### `npm test`
+```
+    cd C:\nodejs
+    git clone https://github.com/algimantaspetkus/fhback
+    cd fhback
+    npm install
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Rename the `example.env` in windows `ren example.env .env` or `mv example.env .env` on linux.
 
-### `npm run build`
+Edit the file, and provide your MongoDB credentials and a secret key for JWT generation. You can change the port if needed.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
+    USER=yourmongodbusername
+    PWD=yourmongodbpassword
+    HOST=nongodbhost
+    JWT=jwtsecretkey
+    PORT=8080
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+To start your back end application
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```
+    npm start
+```
 
-### `npm run eject`
+If everything works, you should secret
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```
+    Server is listening on port 8080
+    Connected to MongoDB
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Front End application
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Navigate to the place you want your backend application to be, clone it and then install the required packages
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```
+    cd C:\nodejs
+    git clone https://github.com/algimantaspetkus/fhfront
+    cd fhfront
+    npm install
+```
 
-## Learn More
+Rename the `example.env` in windows `ren example.env .env` or `mv example.env .env` on linux.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Edit the file, and provide the backend server IP address and the port. If you are going to use it on your local machine, you can leave the localhost, change the port if needed.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```
+    REACT_APP_BASE_SERVER=http://localhost:8080
+```
 
-### Code Splitting
+To start your front end application
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```
+    npm start
+```

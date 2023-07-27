@@ -5,9 +5,9 @@ import dayjs from "dayjs";
 import { DrawerSkeleton } from "../DrawerSkeleton";
 
 export default function TaskDetails({
-  taskId,
-  deleteTask,
-  getTask,
+  itemId,
+  deleteItem,
+  getItem,
   toggleComplete,
 }) {
   const [loading, setLoading] = useState(true);
@@ -15,19 +15,19 @@ export default function TaskDetails({
 
   const fetchData = useCallback(
     async (id) => {
-      const fetchedTask = await getTask(id);
+      const fetchedTask = await getItem(id);
       setLoading(false);
       setTask(fetchedTask?.task);
     },
-    [getTask]
+    [getItem]
   );
 
   useEffect(() => {
-    if (taskId) {
-      fetchData(taskId);
+    if (itemId) {
+      fetchData(itemId);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [taskId]);
+  }, [itemId]);
 
   return (
     <Container sx={{ padding: "2rem" }}>
@@ -90,7 +90,7 @@ export default function TaskDetails({
                 >
                   {task.completed ? "Un-Complete" : "Complete"}
                 </Button>
-                <Button variant="text" color="error" onClick={deleteTask}>
+                <Button variant="text" color="error" onClick={deleteItem}>
                   Delete
                 </Button>
               </Box>

@@ -5,6 +5,7 @@ import {
   Typography,
   TextField,
   Button,
+  Link,
   Chip,
 } from "@mui/material";
 import dayjs from "dayjs";
@@ -50,17 +51,20 @@ export default function ItemDetails({
                   Required
                 </Typography>
               )}
+              <Typography sx={{ marginBottom: "1rem" }} variant="h5">
+                {item.itemTitle}
+              </Typography>
               {item.type && (
                 <Box>
                   <Chip label={item.type} color="primary" />
                 </Box>
               )}
-              <Typography sx={{ marginBottom: "1rem" }} variant="h5">
-                {item.itemTitle}
-              </Typography>
+              {item.quantity && (
+                <TextField label="Quantity" value={item.quantity} readOnly />
+              )}
               {item.itemDescription && (
                 <TextField
-                  label="Item Description"
+                  label="Description"
                   value={item.itemDescription}
                   multiline
                   rows={4}
@@ -83,6 +87,16 @@ export default function ItemDetails({
                   value={dayjs(item.completedAt).format("YYYY-MM-DD HH:mm")}
                   readOnly
                 />
+              )}
+              {item.url && (
+                <Link
+                  underline="none"
+                  href={item.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {item.itemTitle}
+                </Link>
               )}
               <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                 <Button

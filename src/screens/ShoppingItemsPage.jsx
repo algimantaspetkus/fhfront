@@ -1,33 +1,40 @@
 import { useState, useEffect } from "react";
 import { Box, Typography, Container, Drawer } from "@mui/material";
 import ShoppingItemList from "../components/Lists/ShoppingItemList";
-import SingleActionFab from "../components/Fab/SingleActionFab";
+import SpeedDialFab from "../components/Fab/SpeedDialFab";
 import CreateShoppingItemForm from "../components/Forms/CreateShoppingItemForm";
 import ShoppingItemDetails from "../components/Details/ShoppingItemDetails";
-import Dialog from "../components/Dialog/Dialog";
+import Dialog from "../components/FeedBack/Dialog";
 import { useParams } from "react-router-dom";
 import { useShoppingItems } from "../hooks/useShoppingItems";
 import { useDrawer } from "../hooks/useDrawer";
 import { useDialog } from "../hooks/useDialog";
+import { useFilter } from "../hooks/useFilter";
 import { useDispatch } from "react-redux";
 import { setTitle } from "../redux/navigationSlice";
 
 export default function ItemsPage() {
   const [selectedItem, setSelectedItem] = useState(null);
   const [key, setKey] = useState(0);
+
   const dispatch = useDispatch();
   const { itemListId } = useParams();
 
+  const { filterCompleted, toggleFilterCompleted } = useFilter(
+    "filterCompletedShoppingItems"
+  );
+
   const {
-    drawerOpen: ctDrawerOpen,
-    openDrawer: ctOpenDrawer,
-    closeDrawer: ctCloseDrawer,
+    drawerOpen: createDrawerOpen,
+    openDrawer: createOpenDrawer,
+    closeDrawer: createCloseDrawer,
   } = useDrawer();
   const {
-    drawerOpen: tdDrawerOpen,
-    openDrawer: tdOpenDrawer,
-    closeDrawer: tdCloseDrawer,
+    drawerOpen: detailsDrawerOpen,
+    openDrawer: detailsOpenDrawer,
+    closeDrawer: detailsCloseDrawer,
   } = useDrawer();
+
   const {
     state,
     setItemData,
@@ -49,7 +56,7 @@ export default function ItemsPage() {
         title: "Delete",
         callback: () => {
           deleteItem(selectedItem);
-          tdCloseDrawer();
+          detailsCloseDrawer();
         },
       },
     ],
@@ -65,12 +72,12 @@ export default function ItemsPage() {
 
   function showItemDetailsHandler(itemId) {
     setSelectedItem(itemId);
-    tdOpenDrawer();
+    detailsOpenDrawer();
   }
 
   function hideItemDetailsHandler() {
     setSelectedItem(null);
-    tdCloseDrawer();
+    detailsCloseDrawer();
   }
 
   return (
@@ -81,23 +88,32 @@ export default function ItemsPage() {
             {itemList?.listTitle}
           </Typography>
           <ShoppingItemList
-            items={items}
+            items={items.filter((item) => {
+              if (filterCompleted) {
+                return item.completed === false;
+              }
+              return true;
+            })}
             toggleComplete={toggleComplete}
             deleteItem={handleClickOpen}
             showItemDetails={showItemDetailsHandler}
           />
         </Box>
       </Container>
-      <Drawer anchor={"right"} open={ctDrawerOpen} onClose={ctCloseDrawer}>
+      <Drawer
+        anchor={"right"}
+        open={createDrawerOpen}
+        onClose={createCloseDrawer}
+      >
         <CreateShoppingItemForm
-          closeDrawer={ctCloseDrawer}
+          closeDrawer={createCloseDrawer}
           setItemData={setItemData}
           createItem={createItem}
         />
       </Drawer>
       <Drawer
         anchor={"right"}
-        open={tdDrawerOpen}
+        open={detailsDrawerOpen}
         onClose={hideItemDetailsHandler}
       >
         <ShoppingItemDetails
@@ -109,7 +125,11 @@ export default function ItemsPage() {
         />
       </Drawer>
       {dialogProps.open && <Dialog dialogProps={dialogProps} />}
-      <SingleActionFab onClick={ctOpenDrawer} />
+      <SpeedDialFab
+        addItem={createOpenDrawer}
+        toggleFilterCompleted={toggleFilterCompleted}
+        filterCompleted={filterCompleted}
+      />
     </>
   );
 }

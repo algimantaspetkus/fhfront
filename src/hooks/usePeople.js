@@ -1,40 +1,37 @@
 import { useState, useEffect, useCallback } from "react";
+import { useSnackbarMessage } from "./useSnackbarMessage";
 import api from "../api";
 
 export function usePeople(itemListId) {
   const [people, setPeople] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [status, setStatus] = useState(null);
+  const { sendMessage } = useSnackbarMessage();
 
   const server = process.env.REACT_APP_BASE_SERVER;
 
-  const getByTaskList = useCallback(async () => {
+  const getByListId = useCallback(async () => {
     setLoading(true);
     try {
       const response = await api.get(
         `${server}/group/getListMembers/${itemListId}`
       );
       if (!response.data) {
-        setError("Error fetching people");
-        setStatus("error");
+        sendMessage("Error fetching people", "error");
       }
       setPeople(response.data.members);
-      setStatus("success");
     } catch (error) {
-      console.error(error);
-      setError("Error fetching people");
-      setStatus("error");
+      sendMessage(error?.response?.data?.error || "Error fetching people");
     } finally {
       setLoading(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [itemListId, server]);
 
   useEffect(() => {
     if (itemListId) {
-      getByTaskList();
+      getByListId();
     }
-  }, [itemListId, getByTaskList]);
+  }, [itemListId, getByListId]);
 
-  return { people, getByTaskList, loading, error, status };
+  return { people, getByListId, loading };
 }

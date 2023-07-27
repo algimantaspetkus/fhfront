@@ -11,9 +11,9 @@ import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 
 export default function TaskItemsList({
-  tasks,
+  items,
   toggleComplete,
-  showTaskDetails,
+  showItemDetails,
 }) {
   return (
     <List
@@ -22,19 +22,19 @@ export default function TaskItemsList({
         overflow: "auto",
       }}
     >
-      {tasks?.map((task) => (
+      {items?.map((item) => (
         <TaskListItem
           toggleComplete={toggleComplete}
-          key={task._id}
-          task={task}
-          showTaskDetails={showTaskDetails}
+          key={item._id}
+          item={item}
+          showItemDetails={showItemDetails}
         />
       ))}
     </List>
   );
 }
 
-function TaskListItem({ task, toggleComplete, showTaskDetails }) {
+function TaskListItem({ item, toggleComplete, showItemDetails }) {
   const clickHandler = (event) => {
     const isCheckboxClick =
       event.target.getAttribute("data-checkbox") === "true";
@@ -42,25 +42,25 @@ function TaskListItem({ task, toggleComplete, showTaskDetails }) {
       event.target.closest('[data-checkbox="true"]') !== null;
 
     if (isCheckboxClick || isCheckboxChildClick) {
-      toggleComplete(task._id, !task.completed);
+      toggleComplete(item._id, !item.completed);
     } else {
-      showTaskDetails(task._id);
+      showItemDetails(item._id);
     }
   };
 
   return (
     <ListItem sx={{ padding: 0 }}>
       <ListItemButton onClick={clickHandler}>
-        <ListItemText primary={task.taskTitle} />
+        <ListItemText primary={item.taskTitle} />
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          <PriorityBarsMinified priority={task.priority} />
+          <PriorityBarsMinified priority={item.priority} />
           <IconButton
             data-checkbox="true"
             edge="end"
             aria-label="checkbox"
             sx={{ marginLeft: "1rem" }}
           >
-            {task.completed ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
+            {item.completed ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
           </IconButton>
         </Box>
       </ListItemButton>

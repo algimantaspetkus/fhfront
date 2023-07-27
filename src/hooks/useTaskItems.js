@@ -1,4 +1,4 @@
-import { useReducer, useCallback, useEffect } from "react";
+import { useReducer, useEffect } from "react";
 import io from "socket.io-client";
 import { useSnackbarMessage } from "./useSnackbarMessage";
 import api from "../api";
@@ -9,11 +9,9 @@ const initialState = {
   assignedToUser: "",
   dueBy: "",
   priority: "",
-  tasks: [],
-  taskList: {},
+  items: [],
+  itemList: {},
   loading: false,
-  error: null,
-  status: null,
 };
 
 function reducer(state, action) {
@@ -43,43 +41,33 @@ function reducer(state, action) {
         ...state,
         priority: action.payload,
       };
-    case "SET_TASKS":
+    case "SET_ITEMS":
       return {
         ...state,
-        tasks: action.payload,
+        items: action.payload,
       };
-    case "SET_TASK_LIST":
+    case "SET_ITEM_LIST":
       return {
         ...state,
-        taskList: action.payload,
+        itemList: action.payload,
       };
     case "SET_LOADING":
       return {
         ...state,
         loading: action.payload,
       };
-    case "SET_ERROR":
-      return {
-        ...state,
-        error: action.payload,
-      };
-    case "SET_STATUS":
-      return {
-        ...state,
-        status: action.payload,
-      };
     default:
       return state;
   }
 }
 
-export function useTasks(itemListId) {
+export function useTaskItems(itemListId) {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { sendMessage } = useSnackbarMessage();
 
   const server = process.env.REACT_APP_BASE_SERVER;
 
-  const getTasks = useCallback(async () => {
+  const getItems = async () => {
     dispatch({ type: "SET_LOADING", payload: true });
     try {
       const response = await api.get(`${server}/task/tasks/${itemListId}`);
@@ -87,23 +75,20 @@ export function useTasks(itemListId) {
         sendMessage("Failed to get tasks", "error");
       }
       const data = response.data;
-      dispatch({ type: "SET_TASKS", payload: data.tasks });
-      dispatch({ type: "SET_TASK_LIST", payload: data.taskList });
-      dispatch({ type: "SET_STATUS", payload: "success" });
+      dispatch({ type: "SET_ITEMS", payload: data.tasks });
+      dispatch({ type: "SET_ITEM_LIST", payload: data.itemList });
     } catch (error) {
       sendMessage(
         error?.response?.data?.error || "Failed to get tasks",
         "error"
       );
-      dispatch({ type: "SET_ERROR", payload: error });
-      dispatch({ type: "SET_STATUS", payload: "error" });
     } finally {
       dispatch({ type: "SET_LOADING", payload: false });
     }
-  }, [itemListId, server, sendMessage]);
+  };
 
   useEffect(() => {
-    getTasks();
+    getItems();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -113,7 +98,7 @@ export function useTasks(itemListId) {
     });
 
     socket.on("taskItemAdded", () => {
-      getTasks();
+      getItems();
     });
 
     return () => {
@@ -122,7 +107,7 @@ export function useTasks(itemListId) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [server, itemListId]);
 
-  const setTaskData = (type, payload) => {
+  const setItemData = (type, payload) => {
     switch (type) {
       case "taskTitle":
         dispatch({ type: "SET_TASK_TITLE", payload: payload });
@@ -144,7 +129,7 @@ export function useTasks(itemListId) {
     }
   };
 
-  const createTask = async (event) => {
+  const createItem = async (event) => {
     event.preventDefault();
     dispatch({ type: "SET_LOADING", payload: true });
     try {
@@ -165,15 +150,12 @@ export function useTasks(itemListId) {
         sendMessage("Failed to create task", "error");
       }
       sendMessage("Task created", "success");
-      dispatch({ type: "SET_STATUS", payload: "success" });
       resetState();
     } catch (error) {
       sendMessage(
         error?.response?.data?.error || "Failed to create task",
         "error"
       );
-      dispatch({ type: "SET_ERROR", payload: error });
-      dispatch({ type: "SET_STATUS", payload: "error" });
     } finally {
       dispatch({ type: "SET_LOADING", payload: false });
     }
@@ -189,24 +171,24 @@ export function useTasks(itemListId) {
         },
       };
       await api.put(`${server}/task/update`, requestBody);
-      getTasks();
+      getItems();
     } catch (error) {
-      dispatch({ type: "SET_ERROR", payload: error });
-      dispatch({ type: "SET_STATUS", payload: "error" });
+      sendMessage(
+        error?.response?.data?.error || "Failed to update task",
+        "error"
+      );
     } finally {
       dispatch({ type: "SET_LOADING", payload: false });
     }
   };
 
-  const deleteTask = async (taskId) => {
+  const deleteItem = async (taskId) => {
     dispatch({ type: "SET_LOADING", payload: true });
     try {
       await api.delete(`${server}/task/${taskId}`);
       sendMessage("Task deleted", "success");
-      getTasks();
+      getItems();
     } catch (error) {
-      dispatch({ type: "SET_ERROR", payload: error });
-      dispatch({ type: "SET_STATUS", payload: "error" });
       sendMessage(
         error?.response?.data?.error || "Failed to delete task",
         "error"
@@ -216,7 +198,7 @@ export function useTasks(itemListId) {
     }
   };
 
-  const getTask = async (taskId) => {
+  const getItem = async (taskId) => {
     dispatch({ type: "SET_LOADING", payload: true });
     try {
       const response = await api.get(`${server}/task/${taskId}`);
@@ -225,8 +207,10 @@ export function useTasks(itemListId) {
       }
       return response.data;
     } catch (error) {
-      dispatch({ type: "SET_ERROR", payload: error });
-      dispatch({ type: "SET_STATUS", payload: "error" });
+      sendMessage(
+        error?.response?.data?.error || "Failed to get task",
+        "error"
+      );
     } finally {
       dispatch({ type: "SET_LOADING", payload: false });
     }
@@ -242,11 +226,11 @@ export function useTasks(itemListId) {
 
   return {
     state,
-    getTask,
-    getTasks,
-    setTaskData,
-    createTask,
+    getItem,
+    getItems,
+    setItemData,
+    createItem,
     toggleComplete,
-    deleteTask,
+    deleteItem,
   };
 }
