@@ -77,7 +77,7 @@ export function useShoppingItems(itemListId) {
     dispatch({ type: "SET_LOADING", payload: true });
     try {
       const response = await api.get(
-        `${server}/shoppingitem/items/${itemListId}`
+        `${server}/api/shoppingitem/items/${itemListId}`
       );
       if (!response.data) {
         sendMessage("Failed to get shopping items", "error");
@@ -156,7 +156,7 @@ export function useShoppingItems(itemListId) {
       };
 
       const response = await api.post(
-        `${server}/shoppingitem/additem`,
+        `${server}/api/shoppingitem/additem`,
         requestBody
       );
 
@@ -184,7 +184,7 @@ export function useShoppingItems(itemListId) {
           completed: payLoad,
         },
       };
-      await api.put(`${server}/shoppingitem/update`, requestBody);
+      await api.put(`${server}/api/shoppingitem/update`, requestBody);
       getItems();
     } catch (error) {
       sendMessage(
@@ -199,7 +199,7 @@ export function useShoppingItems(itemListId) {
   const deleteItem = async (itemId) => {
     dispatch({ type: "SET_LOADING", payload: true });
     try {
-      await api.delete(`${server}/shoppingitem/${itemId}`);
+      await api.delete(`${server}/api/shoppingitem/${itemId}`);
       sendMessage("Item deleted", "success");
       getItems();
     } catch (error) {
@@ -215,7 +215,7 @@ export function useShoppingItems(itemListId) {
   const getItem = async (itemId) => {
     dispatch({ type: "SET_LOADING", payload: true });
     try {
-      const response = await api.get(`${server}/shoppingitem/${itemId}`);
+      const response = await api.get(`${server}/api/shoppingitem/${itemId}`);
       if (!response.data) {
         return null;
       }

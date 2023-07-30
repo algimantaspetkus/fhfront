@@ -86,7 +86,7 @@ export default function TaskListPage() {
           <ItemList
             {...taskListProps}
             type="tasks"
-            deleteTaskList={handleClickOpenTaskListDelete}
+            deleteItemList={handleClickOpenTaskListDelete}
             makePublic={handleClickOpenTaskListPublic}
           />
         </Box>

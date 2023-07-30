@@ -19,7 +19,7 @@ export function useItemList(type) {
 
   const getItemList = useCallback(async () => {
     try {
-      const response = await api.get(`${server}/${route}/list`);
+      const response = await api.get(`${server}/api/${route}/list`);
       if (!response.data) {
         sendMessage("Failed to get item lists", "error");
       }
@@ -78,7 +78,7 @@ export function useItemList(type) {
 
   const makeItemListPublic = async (itemListId) => {
     try {
-      const response = await api.put(`${server}/${route}/makepublic`, {
+      const response = await api.put(`${server}/api/${route}/makepublic`, {
         itemListId,
       });
       if (!response.data) {
@@ -99,7 +99,7 @@ export function useItemList(type) {
 
   const disableItemList = async (itemListId) => {
     try {
-      const response = await api.put(`${server}/${route}/disable`, {
+      const response = await api.put(`${server}/api/${route}/disable`, {
         itemListId,
       });
       if (!response.data) {
@@ -122,7 +122,7 @@ export function useItemList(type) {
     event.preventDefault();
     setLoading(true);
     try {
-      const response = await api.post(`${server}/${route}/add`, {
+      const response = await api.post(`${server}/api/${route}/add`, {
         listTitle: itemListTitle,
         isPrivate: takListIsPrivate,
       });

@@ -43,7 +43,7 @@ export function useGetUser() {
   async function getUser() {
     setLoading(true);
     try {
-      const response = await api.get(`${server}/user/check`);
+      const response = await api.get(`${server}/api/user/check`);
       const data = response.data;
       if (data.error) {
         sendMessage(data.error, "error");

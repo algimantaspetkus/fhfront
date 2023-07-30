@@ -13,7 +13,7 @@ export function usePeople(itemListId) {
     setLoading(true);
     try {
       const response = await api.get(
-        `${server}/group/getListMembers/${itemListId}`
+        `${server}/api/group/getListMembers/${itemListId}`
       );
       if (!response.data) {
         sendMessage("Error fetching people", "error");

@@ -20,7 +20,7 @@ export function useGroup() {
     event.preventDefault();
     setLoading(true);
     try {
-      const response = await api.post(`${server}/group/addgroup`, { name });
+      const response = await api.post(`${server}/api/group/addgroup`, { name });
       if (response.status === 200) {
         sendMessage("Group created", "success");
         ref.value = "";
@@ -42,7 +42,7 @@ export function useGroup() {
   async function disableGroup(groupId) {
     setLoading(true);
     try {
-      const response = await api.post(`${server}/group/disablegroup`, {
+      const response = await api.post(`${server}/api/group/disablegroup`, {
         groupId,
       });
       if (response.status === 200) {
@@ -63,7 +63,7 @@ export function useGroup() {
   async function leaveGroup(groupId) {
     setLoading(true);
     try {
-      const response = await api.post(`${server}/group/leavegroup`, {
+      const response = await api.post(`${server}/api/group/leavegroup`, {
         groupId,
       });
       if (response.status === 200) {
@@ -84,7 +84,7 @@ export function useGroup() {
   async function updateDefaultGroup(id) {
     setLoading(true);
     try {
-      const response = await api.put(`${server}/user/updatedefaultgroup`, {
+      const response = await api.put(`${server}/api/user/updatedefaultgroup`, {
         defaultGroupId: id,
       });
       if (response.status === 200) {
@@ -106,7 +106,7 @@ export function useGroup() {
     setLoading(true);
     try {
       const response = await api.get(
-        `${server}/group/getgroupsecret/${groupId}`
+        `${server}/api/group/getgroupsecret/${groupId}`
       );
       if (!response?.data?.secret) {
         sendMessage("Failed to get invitation code", "error");
@@ -127,7 +127,7 @@ export function useGroup() {
     event.preventDefault();
     setLoading(true);
     try {
-      const response = await api.post(`${server}/group/joingroup`, {
+      const response = await api.post(`${server}/api/group/joingroup`, {
         secret,
       });
       if (response.status === 200) {

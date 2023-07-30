@@ -70,7 +70,7 @@ export function useTaskItems(itemListId) {
   const getItems = async () => {
     dispatch({ type: "SET_LOADING", payload: true });
     try {
-      const response = await api.get(`${server}/task/tasks/${itemListId}`);
+      const response = await api.get(`${server}/api/task/tasks/${itemListId}`);
       if (!response.data) {
         sendMessage("Failed to get tasks", "error");
       }
@@ -144,7 +144,10 @@ export function useTaskItems(itemListId) {
         priority: state.priority !== "" ? state.priority : undefined,
       };
 
-      const response = await api.post(`${server}/task/addtask`, requestBody);
+      const response = await api.post(
+        `${server}/api/task/addtask`,
+        requestBody
+      );
 
       if (!response?.data) {
         sendMessage("Failed to create task", "error");
@@ -170,7 +173,7 @@ export function useTaskItems(itemListId) {
           completed: payLoad,
         },
       };
-      await api.put(`${server}/task/update`, requestBody);
+      await api.put(`${server}/api/task/update`, requestBody);
       getItems();
     } catch (error) {
       sendMessage(
@@ -185,7 +188,7 @@ export function useTaskItems(itemListId) {
   const deleteItem = async (taskId) => {
     dispatch({ type: "SET_LOADING", payload: true });
     try {
-      await api.delete(`${server}/task/${taskId}`);
+      await api.delete(`${server}/api/task/${taskId}`);
       sendMessage("Task deleted", "success");
       getItems();
     } catch (error) {
@@ -201,7 +204,7 @@ export function useTaskItems(itemListId) {
   const getItem = async (taskId) => {
     dispatch({ type: "SET_LOADING", payload: true });
     try {
-      const response = await api.get(`${server}/task/${taskId}`);
+      const response = await api.get(`${server}/api/task/${taskId}`);
       if (!response.data) {
         return null;
       }

@@ -22,7 +22,7 @@ export default function TaskList({
   anchorEl,
   handleClose,
   activeitemListId,
-  deleteTaskList,
+  deleteItemList,
   makePublic,
   type,
 }) {
@@ -70,7 +70,7 @@ export default function TaskList({
             </MenuItem>
             <MenuItem
               onClick={() => {
-                deleteTaskList(list._id);
+                deleteItemList(list._id);
                 handleClose();
               }}
             >

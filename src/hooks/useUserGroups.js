@@ -19,7 +19,7 @@ export function useUserGroups() {
     setStatus(null);
 
     try {
-      const response = await api(`${server}/group/getgroups`);
+      const response = await api(`${server}/api/group/getgroups`);
       if (!response.data) {
         sendMessage("Failed to get groups", "error");
       }
