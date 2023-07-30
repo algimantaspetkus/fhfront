@@ -60,7 +60,7 @@ export function useGetUser() {
       } else {
         localStorage.removeItem("token");
         dispatch(resetState());
-        window.location.href = "/login";
+        window.location.href = "/signin";
       }
     } catch (error) {
       console.log(error);
@@ -76,7 +76,7 @@ export function useGetUser() {
       const formData = new FormData();
       formData.append("avatar", fileInputRef.current.files[0]);
       api
-        .put("/user/updateavatar", formData)
+        .put(`${server}/api/user/updateavatar`, formData)
         .then(() => {
           sendMessage("Avatar updated", "success");
           getUser();
@@ -95,7 +95,7 @@ export function useGetUser() {
     event.preventDefault();
     if (newDisplayName.length > 2) {
       api
-        .put("/user/updatedisplayname", {
+        .put(`${server}/api/user/updatedisplayname`, {
           displayName: newDisplayName,
         })
         .then(() => {
@@ -129,7 +129,7 @@ export function useGetUser() {
     event.preventDefault();
     if (newPassword === confirmNewPassword) {
       try {
-        const response = await api.put("/user/updatepassword", {
+        const response = await api.put(`${server}/api/user/updatepassword`, {
           oldPassword,
           newPassword,
         });

@@ -6,12 +6,12 @@ import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import ClearIcon from "@mui/icons-material/Clear";
 
-export default function DateTimePicker({ setItemData }) {
+export default function DateTimePicker({ setDate, label }) {
   const [selectedDateTime, setSelectedDateTime] = useState(null);
 
   useEffect(() => {
-    setItemData("dueBy", selectedDateTime);
-  }, [selectedDateTime, setItemData]);
+    setDate(selectedDateTime);
+  }, [selectedDateTime, setDate]);
 
   const handleClearDateTime = () => {
     setSelectedDateTime(null);
@@ -33,7 +33,7 @@ export default function DateTimePicker({ setItemData }) {
           onChange={setSelectedDateTime}
           format="YYYY-MM-DD HH:mm"
           ampm={false}
-          label="Due By"
+          label={label}
         />
         <IconButton onClick={handleClearDateTime}>
           <ClearIcon />

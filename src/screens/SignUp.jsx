@@ -20,7 +20,7 @@ export default function Login() {
 
   const handleRegistrationSuccess = useCallback(() => {
     sendMessage("Registered succesfully", "success");
-    navigate("/login");
+    navigate("/signin");
   }, [sendMessage, navigate]);
 
   const handleRegistrationError = useCallback(() => {
@@ -140,7 +140,7 @@ export default function Login() {
           <Typography
             variant="span"
             sx={{ cursor: "pointer", color: "blue" }}
-            onClick={() => navigate("/login")}
+            onClick={() => navigate("/signin")}
           >
             here
           </Typography>{" "}

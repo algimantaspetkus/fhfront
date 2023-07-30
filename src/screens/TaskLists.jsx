@@ -81,7 +81,7 @@ export default function TaskListPage() {
       <Container>
         <Box sx={{ marginTop: "5rem" }}>
           <Typography variant="h4" component="h2">
-            TaskList page
+            Task Lists
           </Typography>
           <ItemList
             {...taskListProps}

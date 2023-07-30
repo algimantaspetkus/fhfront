@@ -8,7 +8,7 @@ export default function UpdatePasswordForm() {
   const navigate = useNavigate();
   const { signOut } = useAuth();
   const signOutCallback = () => {
-    signOut(() => navigate("/login"));
+    signOut(() => navigate("/signin"));
   };
   const { setPassword, changePassword } = useGetUser();
   return (

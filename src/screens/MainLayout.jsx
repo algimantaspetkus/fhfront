@@ -6,15 +6,16 @@ import React from "react";
 import AppBar from "../components/AppBar";
 import Box from "@mui/material/Box";
 
-import Login from "./Login";
-import Profile from "./Profile";
-import Register from "./Register";
-import DashboardPage from "./DashboardPage";
-import TaskListsPage from "./TaskListsPage";
-import ShoppingListPage from "./ShoppingListPage";
-import GroupPage from "./GroupPage";
-import TasksPage from "./TasksPage";
-import ShoppingItemsPage from "./ShoppingItemsPage";
+import SignIn from "./SignIn";
+import ProfileSettings from "./ProfileSettings";
+import SignUp from "./SignUp";
+import Dashboard from "./Dashboard";
+import TaskLists from "./TaskLists";
+import ShoppingLists from "./ShoppingLists";
+import GroupSettings from "./GroupsSettings";
+import Tasks from "./Tasks";
+import ShoppingItems from "./ShoppingItems";
+import Calendar from "./Calendar";
 
 export default function MainLayout() {
   const { getUser } = useGetUser();
@@ -31,9 +32,9 @@ export default function MainLayout() {
       getUser();
     }
 
-    if (!jwt && currentPath !== "/login/") {
-      window.location.replace("/login/");
-    } else if (jwt && currentPath === "/login/") {
+    if (!jwt && currentPath !== "/signin/") {
+      window.location.replace("/signin/");
+    } else if (jwt && currentPath === "/signin/") {
       window.location.replace("/");
     } else if (jwt && currentPath !== "/group" && !defaultGroupId) {
       window.location.replace("/group");
@@ -51,21 +52,19 @@ export default function MainLayout() {
         ) : null}
         <Box component={"main"}>
           <Routes>
-            <Route path="/" element={<DashboardPage />} />
-            <Route path="/tasklists" element={<TaskListsPage />} exact />
-            <Route path="/shoppinglists" element={<ShoppingListPage />} exact />
-            <Route
-              path="/tasklists/:itemListId/tasks"
-              element={<TasksPage />}
-            />
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/tasklists" element={<TaskLists />} exact />
+            <Route path="/shoppinglists" element={<ShoppingLists />} exact />
+            <Route path="/tasklists/:itemListId/tasks" element={<Tasks />} />
             <Route
               path="/shoppinglists/:itemListId/shoppingitems"
-              element={<ShoppingItemsPage />}
+              element={<ShoppingItems />}
             />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/group" element={<GroupPage />} />
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/profile" element={<ProfileSettings />} />
+            <Route path="/group" element={<GroupSettings />} />
+            <Route path="/calendar" element={<Calendar />} />
           </Routes>
         </Box>
       </Router>

@@ -34,6 +34,11 @@ export default function TaskList({
         overflow: "auto",
       }}
     >
+      {itemList?.length === 0 && (
+        <ListItem>
+          <ListItemText primary="You currently do not have any lists to display" />
+        </ListItem>
+      )}
       {itemList?.map((list) => (
         <ListItem key={list._id}>
           <ListItemButton onClick={() => navigate(`${list._id}/${type}`)}>

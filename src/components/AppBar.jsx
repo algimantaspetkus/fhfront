@@ -43,7 +43,7 @@ function DrawerAppBar({ window }) {
   const navigate = useNavigate();
 
   const signOutCallback = () => {
-    navigate("/login");
+    navigate("/signin");
   };
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);

@@ -105,7 +105,7 @@ export default function Login() {
           <Typography
             variant="span"
             sx={{ cursor: "pointer", color: "blue" }}
-            onClick={() => navigate("/register")}
+            onClick={() => navigate("/signup")}
           >
             here
           </Typography>{" "}

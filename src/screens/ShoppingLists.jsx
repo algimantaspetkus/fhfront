@@ -81,7 +81,7 @@ export default function ShoppingListPage() {
       <Container>
         <Box sx={{ marginTop: "5rem" }}>
           <Typography variant="h4" component="h2">
-            ShoppingList page
+            Shopping Lists
           </Typography>
           <ItemList
             {...shoppingListProps}
