@@ -3,6 +3,16 @@ import { useSnackbarMessage } from "./useSnackbarMessage";
 import { useSelector } from "react-redux";
 import api from "../api";
 import io from "socket.io-client";
+import {
+  faCakeCandles,
+  faGift,
+  faStethoscope,
+  faCompass,
+  faGraduationCap,
+  faChampagneGlasses,
+  faPaw,
+  faUtensils,
+} from "@fortawesome/free-solid-svg-icons";
 
 const server = process.env.REACT_APP_BASE_SERVER;
 
@@ -14,6 +24,41 @@ export function useEvent() {
   const [description, setDescription] = useState("Test");
   const [date, setDate] = useState(new Date());
   const [loading, setLoading] = useState(false);
+
+  const iconArray = [
+    {
+      icon: faCakeCandles,
+      text: "birthday",
+    },
+    {
+      icon: faGift,
+      text: "gift",
+    },
+    {
+      icon: faStethoscope,
+      text: "medical",
+    },
+    {
+      icon: faCompass,
+      text: "travel",
+    },
+    {
+      icon: faGraduationCap,
+      text: "graduation",
+    },
+    {
+      icon: faChampagneGlasses,
+      text: "party",
+    },
+    {
+      icon: faPaw,
+      text: "pet",
+    },
+    {
+      icon: faUtensils,
+      text: "food",
+    },
+  ];
 
   const defaultGroupId = useSelector(
     (state) => state.userSettings.defaultGroupId
@@ -76,6 +121,21 @@ export function useEvent() {
     }
   }
 
+  async function deleteItem(id) {
+    setLoading(true);
+    try {
+      await api.delete(`${server}/api/eventitem/deleteitem/${id}`);
+      sendMessage("Item deleted", "success");
+    } catch (error) {
+      sendMessage(
+        error?.response?.data?.error || "Failed to delete event item",
+        "error"
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
+
   function setItemData(type, value) {
     switch (type) {
       case "itemTitle":
@@ -99,7 +159,9 @@ export function useEvent() {
     addItem,
     setItemData,
     getItems,
+    deleteItem,
     items,
     loading,
+    iconArray,
   };
 }

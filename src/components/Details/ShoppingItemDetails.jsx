@@ -9,7 +9,7 @@ import {
   Chip,
 } from "@mui/material";
 import dayjs from "dayjs";
-import { DrawerSkeleton } from "../DrawerSkeleton";
+import { DrawerSkeleton } from "../FeedBack/DrawerSkeleton";
 
 export default function ItemDetails({
   itemId,

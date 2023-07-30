@@ -1,52 +1,9 @@
 import { Box, IconButton } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCakeCandles,
-  faGift,
-  faStethoscope,
-  faCompass,
-  faGraduationCap,
-  faChampagneGlasses,
-  faPaw,
-  faUtensils,
-} from "@fortawesome/free-solid-svg-icons";
-
-const iconNarray = [
-  {
-    icon: faCakeCandles,
-    text: "birthday",
-  },
-  {
-    icon: faGift,
-    text: "gift",
-  },
-  {
-    icon: faStethoscope,
-    text: "medical",
-  },
-  {
-    icon: faCompass,
-    text: "travel",
-  },
-  {
-    icon: faGraduationCap,
-    text: "graduation",
-  },
-  {
-    icon: faChampagneGlasses,
-    text: "party",
-  },
-  {
-    icon: faPaw,
-    text: "pet",
-  },
-  {
-    icon: faUtensils,
-    text: "food",
-  },
-];
+import { useEvent } from "../../hooks/useEvent";
 
 export default function FAIconPicker({ selectedIcon, iconClickHandler }) {
+  const { iconArray } = useEvent();
   return (
     <Box
       sx={{
@@ -55,7 +12,7 @@ export default function FAIconPicker({ selectedIcon, iconClickHandler }) {
         justifyContent: "space-between",
       }}
     >
-      {iconNarray.map((icon, index) => (
+      {iconArray.map((icon, index) => (
         <IconButton
           key={index}
           color={icon.text === selectedIcon ? "primary" : ""}
