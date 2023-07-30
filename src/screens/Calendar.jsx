@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Dialog from "../components/FeedBack/Dialog";
 import { Box, Typography, Container, Drawer } from "@mui/material";
 import EventItems from "../components/Lists/EventItems";
