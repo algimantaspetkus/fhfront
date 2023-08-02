@@ -116,7 +116,7 @@ export function useItemList(type) {
     }
   }
 
-  async function createItemList(event) {
+  async function createItemList(event, callback) {
     event.preventDefault();
     setLoading(true);
     try {
@@ -128,6 +128,7 @@ export function useItemList(type) {
         sendMessage("Failed to create list", "error");
       } else {
         sendMessage("List created", "success");
+        callback();
         getItemList();
       }
     } catch (error) {

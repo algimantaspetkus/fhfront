@@ -42,8 +42,7 @@ export default function CreateShoppingItemForm({
             component="form"
             sx={{ display: "flex", flexDirection: "column", gap: "1rem" }}
             onSubmit={(event) => {
-              createItem(event);
-              closeDrawer();
+              createItem(event, closeDrawer);
             }}
           >
             <TextField

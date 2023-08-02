@@ -97,6 +97,7 @@ export default function TaskListPage() {
           closeDrawer={closeDrawer}
           setItemListData={setItemListData}
           createItemList={createItemList}
+          title="Create a Task List"
         />
       </Drawer>
       {dialogPropsTaskListDelete.open && (

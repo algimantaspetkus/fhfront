@@ -158,7 +158,7 @@ Parameters:
 | --------- | ------ | ------------------------------------ |
 | name      | string | Required. The name of the new group. |
 
-## Disable a Group
+## Delete a Group
 
 Endpoint: `POST /api/group/disablegroup`
 
@@ -278,7 +278,7 @@ Parameters:
 | ---------- | ------ | --------------------------------------- |
 | itemListId | string | Required. The ID of the list to modify. |
 
-## Disable Item List
+## Delete Item List
 
 Endpoint: `PUT /api/tasklist/disable`
 

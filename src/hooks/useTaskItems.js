@@ -127,7 +127,7 @@ export function useTaskItems(itemListId) {
     }
   }
 
-  async function createItem(event) {
+  async function createItem(event, callback) {
     event.preventDefault();
     dispatch({ type: "SET_LOADING", payload: true });
     try {
@@ -151,6 +151,7 @@ export function useTaskItems(itemListId) {
         sendMessage("Failed to create task", "error");
       }
       sendMessage("Task created", "success");
+      callback();
       resetState();
     } catch (error) {
       sendMessage(

@@ -138,7 +138,7 @@ export function useShoppingItems(itemListId) {
     }
   }
 
-  async function createItem(event) {
+  async function createItem(event, callback) {
     event.preventDefault();
     dispatch({ type: "SET_LOADING", payload: true });
     try {
@@ -162,6 +162,7 @@ export function useShoppingItems(itemListId) {
         sendMessage("Failed to create shopping item", "error");
       }
       sendMessage("Shopping Item created", "success");
+      callback();
       resetState();
     } catch (error) {
       sendMessage(

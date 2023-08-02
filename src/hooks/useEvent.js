@@ -98,19 +98,24 @@ export function useEvent() {
     }
   }, [defaultGroupId, getItems]);
 
-  async function addItem(event) {
+  async function addItem(event, callback) {
     event.preventDefault();
     setLoading(true);
     try {
       await api.post(`${server}/api/eventitem/additem`, {
         eventTitle: title,
-        eventDescription: description,
+        eventDescription: description ? description : undefined,
         eventDate: date,
         type: icon,
       });
       resetState();
+      callback();
       sendMessage("Event item created", "success");
     } catch (error) {
+      if (!date) {
+        sendMessage("Please select a date", "error");
+        return;
+      }
       sendMessage(
         error?.response?.data?.error || "Failed to create an event item",
         "error"

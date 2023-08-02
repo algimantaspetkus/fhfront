@@ -16,7 +16,7 @@ export function useGroup() {
 
   const server = process.env.REACT_APP_BASE_SERVER;
 
-  async function createGroup(event, ref) {
+  async function createGroup(event, ref, callback) {
     event.preventDefault();
     setLoading(true);
     try {
@@ -26,6 +26,7 @@ export function useGroup() {
         ref.value = "";
         ref.focus();
         updateDefaultGroup(response.data.groupId);
+        callback();
       } else {
         sendMessage("Failed to create a group", "error");
       }
@@ -46,7 +47,7 @@ export function useGroup() {
         groupId,
       });
       if (response.status === 200) {
-        sendMessage("Group delete", "success");
+        sendMessage("Group deleted", "success");
       } else {
         sendMessage("Failed to delete group", "error");
       }
@@ -123,7 +124,7 @@ export function useGroup() {
     }
   }
 
-  async function joinGroup(event, ref) {
+  async function joinGroup(event, ref, callback) {
     event.preventDefault();
     setLoading(true);
     try {
@@ -132,10 +133,11 @@ export function useGroup() {
       });
       if (response.status === 200) {
         sendMessage("Group joined", "success");
-        ref.value = "";
-        ref.focus();
+        callback();
       } else {
         sendMessage("Failed to join group", "error");
+        ref.value = "";
+        ref.focus();
       }
     } catch (error) {
       sendMessage(

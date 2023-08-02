@@ -19,8 +19,11 @@ export default function CreateGroupForm({ drawerClose }) {
           component="form"
           sx={{ display: "flex", gap: "1rem" }}
           onSubmit={(event) => {
-            createGroup(event, name.current?.querySelector("input"));
-            drawerClose();
+            createGroup(
+              event,
+              name.current?.querySelector("input"),
+              drawerClose
+            );
           }}
         >
           <TextField
@@ -50,8 +53,11 @@ export default function CreateGroupForm({ drawerClose }) {
           component="form"
           sx={{ display: "flex", gap: "1rem" }}
           onSubmit={(event) => {
-            joinGroup(event, secret.current?.querySelector("input"));
-            drawerClose();
+            joinGroup(
+              event,
+              secret.current?.querySelector("input"),
+              drawerClose
+            );
           }}
         >
           <TextField

@@ -97,6 +97,7 @@ export default function ShoppingListPage() {
           closeDrawer={closeDrawer}
           setItemListData={setItemListData}
           createItemList={createItemList}
+          title="Create a Shopping List"
         />
       </Drawer>
       {dialogPropsShoppingListDelete.open && (

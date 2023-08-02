@@ -54,14 +54,10 @@ export function useGetUser() {
         dispatch(setAvatar(data.avatar));
         dispatch(setDefaultGroupId(data.defaultGroupId));
         dispatch(incrementKey());
-        if (!data.defaultGroupId && window.location.pathname !== "/group") {
-          window.location.href = "/group";
-        }
       }
     } catch (error) {
       localStorage.removeItem("token");
       dispatch(resetState());
-      window.location.href = "/signin";
       sendMessage("Error getting user", "error");
     } finally {
       setLoading(false);

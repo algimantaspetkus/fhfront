@@ -12,19 +12,19 @@ export default function CreateGroupForm({
   closeDrawer,
   setItemListData,
   createItemList,
+  title,
 }) {
   return (
     <Container sx={{ padding: "2rem" }}>
       <Box sx={{ marginBottom: "3rem" }}>
         <Typography sx={{ marginBottom: "1rem" }} variant="h5">
-          Create a Task List
+          {title}
         </Typography>
         <Box
           component="form"
           sx={{ display: "flex", flexDirection: "column", gap: "1rem" }}
           onSubmit={(event) => {
-            createItemList(event);
-            closeDrawer();
+            createItemList(event, closeDrawer);
           }}
         >
           <TextField

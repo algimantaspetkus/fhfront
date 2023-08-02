@@ -83,7 +83,7 @@ export default function GroupList({
                 handleClose();
               }}
             >
-              Disable
+              Delete
             </MenuItem>
             <MenuItem
               disabled={group.role === "owner"}
