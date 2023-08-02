@@ -20,9 +20,9 @@ export default function Auth({ children }) {
       getUser();
     }
 
-    if (!jwt && pathname !== "/signin") {
+    if (!jwt && pathname !== "/signin" && pathname !== "/signup") {
       dispatch(resetState());
-      navigate("/signin/");
+      navigate("/signin");
     } else if (jwt && pathname === "/signin") {
       navigate("/");
     } else if (jwt && pathname !== "/group" && !defaultGroupId) {

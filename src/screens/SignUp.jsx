@@ -1,51 +1,24 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef } from "react";
 import { TextField, Box, Typography } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { useSnackbarMessage } from "../hooks/useSnackbarMessage";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 
 const server = process.env.REACT_APP_BASE_SERVER;
 
 export default function Login() {
-  const { sendMessage } = useSnackbarMessage();
   const [email, setEmail] = useState("");
   const [displayName, setDispllayName] = useState("");
   const [password, setPassword] = useState("");
 
   const pwd = useRef(null);
 
-  const { loading, error, status, signUp } = useAuth();
+  const { loading, signUp } = useAuth();
   const navigate = useNavigate();
 
-  const handleRegistrationSuccess = useCallback(() => {
-    sendMessage("Registered succesfully", "success");
-    navigate("/signin");
-  }, [sendMessage, navigate]);
-
-  const handleRegistrationError = useCallback(() => {
-    sendMessage(error || "Registeration failed", "error");
-    setPassword("");
-  }, [sendMessage, error]);
-
-  useEffect(() => {
-    if (status === "success") {
-      handleRegistrationSuccess();
-    }
-    if (status === "error") {
-      handleRegistrationError();
-    }
-  }, [status, handleRegistrationSuccess, handleRegistrationError]);
-
-  const singUpHandler = useCallback(
-    (event) => {
-      event.preventDefault();
-      signUp(email, displayName, password, navigate);
-    },
-    [email, password, displayName, signUp, navigate]
-  );
-
-  console.log(`url(${server}/images/background.jpg)`);
+  function singUpHandler(event) {
+    signUp(event, email, displayName, password, navigate);
+  }
 
   return (
     <Box

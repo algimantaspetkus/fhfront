@@ -34,9 +34,8 @@ export default function Login() {
         justifyContent: "center",
       }}
     >
-      {/* Background */}
-      <div
-        style={{
+      <Box
+        sx={{
           position: "absolute",
           top: 0,
           left: 0,
@@ -48,9 +47,7 @@ export default function Login() {
           filter: "blur(2px)",
           zIndex: -1,
         }}
-      ></div>
-
-      {/* Login Form */}
+      ></Box>
       <Box
         component="form"
         onSubmit={signInHandler}

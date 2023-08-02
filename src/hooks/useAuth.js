@@ -47,14 +47,15 @@ export function useAuth() {
         }
       }
     } catch (error) {
-      sendMessage("Login failed", "error");
+      sendMessage(error?.response?.data?.error || "Sign in failed", "error");
       pwdRef.focus();
     } finally {
       setLoading(false);
     }
   }
 
-  async function signUp(email, displayName, password, navigate) {
+  async function signUp(event, email, displayName, password, navigate) {
+    event.preventDefault();
     setLoading(true);
     try {
       const response = await api.post(`${server}/api/auth/signup`, {
@@ -68,13 +69,11 @@ export function useAuth() {
         navigate("/signin");
       }
       if (data.error) {
+        console.log(data);
         sendMessage(data.error, "error");
       }
     } catch (error) {
-      sendMessage(
-        error?.response?.data?.error || "Registration failed",
-        "error"
-      );
+      sendMessage(error?.response?.data?.error || "Sign up failed", "error");
     } finally {
       setLoading(false);
     }
