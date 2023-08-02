@@ -3,13 +3,13 @@ import { useState } from "react";
 export function useDialog({ content, title, buttons }) {
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  const handleClickOpen = () => {
+  function handleClickOpen() {
     setDialogOpen(true);
-  };
+  }
 
-  const handleClose = () => {
+  function handleClose() {
     setDialogOpen(false);
-  };
+  }
 
   const dialogProps = {
     open: dialogOpen,

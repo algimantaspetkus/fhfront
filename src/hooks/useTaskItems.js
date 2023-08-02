@@ -1,4 +1,4 @@
-import { useReducer, useEffect } from "react";
+import { useReducer, useEffect, useCallback } from "react";
 import io from "socket.io-client";
 import { useSnackbarMessage } from "./useSnackbarMessage";
 import api from "../api";
@@ -61,13 +61,13 @@ function reducer(state, action) {
   }
 }
 
+const server = process.env.REACT_APP_BASE_SERVER;
+
 export function useTaskItems(itemListId) {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { sendMessage } = useSnackbarMessage();
 
-  const server = process.env.REACT_APP_BASE_SERVER;
-
-  const getItems = async () => {
+  const getItems = useCallback(async () => {
     dispatch({ type: "SET_LOADING", payload: true });
     try {
       const response = await api.get(`${server}/api/task/tasks/${itemListId}`);
@@ -85,29 +85,27 @@ export function useTaskItems(itemListId) {
     } finally {
       dispatch({ type: "SET_LOADING", payload: false });
     }
-  };
+  }, [itemListId, sendMessage]);
 
   useEffect(() => {
     getItems();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [getItems]);
 
   useEffect(() => {
     const socket = io(server, {
       query: { room: itemListId },
     });
 
-    socket.on("taskItemAdded", () => {
+    socket.on("updateTaskItem", () => {
       getItems();
     });
 
     return () => {
       socket.disconnect();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [server, itemListId]);
+  }, [getItems, itemListId]);
 
-  const setItemData = (type, payload) => {
+  function setItemData(type, payload) {
     switch (type) {
       case "taskTitle":
         dispatch({ type: "SET_TASK_TITLE", payload: payload });
@@ -127,9 +125,9 @@ export function useTaskItems(itemListId) {
       default:
         break;
     }
-  };
+  }
 
-  const createItem = async (event) => {
+  async function createItem(event) {
     event.preventDefault();
     dispatch({ type: "SET_LOADING", payload: true });
     try {
@@ -162,9 +160,9 @@ export function useTaskItems(itemListId) {
     } finally {
       dispatch({ type: "SET_LOADING", payload: false });
     }
-  };
+  }
 
-  const toggleComplete = async (taskId, payLoad) => {
+  async function toggleComplete(taskId, payLoad) {
     dispatch({ type: "SET_LOADING", payload: true });
     try {
       const requestBody = {
@@ -183,9 +181,9 @@ export function useTaskItems(itemListId) {
     } finally {
       dispatch({ type: "SET_LOADING", payload: false });
     }
-  };
+  }
 
-  const deleteItem = async (taskId) => {
+  async function deleteItem(taskId) {
     dispatch({ type: "SET_LOADING", payload: true });
     try {
       await api.delete(`${server}/api/task/${taskId}`);
@@ -199,9 +197,9 @@ export function useTaskItems(itemListId) {
     } finally {
       dispatch({ type: "SET_LOADING", payload: false });
     }
-  };
+  }
 
-  const getItem = async (taskId) => {
+  async function getItem(taskId) {
     dispatch({ type: "SET_LOADING", payload: true });
     try {
       const response = await api.get(`${server}/api/task/${taskId}`);
@@ -217,15 +215,15 @@ export function useTaskItems(itemListId) {
     } finally {
       dispatch({ type: "SET_LOADING", payload: false });
     }
-  };
+  }
 
-  const resetState = () => {
+  function resetState() {
     dispatch({ type: "SET_TASK_TITLE", payload: "" });
     dispatch({ type: "SET_TASK_DESCRIPTION", payload: "" });
     dispatch({ type: "SET_ASSIGNED_TO_USER", payload: "" });
     dispatch({ type: "SET_DUE_BY", payload: "" });
     dispatch({ type: "SET_PRIORITY", payload: "" });
-  };
+  }
 
   return {
     state,

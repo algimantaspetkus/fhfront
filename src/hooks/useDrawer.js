@@ -5,7 +5,7 @@ export function useDrawer() {
   const [shouldHandleBack, setShouldHandleBack] = useState(true);
 
   useEffect(() => {
-    const handleBackButton = (event) => {
+    function handleBackButton(event) {
       if (shouldHandleBack) {
         if (drawerOpen) {
           event.preventDefault();
@@ -14,7 +14,7 @@ export function useDrawer() {
       } else {
         setShouldHandleBack(true);
       }
-    };
+    }
 
     if (drawerOpen) {
       window.history.pushState({ drawerOpen: true }, "");

@@ -22,8 +22,8 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { setTitle } from "../redux/navigationSlice";
-import { useAuth } from "../hooks/useAuth";
+import { setTitle } from "../../redux/navigationSlice";
+import { useAuth } from "../../hooks/useAuth";
 
 const drawerWidth = 340;
 const settings = [
@@ -31,7 +31,6 @@ const settings = [
   { title: "Group", path: "/group", appBarTitle: "Group Settings" },
 ];
 const navItems = [
-  { title: "Dashboard", path: "/", appBarTitle: "Dashboard" },
   { title: "Tasks", path: "/tasklists", appBarTitle: "Tasks" },
   { title: "Shopping", path: "/shoppinglists", appBarTitle: "Shopping" },
   { title: "Calendar", path: "/calendar", appBarTitle: "Calendar" },

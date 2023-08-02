@@ -106,7 +106,7 @@ export function useGroup() {
     setLoading(true);
     try {
       const response = await api.get(
-        `${server}/api/group/getgroupsecret/${groupId}`
+        `${server}/api/group/groupsecret/${groupId}`
       );
       if (!response?.data?.secret) {
         sendMessage("Failed to get invitation code", "error");
@@ -147,13 +147,13 @@ export function useGroup() {
     }
   }
 
-  const setGroupNameHandler = (event) => {
+  function setGroupNameHandler(event) {
     setName(event.target.value);
-  };
+  }
 
-  const setGroupSecretHandler = (event) => {
+  function setGroupSecretHandler(event) {
     setSecret(event.target.value);
-  };
+  }
 
   return {
     createGroup,

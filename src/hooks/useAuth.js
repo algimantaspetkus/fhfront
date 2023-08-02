@@ -11,14 +11,14 @@ import {
 import { useSnackbarMessage } from "./useSnackbarMessage";
 import { resetState } from "../redux/userSettingsSlice";
 
+const server = process.env.REACT_APP_BASE_SERVER;
+
 export function useAuth() {
   const [loading, setLoading] = useState(false);
   const { sendMessage } = useSnackbarMessage();
 
   const dispatch = useDispatch();
   const passwordRef = useRef(null);
-
-  const server = process.env.REACT_APP_BASE_SERVER;
 
   async function signIn(email, password, callBack, pwdRef) {
     setLoading(true);
@@ -54,7 +54,7 @@ export function useAuth() {
     }
   }
 
-  async function signUp(email, displayName, password) {
+  async function signUp(email, displayName, password, navigate) {
     setLoading(true);
     try {
       const response = await api.post(`${server}/api/auth/signup`, {
@@ -63,12 +63,18 @@ export function useAuth() {
         password,
       });
       const data = response.data;
+      if (!data.error) {
+        sendMessage("Registration successful", "success");
+        navigate("/signin");
+      }
       if (data.error) {
         sendMessage(data.error, "error");
       }
-      sendMessage("Registration successful", "success");
     } catch (error) {
-      sendMessage("Registration failed", "error");
+      sendMessage(
+        error?.response?.data?.error || "Registration failed",
+        "error"
+      );
     } finally {
       setLoading(false);
     }

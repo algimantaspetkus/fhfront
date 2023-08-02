@@ -6,7 +6,7 @@ import {
   ListItemText,
   IconButton,
 } from "@mui/material";
-import { PriorityBarsMinified } from "../UI/PriorityBars";
+import { PriorityBarsMinified } from "../Details/PriorityBars";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 

@@ -73,7 +73,7 @@ export default function Login() {
           },
         }}
       >
-        <Typography variant="h4">Login</Typography>
+        <Typography variant="h4">Sign In</Typography>
         <TextField
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -109,7 +109,7 @@ export default function Login() {
           >
             here
           </Typography>{" "}
-          to register.
+          to sign up.
         </Typography>
       </Box>
     </Box>

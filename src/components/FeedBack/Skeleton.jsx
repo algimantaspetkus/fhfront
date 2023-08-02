@@ -13,3 +13,14 @@ export function DrawerSkeleton() {
     </Stack>
   );
 }
+
+export function ListSkeleton() {
+  return (
+    <Stack spacing={1}>
+      <Skeleton variant="rounded" animation="wave" height="3rem" />
+      <Skeleton variant="rounded" animation="wave" height="3rem" />
+      <Skeleton variant="rounded" animation="wave" height="3rem" />
+      <Skeleton variant="rounded" animation="wave" height="3rem" />
+    </Stack>
+  );
+}

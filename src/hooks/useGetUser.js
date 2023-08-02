@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   resetState,
@@ -21,6 +21,8 @@ function toCamelCase(inputString) {
   return firstWord + camelCaseWords;
 }
 
+const server = process.env.REACT_APP_BASE_SERVER;
+
 export function useGetUser() {
   const [loading, setLoading] = useState(false);
   const [oldPassword, setOldPassword] = useState("");
@@ -34,13 +36,11 @@ export function useGetUser() {
   const fileInputRef = useRef(null);
   const displayName = useSelector((state) => state.userSettings.displayName);
 
-  const server = process.env.REACT_APP_BASE_SERVER;
-
   useEffect(() => {
     setNewDisplayName(displayName);
   }, [displayName, setNewDisplayName]);
 
-  async function getUser() {
+  const getUser = useCallback(async () => {
     setLoading(true);
     try {
       const response = await api.get(`${server}/api/user/check`);
@@ -57,18 +57,16 @@ export function useGetUser() {
         if (!data.defaultGroupId && window.location.pathname !== "/group") {
           window.location.href = "/group";
         }
-      } else {
-        localStorage.removeItem("token");
-        dispatch(resetState());
-        window.location.href = "/signin";
       }
     } catch (error) {
-      console.log(error);
+      localStorage.removeItem("token");
+      dispatch(resetState());
+      window.location.href = "/signin";
       sendMessage("Error getting user", "error");
     } finally {
       setLoading(false);
     }
-  }
+  }, [dispatch, sendMessage]);
 
   async function updateAvatar(event) {
     event.preventDefault();

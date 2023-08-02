@@ -4,6 +4,8 @@ import io from "socket.io-client";
 import api from "../api";
 import { useSnackbarMessage } from "./useSnackbarMessage";
 
+const server = process.env.REACT_APP_BASE_SERVER;
+
 export function useItemList(type) {
   const route = type + "list";
   const defaultGroupId = useSelector(
@@ -15,8 +17,6 @@ export function useItemList(type) {
   const [takListIsPrivate, setItemListIsPrivate] = useState(false);
   const { sendMessage } = useSnackbarMessage();
 
-  const server = process.env.REACT_APP_BASE_SERVER;
-
   const getItemList = useCallback(async () => {
     try {
       const response = await api.get(`${server}/api/${route}/list`);
@@ -27,18 +27,17 @@ export function useItemList(type) {
       setItemList(data.itemList);
     } catch (error) {
       sendMessage(
-        error?.response?.data?.error || "Failed to make item list public",
+        error?.response?.data?.error || "Failed to get item lists",
         "error"
       );
     } finally {
       setLoading(false);
     }
-  }, [sendMessage, server, route]);
+  }, [sendMessage, route]);
 
   useEffect(() => {
     getItemList();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [getItemList]);
 
   useEffect(() => {
     if (defaultGroupId && defaultGroupId !== "notset") {
@@ -56,10 +55,9 @@ export function useItemList(type) {
         socket.disconnect();
       };
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [server, defaultGroupId]);
+  }, [defaultGroupId, type, getItemList]);
 
-  const setItemListData = (type, payload) => {
+  function setItemListData(type, payload) {
     switch (type) {
       case "itemListTitle":
         setItemListTitle(payload);
@@ -74,9 +72,9 @@ export function useItemList(type) {
       default:
         break;
     }
-  };
+  }
 
-  const makeItemListPublic = async (itemListId) => {
+  async function makeItemListPublic(itemListId) {
     try {
       const response = await api.put(`${server}/api/${route}/makepublic`, {
         itemListId,
@@ -95,9 +93,9 @@ export function useItemList(type) {
     } finally {
       setLoading(false);
     }
-  };
+  }
 
-  const disableItemList = async (itemListId) => {
+  async function disableItemList(itemListId) {
     try {
       const response = await api.put(`${server}/api/${route}/disable`, {
         itemListId,
@@ -116,9 +114,9 @@ export function useItemList(type) {
     } finally {
       setLoading(false);
     }
-  };
+  }
 
-  const createItemList = async (event) => {
+  async function createItemList(event) {
     event.preventDefault();
     setLoading(true);
     try {
@@ -140,7 +138,7 @@ export function useItemList(type) {
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   return {
     loading,

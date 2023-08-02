@@ -40,9 +40,9 @@ export default function Login() {
   const singUpHandler = useCallback(
     (event) => {
       event.preventDefault();
-      signUp(email, displayName, password);
+      signUp(email, displayName, password, navigate);
     },
-    [email, password, displayName, signUp]
+    [email, password, displayName, signUp, navigate]
   );
 
   console.log(`url(${server}/images/background.jpg)`);
@@ -95,7 +95,7 @@ export default function Login() {
           },
         }}
       >
-        <Typography variant="h4">Register</Typography>
+        <Typography variant="h4">Sign Up</Typography>
         <TextField
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -130,7 +130,7 @@ export default function Login() {
           loading={loading}
           variant="outlined"
         >
-          Register
+          Sign
         </LoadingButton>
         <Typography
           variant="p"

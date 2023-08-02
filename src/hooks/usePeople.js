@@ -2,18 +2,18 @@ import { useState, useEffect, useCallback } from "react";
 import { useSnackbarMessage } from "./useSnackbarMessage";
 import api from "../api";
 
+const server = process.env.REACT_APP_BASE_SERVER;
+
 export function usePeople(itemListId) {
   const [people, setPeople] = useState([]);
   const [loading, setLoading] = useState(false);
   const { sendMessage } = useSnackbarMessage();
 
-  const server = process.env.REACT_APP_BASE_SERVER;
-
   const getByListId = useCallback(async () => {
     setLoading(true);
     try {
       const response = await api.get(
-        `${server}/api/group/getListMembers/${itemListId}`
+        `${server}/api/group/listmembers/${itemListId}`
       );
       if (!response.data) {
         sendMessage("Error fetching people", "error");
@@ -24,8 +24,7 @@ export function usePeople(itemListId) {
     } finally {
       setLoading(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [itemListId, server]);
+  }, [itemListId, sendMessage]);
 
   useEffect(() => {
     if (itemListId) {

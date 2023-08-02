@@ -1,4 +1,4 @@
-import { useReducer, useEffect } from "react";
+import { useReducer, useEffect, useCallback } from "react";
 import io from "socket.io-client";
 import { useSnackbarMessage } from "./useSnackbarMessage";
 import api from "../api";
@@ -73,7 +73,7 @@ export function useShoppingItems(itemListId) {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { sendMessage } = useSnackbarMessage();
 
-  const getItems = async () => {
+  const getItems = useCallback(async () => {
     dispatch({ type: "SET_LOADING", payload: true });
     try {
       const response = await api.get(
@@ -93,29 +93,27 @@ export function useShoppingItems(itemListId) {
     } finally {
       dispatch({ type: "SET_LOADING", payload: false });
     }
-  };
+  }, [itemListId, sendMessage]);
 
   useEffect(() => {
     getItems();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [getItems]);
 
   useEffect(() => {
     const socket = io(server, {
       query: { room: itemListId },
     });
 
-    socket.on("shoppingItemAdded", () => {
+    socket.on("updateShoppingItem", () => {
       getItems();
     });
 
     return () => {
       socket.disconnect();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [server, itemListId]);
+  }, [getItems, itemListId]);
 
-  const setItemData = (type, payload) => {
+  function setItemData(type, payload) {
     switch (type) {
       case "itemTitle":
         dispatch({ type: "SET_ITEM_TITLE", payload: payload });
@@ -138,9 +136,9 @@ export function useShoppingItems(itemListId) {
       default:
         break;
     }
-  };
+  }
 
-  const createItem = async (event) => {
+  async function createItem(event) {
     event.preventDefault();
     dispatch({ type: "SET_LOADING", payload: true });
     try {
@@ -173,9 +171,9 @@ export function useShoppingItems(itemListId) {
     } finally {
       dispatch({ type: "SET_LOADING", payload: false });
     }
-  };
+  }
 
-  const toggleComplete = async (shoppingItemId, payLoad) => {
+  async function toggleComplete(shoppingItemId, payLoad) {
     dispatch({ type: "SET_LOADING", payload: true });
     try {
       const requestBody = {
@@ -194,9 +192,9 @@ export function useShoppingItems(itemListId) {
     } finally {
       dispatch({ type: "SET_LOADING", payload: false });
     }
-  };
+  }
 
-  const deleteItem = async (itemId) => {
+  async function deleteItem(itemId) {
     dispatch({ type: "SET_LOADING", payload: true });
     try {
       await api.delete(`${server}/api/shoppingitem/${itemId}`);
@@ -210,9 +208,9 @@ export function useShoppingItems(itemListId) {
     } finally {
       dispatch({ type: "SET_LOADING", payload: false });
     }
-  };
+  }
 
-  const getItem = async (itemId) => {
+  async function getItem(itemId) {
     dispatch({ type: "SET_LOADING", payload: true });
     try {
       const response = await api.get(`${server}/api/shoppingitem/${itemId}`);
@@ -229,16 +227,16 @@ export function useShoppingItems(itemListId) {
     } finally {
       dispatch({ type: "SET_LOADING", payload: false });
     }
-  };
+  }
 
-  const resetState = () => {
+  function resetState() {
     dispatch({ type: "SET_ITEM_TITLE", payload: "" });
     dispatch({ type: "SET_ITEM_DESCRIPTION", payload: "" });
     dispatch({ type: "SET_ITEM_TYPE", payload: "" });
     dispatch({ type: "SET_ITEM_REQUIRED", payload: "" });
     dispatch({ type: "SET_ITEM_URL", payload: "" });
     dispatch({ type: "SET_ITEM_QUANTITY", payload: "" });
-  };
+  }
 
   return {
     state,

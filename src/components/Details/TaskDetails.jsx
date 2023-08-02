@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { Container, Box, Typography, TextField, Button } from "@mui/material";
-import { PriorityBars } from "../UI/PriorityBars";
+import { PriorityBars } from "./PriorityBars";
 import dayjs from "dayjs";
-import { DrawerSkeleton } from "../FeedBack/DrawerSkeleton";
+import { DrawerSkeleton } from "../FeedBack/Skeleton";
 
 export default function TaskDetails({
   itemId,
