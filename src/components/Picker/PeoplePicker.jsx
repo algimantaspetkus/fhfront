@@ -1,8 +1,14 @@
 import { useState, useEffect } from "react";
-import TextField from "@mui/material/TextField";
-import Autocomplete from "@mui/material/Autocomplete";
-import CircularProgress from "@mui/material/CircularProgress";
+import {
+  Box,
+  TextField,
+  Autocomplete,
+  CircularProgress,
+  Avatar,
+} from "@mui/material";
 import { usePeople } from "../../hooks/usePeople";
+
+const server = process.env.REACT_APP_BASE_SERVER;
 
 export default function PeoplePicker({ itemListId, setItemData }) {
   const [open, setOpen] = useState(false);
@@ -30,6 +36,16 @@ export default function PeoplePicker({ itemListId, setItemData }) {
       getOptionLabel={(option) => option.displayName}
       options={people}
       loading={loading}
+      renderOption={(props, option) => (
+        <Box {...props}>
+          <Avatar
+            sx={{ marginRight: "1rem" }}
+            src={`${server}${option.avatar}`}
+            alt={option.displayName}
+          />
+          {option.displayName}
+        </Box>
+      )}
       renderInput={(params) => (
         <TextField
           {...params}
