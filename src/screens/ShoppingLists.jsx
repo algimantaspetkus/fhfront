@@ -64,9 +64,9 @@ export default function ShoppingListPage() {
     setActiveitemListId(itemListId);
   }, []);
 
-  const handleClose = () => {
+  function handleClose() {
     setAnchorEl(null);
-  };
+  }
 
   const shoppingListProps = {
     itemList,

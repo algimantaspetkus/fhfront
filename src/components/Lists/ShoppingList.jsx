@@ -39,7 +39,7 @@ function ShoppingItemListItem({
   toggleComplete,
   showShoppingItemDetails,
 }) {
-  const clickHandler = (event) => {
+  function clickHandler(event) {
     const isCheckboxClick =
       event.target.getAttribute("data-checkbox") === "true";
     const isCheckboxChildClick =
@@ -50,7 +50,7 @@ function ShoppingItemListItem({
     } else {
       showShoppingItemDetails(shoppingItem._id);
     }
-  };
+  }
 
   return (
     <ListItem sx={{ padding: 0 }}>

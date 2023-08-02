@@ -64,9 +64,9 @@ export default function TaskListPage() {
     setActiveitemListId(itemListId);
   }, []);
 
-  const handleClose = () => {
+  function handleClose() {
     setAnchorEl(null);
-  };
+  }
 
   const taskListProps = {
     itemList,

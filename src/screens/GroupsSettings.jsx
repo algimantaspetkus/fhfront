@@ -65,9 +65,9 @@ export default function GroupPage() {
     setAnchorEl(event.currentTarget);
   }, []);
 
-  const handleClose = () => {
+  function handleClose() {
     setAnchorEl(null);
-  };
+  }
 
   const groupListProps = {
     groups,

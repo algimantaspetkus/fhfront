@@ -1,7 +1,9 @@
 import axios from "axios";
 
+const server = process.env.REACT_APP_BASE_SERVER;
+
 const api = axios.create({
-  baseURL: process.env.REACT_APP_BASE_SERVER,
+  baseURL: server,
 });
 
 api.interceptors.request.use((config) => {

@@ -12,7 +12,7 @@ export default function UpdateAvatarForm() {
     setShowClearButton,
   } = useGetUser();
 
-  const handleFileInputChange = (event) => {
+  function handleFileInputChange(event) {
     const file = event.target.files[0];
     if (file) {
       const allowedFormats = ["image/jpeg", "image/png", "image/gif"];
@@ -24,9 +24,9 @@ export default function UpdateAvatarForm() {
         setFileName("");
       }
     }
-  };
+  }
 
-  const handleUploadButtonClick = () => {
+  function handleUploadButtonClick() {
     if (showClearButton) {
       setFileName("");
       setShowClearButton(false);
@@ -34,7 +34,7 @@ export default function UpdateAvatarForm() {
     } else {
       fileInputRef.current.click();
     }
-  };
+  }
 
   return (
     <Box component="form" onSubmit={updateAvatar}>

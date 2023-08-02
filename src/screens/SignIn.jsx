@@ -14,11 +14,10 @@ export default function Login() {
   const { loading, signIn, passwordRef } = useAuth();
   const navigate = useNavigate();
 
-  const signInHandler = (event) => {
-    event.preventDefault();
+  function signInHandler(event) {
     const passwordRef = event.target.querySelector("#Password");
-    signIn(email, password, navigate, passwordRef);
-  };
+    signIn(event, email, password, navigate, passwordRef);
+  }
 
   function setPasswordHandler(_, value) {
     setPassword(value);

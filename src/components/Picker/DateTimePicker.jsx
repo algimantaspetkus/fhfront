@@ -13,9 +13,9 @@ export default function DateTimePicker({ setDate, label }) {
     setDate(selectedDateTime);
   }, [selectedDateTime, setDate]);
 
-  const handleClearDateTime = () => {
+  function handleClearDateTime() {
     setSelectedDateTime(null);
-  };
+  }
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>

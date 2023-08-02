@@ -1,14 +1,14 @@
-import * as React from "react";
+import { useState, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import CircularProgress from "@mui/material/CircularProgress";
 import { usePeople } from "../../hooks/usePeople";
 
 export default function PeoplePicker({ itemListId, setItemData }) {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const { people, getByListId, loading } = usePeople(itemListId);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (open) {
       getByListId();
     }
@@ -16,7 +16,6 @@ export default function PeoplePicker({ itemListId, setItemData }) {
 
   return (
     <Autocomplete
-      id="asynchronous-demo"
       open={open}
       onChange={(e, value) => setItemData("assignedToUser", value?._id)}
       onOpen={() => {

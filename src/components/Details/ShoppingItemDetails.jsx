@@ -21,12 +21,12 @@ export default function ItemDetails({
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const fetchData = async (id) => {
+    async function fetchData(id) {
       setLoading(true);
       const fetchedItem = await getItem(id);
       await setItem(fetchedItem?.shoppingItem);
       setLoading(false);
-    };
+    }
     if (itemId) {
       fetchData(itemId);
     }

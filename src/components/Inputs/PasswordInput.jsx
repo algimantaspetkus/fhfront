@@ -17,10 +17,12 @@ export default function PasswordInput({
   fullWidth,
 }) {
   const [showPassword, setShowPassword] = useState(false);
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-  const handleMouseDownPassword = (event) => {
+  function handleClickShowPassword() {
+    setShowPassword((show) => !show);
+  }
+  function handleMouseDownPassword(event) {
     event.preventDefault();
-  };
+  }
   return (
     <FormControl
       fullWidth={fullWidth}

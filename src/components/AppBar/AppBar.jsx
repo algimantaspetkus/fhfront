@@ -41,9 +41,10 @@ const server = process.env.REACT_APP_BASE_SERVER;
 function DrawerAppBar({ window }) {
   const navigate = useNavigate();
 
-  const signOutCallback = () => {
+  function signOutCallback() {
     navigate("/signin");
-  };
+  }
+
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const appBarTitle = useSelector((state) => state.navigation.appBarTitle);
@@ -53,23 +54,23 @@ function DrawerAppBar({ window }) {
   const { signOut } = useAuth();
   const dispatch = useDispatch();
 
-  const handleDrawerToggle = () => {
-    setIsDrawerOpen(!isDrawerOpen); // Toggle the drawer state
-  };
+  function handleDrawerToggle() {
+    setIsDrawerOpen(!isDrawerOpen);
+  }
 
-  const handleOpenUserMenu = (event) => {
+  function handleOpenUserMenu(event) {
     setAnchorElUser(event.currentTarget);
-  };
+  }
 
-  const handleCloseUserMenu = () => {
+  function handleCloseUserMenu() {
     setAnchorElUser(null);
-  };
+  }
 
-  const handleNavItemClick = (item) => {
+  function handleNavItemClick(item) {
     navigate(item.path);
     dispatch(setTitle(item?.appBarTitle));
-    setIsDrawerOpen(false); // Close the drawer on mobile devices
-  };
+    setIsDrawerOpen(false);
+  }
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>

@@ -1,6 +1,7 @@
 import * as React from "react";
-import Button from "@mui/material/Button";
 import {
+  Box,
+  Button,
   Typography,
   Dialog,
   DialogActions,
@@ -12,7 +13,7 @@ import {
 export default function SimpleDialog({ dialogProps }) {
   const { open, closeHandler, title, content, buttons } = dialogProps;
   return (
-    <div>
+    <Box>
       <Dialog open={open} onClose={closeHandler}>
         <DialogTitle>{title}</DialogTitle>
         <DialogContent>
@@ -35,6 +36,6 @@ export default function SimpleDialog({ dialogProps }) {
           ))}
         </DialogActions>
       </Dialog>
-    </div>
+    </Box>
   );
 }

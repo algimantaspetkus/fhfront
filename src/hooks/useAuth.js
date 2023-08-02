@@ -20,7 +20,8 @@ export function useAuth() {
   const dispatch = useDispatch();
   const passwordRef = useRef(null);
 
-  async function signIn(email, password, callBack, pwdRef) {
+  async function signIn(event, email, password, callBack, pwdRef) {
+    event.preventDefault();
     setLoading(true);
     try {
       const response = await api.post(`${server}/api/auth/signin`, {
@@ -69,7 +70,6 @@ export function useAuth() {
         navigate("/signin");
       }
       if (data.error) {
-        console.log(data);
         sendMessage(data.error, "error");
       }
     } catch (error) {

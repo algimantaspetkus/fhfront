@@ -18,7 +18,6 @@ export default function ShoppingItemList({
   toggleComplete,
   showItemDetails,
 }) {
-  // Sort the items by type and name
   const sortedItems = items.slice().sort((a, b) => {
     if (!a.type && b.type) return 1;
     if (a.type && !b.type) return -1;
@@ -28,7 +27,6 @@ export default function ShoppingItemList({
     );
   });
 
-  // Group the items by type
   const groupedItems = sortedItems.reduce((groups, item) => {
     const key = item.type || "Not Grouped";
     groups[key] = [...(groups[key] || []), item];
@@ -69,7 +67,7 @@ export default function ShoppingItemList({
 }
 
 function ShoppingListItem({ item, toggleComplete, showItemDetails }) {
-  const clickHandler = (event) => {
+  function clickHandler(event) {
     const isCheckboxClick =
       event.target.getAttribute("data-checkbox") === "true";
     const isCheckboxChildClick =
@@ -80,7 +78,7 @@ function ShoppingListItem({ item, toggleComplete, showItemDetails }) {
     } else {
       showItemDetails(item._id);
     }
-  };
+  }
 
   return (
     <ListItem sx={{ padding: 0 }}>
