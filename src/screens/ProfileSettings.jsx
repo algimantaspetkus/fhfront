@@ -1,4 +1,5 @@
 import { Box, Container, Typography } from "@mui/material";
+
 import UpdateAvatarForm from "../components/Forms/UpdateAvatarForm";
 import UpdateDisplayNameForm from "../components/Forms/UpdateDisplayNameForm";
 import UpdatePasswordForm from "../components/Forms/UpdatePasswordForm";

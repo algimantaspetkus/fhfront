@@ -1,16 +1,19 @@
 import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
 import { Box, Typography, Container, Drawer } from "@mui/material";
+
 import TaskItemsList from "../components/Lists/TaskItemsList";
 import SpeedDialFab from "../components/Fab/SpeedDialFab";
 import CreateTaskForm from "../components/Forms/CreateTaskForm";
 import TaskDetails from "../components/Details/TaskDetails";
 import Dialog from "../components/FeedBack/Dialog";
-import { useParams } from "react-router-dom";
+import { ListSkeleton } from "../components/FeedBack/Skeleton";
+
+import { setTitle } from "../redux/navigationSlice";
 import { useTaskItems } from "../hooks/useTaskItems";
 import { useDrawer } from "../hooks/useDrawer";
 import { useDialog } from "../hooks/useDialog";
-import { useDispatch } from "react-redux";
-import { setTitle } from "../redux/navigationSlice";
 import { useFilter } from "../hooks/useFilter";
 
 export default function TasksPage() {
@@ -42,6 +45,7 @@ export default function TasksPage() {
     createItem,
     toggleComplete,
     deleteItem,
+    loading,
   } = useTaskItems(itemListId);
   const { items, itemList } = state;
 
@@ -88,17 +92,21 @@ export default function TasksPage() {
           <Typography variant="h4" component="h2">
             {itemList?.listTitle}
           </Typography>
-          <TaskItemsList
-            items={items.filter((item) => {
-              if (filterCompleted) {
-                return item.completed === false;
-              }
-              return true;
-            })}
-            toggleComplete={toggleComplete}
-            deleteItem={deleteItem}
-            showItemDetails={showTaskDetailsHandler}
-          />
+          {loading ? (
+            <ListSkeleton />
+          ) : (
+            <TaskItemsList
+              items={items.filter((item) => {
+                if (filterCompleted) {
+                  return item.completed === false;
+                }
+                return true;
+              })}
+              toggleComplete={toggleComplete}
+              deleteItem={deleteItem}
+              showItemDetails={showTaskDetailsHandler}
+            />
+          )}
         </Box>
       </Container>
       <Drawer

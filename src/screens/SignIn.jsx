@@ -1,8 +1,10 @@
 import { useState } from "react";
-import { TextField, Box, Typography } from "@mui/material";
-import PasswordInput from "../components/Inputs/PasswordInput";
-import LoadingButton from "@mui/lab/LoadingButton";
 import { useNavigate } from "react-router-dom";
+import { TextField, Box, Typography } from "@mui/material";
+import LoadingButton from "@mui/lab/LoadingButton";
+
+import PasswordInput from "../components/Inputs/PasswordInput";
+
 import { useAuth } from "../hooks/useAuth";
 
 const server = process.env.REACT_APP_BASE_SERVER;

@@ -1,12 +1,15 @@
 import { useState, useCallback } from "react";
-import Dialog from "../components/FeedBack/Dialog";
 import { Box, Typography, Container, Drawer } from "@mui/material";
+
+import Dialog from "../components/FeedBack/Dialog";
 import ItemList from "../components/Lists/ItemList";
 import SingleActionFab from "../components/Fab/SingleActionFab";
+import CreateItemListForm from "../components/Forms/CreateItemListForm";
+import { ListSkeleton } from "../components/FeedBack/Skeleton";
+
 import { useItemList } from "../hooks/useItemList";
 import { useDrawer } from "../hooks/useDrawer";
 import { useDialog } from "../hooks/useDialog";
-import CreateItemListForm from "../components/Forms/CreateItemListForm";
 
 export default function ShoppingListPage() {
   const {
@@ -15,6 +18,7 @@ export default function ShoppingListPage() {
     createItemList,
     makeItemListPublic,
     disableItemList,
+    loading,
   } = useItemList("shopping");
   const [activeitemListId, setActiveitemListId] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -83,12 +87,16 @@ export default function ShoppingListPage() {
           <Typography variant="h4" component="h2">
             Shopping Lists
           </Typography>
-          <ItemList
-            {...shoppingListProps}
-            type="shoppingitems"
-            deleteItemList={handleClickOpenShoppingListDelete}
-            makePublic={handleClickOpenShoppingListPublic}
-          />
+          {loading ? (
+            <ListSkeleton />
+          ) : (
+            <ItemList
+              {...shoppingListProps}
+              type="shoppingitems"
+              deleteItemList={handleClickOpenShoppingListDelete}
+              makePublic={handleClickOpenShoppingListPublic}
+            />
+          )}
         </Box>
       </Container>
       <SingleActionFab onClick={openDrawer} />

@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import MenuIcon from "@mui/icons-material/Menu";
 import PropTypes from "prop-types";
 import {
   AppBar,
@@ -19,9 +22,7 @@ import {
   Menu,
   MenuItem,
 } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+
 import { setTitle } from "../../redux/navigationSlice";
 import { useAuth } from "../../hooks/useAuth";
 

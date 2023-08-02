@@ -1,14 +1,17 @@
 import { useEffect, useState, useCallback } from "react";
-import SingleActionFab from "../components/Fab/SingleActionFab";
-import Dialog from "../components/FeedBack/Dialog";
+import { useSelector } from "react-redux";
 import { Box, Typography, Container, Drawer } from "@mui/material";
+
+import SingleActionFab from "../components/Fab/SingleActionFab";
+import CreateGroupForm from "../components/Forms/CreateGroupForm";
+import GroupList from "../components/Lists/GroupList";
+import Dialog from "../components/FeedBack/Dialog";
+import { ListSkeleton } from "../components/FeedBack/Skeleton";
+
 import { useUserGroups } from "../hooks/useUserGroups";
 import { useGroup } from "../hooks/useGroup";
 import { useDialog } from "../hooks/useDialog";
 import { useDrawer } from "../hooks/useDrawer";
-import { useSelector } from "react-redux";
-import CreateGroupForm from "../components/Forms/CreateGroupForm";
-import GroupList from "../components/Lists/GroupList";
 
 export default function GroupPage() {
   const { groups } = useUserGroups();
@@ -57,6 +60,7 @@ export default function GroupPage() {
     disableGroup,
     leaveGroup,
     getGroupSecret,
+    loading,
   } = useGroup();
 
   const handleClick = useCallback((event, groupId) => {
@@ -96,7 +100,7 @@ export default function GroupPage() {
             Group Settings
           </Typography>
         </Box>
-        {groups && <GroupList {...groupListProps} />}
+        {loading ? <ListSkeleton /> : <GroupList {...groupListProps} />}
       </Container>
       <SingleActionFab onClick={openDrawer} />
       <Drawer anchor={"right"} open={drawerOpen} onClose={closeDrawer}>

@@ -1,17 +1,20 @@
 import { useState } from "react";
-import Dialog from "../components/FeedBack/Dialog";
 import { Box, Typography, Container, Drawer } from "@mui/material";
+
+import Dialog from "../components/FeedBack/Dialog";
 import EventItems from "../components/Lists/EventItems";
 import SingleActionFab from "../components/Fab/SingleActionFab";
+import CreateEventItemForm from "../components/Forms/CreateEventItemForm";
+import { ListSkeleton } from "../components/FeedBack/Skeleton";
+
 import { useEvent } from "../hooks/useEvent";
 import { useDrawer } from "../hooks/useDrawer";
 import { useDialog } from "../hooks/useDialog";
-import CreateEventItemForm from "../components/Forms/CreateEventItemForm";
 
 export default function Calendar() {
   const [activeItemId, setActiveItemId] = useState(null);
   const { openDrawer, closeDrawer, drawerOpen } = useDrawer();
-  const { addItem, setItemData, deleteItem, items } = useEvent();
+  const { addItem, setItemData, deleteItem, items, loading } = useEvent();
 
   const {
     dialogProps: dialogPropsTaskListDelete,
@@ -44,10 +47,14 @@ export default function Calendar() {
           <Typography variant="h4" component="h2">
             Upcoming Events
           </Typography>
-          <EventItems
-            items={items.upcomingItems}
-            deleteItem={onDeleteHandler}
-          />
+          {loading ? (
+            ListSkeleton
+          ) : (
+            <EventItems
+              items={items.upcomingItems}
+              deleteItem={onDeleteHandler}
+            />
+          )}
         </Box>
         <Box sx={{ marginTop: "5rem" }}>
           <Typography variant="h4" component="h2">

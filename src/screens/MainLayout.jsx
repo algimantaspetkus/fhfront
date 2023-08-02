@@ -2,8 +2,9 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Box from "@mui/material/Box";
 
-import Auth from "../utils/Auth";
 import AppBar from "../components/AppBar/AppBar";
+import Auth from "../utils/Auth";
+
 import SignIn from "./SignIn";
 import ProfileSettings from "./ProfileSettings";
 import SignUp from "./SignUp";

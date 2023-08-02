@@ -1,17 +1,20 @@
 import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { Box, Typography, Container, Drawer } from "@mui/material";
+
 import ShoppingItemList from "../components/Lists/ShoppingItemList";
 import SpeedDialFab from "../components/Fab/SpeedDialFab";
 import CreateShoppingItemForm from "../components/Forms/CreateShoppingItemForm";
 import ShoppingItemDetails from "../components/Details/ShoppingItemDetails";
 import Dialog from "../components/FeedBack/Dialog";
-import { useParams } from "react-router-dom";
+import { ListSkeleton } from "../components/FeedBack/Skeleton";
+
+import { setTitle } from "../redux/navigationSlice";
 import { useShoppingItems } from "../hooks/useShoppingItems";
 import { useDrawer } from "../hooks/useDrawer";
 import { useDialog } from "../hooks/useDialog";
 import { useFilter } from "../hooks/useFilter";
 import { useDispatch } from "react-redux";
-import { setTitle } from "../redux/navigationSlice";
 
 export default function ItemsPage() {
   const [selectedItem, setSelectedItem] = useState(null);
@@ -42,6 +45,7 @@ export default function ItemsPage() {
     toggleComplete,
     deleteItem,
     getItem,
+    loading,
   } = useShoppingItems(itemListId);
   const { items, itemList } = state;
 
@@ -87,17 +91,21 @@ export default function ItemsPage() {
           <Typography variant="h4" component="h2">
             {itemList?.listTitle}
           </Typography>
-          <ShoppingItemList
-            items={items.filter((item) => {
-              if (filterCompleted) {
-                return item.completed === false;
-              }
-              return true;
-            })}
-            toggleComplete={toggleComplete}
-            deleteItem={handleClickOpen}
-            showItemDetails={showItemDetailsHandler}
-          />
+          {loading ? (
+            <ListSkeleton />
+          ) : (
+            <ShoppingItemList
+              items={items.filter((item) => {
+                if (filterCompleted) {
+                  return item.completed === false;
+                }
+                return true;
+              })}
+              toggleComplete={toggleComplete}
+              deleteItem={handleClickOpen}
+              showItemDetails={showItemDetailsHandler}
+            />
+          )}
         </Box>
       </Container>
       <Drawer
