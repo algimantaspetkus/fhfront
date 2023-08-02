@@ -257,9 +257,11 @@ Parameters:
 
 Endpoint: `GET /api/user/check`
 
-## Add Item List
+## Add List
 
-Endpoint: `POST /api/tasklist/add`
+### Can either be **{ tasklist || shoppinglist }** or **shoppinglist**
+
+Endpoint: `POST /api/{ tasklist || shoppinglist }/add`
 
 Parameters:
 
@@ -268,9 +270,9 @@ Parameters:
 | listTitle | string  | Required. The title of the new list.      |
 | isPrivate | boolean | Required. Specify if the list is private. |
 
-## Make Item List Public
+## Make List Public
 
-Endpoint: `PUT /api/tasklist/makepublic`
+Endpoint: `PUT /api/{ tasklist || shoppinglist }/makepublic`
 
 Parameters:
 
@@ -278,9 +280,9 @@ Parameters:
 | ---------- | ------ | --------------------------------------- |
 | itemListId | string | Required. The ID of the list to modify. |
 
-## Delete Item List
+## Delete List
 
-Endpoint: `PUT /api/tasklist/disable`
+Endpoint: `PUT /api/{ tasklist || shoppinglist }/disable`
 
 Parameters:
 
@@ -288,9 +290,9 @@ Parameters:
 | ---------- | ------ | ---------------------------------------- |
 | itemListId | string | Required. The ID of the list to disable. |
 
-## Get Item List
+## Get List
 
-Endpoint: `GET /api/tasklist/list`
+Endpoint: `GET /api/{ tasklist || shoppinglist }/list`
 
 ## Add Task Item
 
@@ -347,6 +349,63 @@ Parameters:
 | Parameter | Type   | Description                   |
 | --------- | ------ | ----------------------------- |
 | taskId    | string | Required. The ID of the task. |
+
+## Add Shopping Item
+
+Endpoint: `POST /api/shoppingitem/additem`
+
+Parameters:
+
+| Parameter       | Type    | Description                                  |
+| --------------- | ------- | -------------------------------------------- |
+| itemListId      | string  | Required. The ID of the item list.           |
+| itemTitle       | string  | Required. The title of the shopping item.    |
+| itemDescription | string  | The description of the shopping item.        |
+| required        | boolean | The flag indicating if the item is required. |
+| type            | string  | The type of the shopping item.               |
+| url             | string  | The URL associated with the shopping item.   |
+| quantity        | string  | The quantity of the shopping item.           |
+
+## Update Shopping Item
+
+Endpoint: `PUT /api/shoppingitem/update`
+
+Parameters:
+
+| Parameter      | Type   | Description                                      |
+| -------------- | ------ | ------------------------------------------------ |
+| shoppingItemId | string | Required. The ID of the shopping item to update. |
+| data           | object | Required. The updated shopping item data.        |
+
+## Get Shopping Item Details
+
+Endpoint: `GET /api/shoppingitem/:shoppingItemId`
+
+Parameters:
+
+| Parameter      | Type   | Description                            |
+| -------------- | ------ | -------------------------------------- |
+| shoppingItemId | string | Required. The ID of the shopping item. |
+
+## Delete Shopping Item
+
+Endpoint: `DELETE /api/shoppingitem/:shoppingItemId`
+
+Parameters:
+
+| Parameter      | Type   | Description                                      |
+| -------------- | ------ | ------------------------------------------------ |
+| shoppingItemId | string | Required. The ID of the shopping item to delete. |
+
+## Get Shopping Items
+
+Endpoint: `GET /api/shoppingitem/items/:itemListId`
+
+Parameters:
+
+| Parameter  | Type   | Description                        |
+| ---------- | ------ | ---------------------------------- |
+| itemListId | string | Required. The ID of the item list. |
 
 ## Add Event Item
 
