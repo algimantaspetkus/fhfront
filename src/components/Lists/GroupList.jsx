@@ -35,6 +35,11 @@ export default function GroupList({
         overflow: "auto",
       }}
     >
+      {groups?.length === 0 && (
+        <ListItem>
+          <ListItemText primary="You currently do not have any groups to display" />
+        </ListItem>
+      )}
       {groups?.map((group) => (
         <ListItem key={group.groupId._id}>
           <ListItemText
