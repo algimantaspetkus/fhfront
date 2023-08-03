@@ -30,7 +30,7 @@ export function useAuth() {
       });
       const data = response.data;
       if (data.error) {
-        sendMessage(data.error, "error");
+        sendMessage(data.error, "error", true);
         pwdRef.focus();
       }
       if (data.token) {
@@ -40,7 +40,7 @@ export function useAuth() {
         dispatch(setDisplayName(data.displayName));
         dispatch(setAvatar(data.avatar));
         dispatch(setDefaultGroupId(data.defaultGroupId));
-        sendMessage("Login successful", "success");
+        sendMessage("Login successful", "success", true);
         if (!data.defaultGroupId && window.location.pathname !== "/group") {
           callBack("/group");
         } else {
@@ -48,7 +48,11 @@ export function useAuth() {
         }
       }
     } catch (error) {
-      sendMessage(error?.response?.data?.error || "Sign in failed", "error");
+      sendMessage(
+        error?.response?.data?.error || "Sign in failed",
+        "error",
+        true
+      );
       pwdRef.focus();
     } finally {
       setLoading(false);
@@ -66,14 +70,18 @@ export function useAuth() {
       });
       const data = response.data;
       if (!data.error) {
-        sendMessage("Registration successful", "success");
+        sendMessage("Registration successful", "success", true);
         navigate("/signin");
       }
       if (data.error) {
-        sendMessage(data.error, "error");
+        sendMessage(data.error, "error", true);
       }
     } catch (error) {
-      sendMessage(error?.response?.data?.error || "Sign up failed", "error");
+      sendMessage(
+        error?.response?.data?.error || "Sign up failed",
+        "error",
+        true
+      );
     } finally {
       setLoading(false);
     }

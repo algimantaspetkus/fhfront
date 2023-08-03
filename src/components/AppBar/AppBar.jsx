@@ -14,14 +14,16 @@ import {
   ListItem,
   ListItemButton,
   ListItemText,
-  Toolbar,
   Typography,
   Button,
   Avatar,
   Tooltip,
+  Toolbar,
   Menu,
   MenuItem,
 } from "@mui/material";
+
+import groupIcon from "../../icon.png";
 
 import { setTitle } from "../../redux/navigationSlice";
 import { useAuth } from "../../hooks/useAuth";
@@ -75,9 +77,20 @@ function DrawerAppBar({ window }) {
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
-      <Typography variant="h6" sx={{ my: 2 }}>
-        Group Hub
-      </Typography>
+      <Box
+        sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+      >
+        <Avatar
+          alt="Group Hub Icon"
+          src={groupIcon}
+          sx={{
+            marginRight: "1rem",
+          }}
+        />
+        <Typography variant="h6" sx={{ my: 2, fontWeight: "700" }}>
+          Group Hub
+        </Typography>
+      </Box>
       <Divider />
       <List>
         {navItems.map((item) => (
@@ -111,6 +124,15 @@ function DrawerAppBar({ window }) {
           >
             <MenuIcon />
           </IconButton>
+          {/* Add the icon next to the Group Hub headers */}
+          <Avatar
+            alt="Group Hub Icon"
+            src={groupIcon}
+            sx={{
+              display: { xs: "none", sm: "block", mr: 1 },
+              marginRight: "1rem",
+            }}
+          />
           <Typography
             variant="h6"
             component="div"

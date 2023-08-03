@@ -10,6 +10,7 @@ function App() {
   return (
     <Provider store={store}>
       <SnackbarProvider maxSnack={3}>
+        <div className="logo-container" />
         <MainLayout />
       </SnackbarProvider>
     </Provider>

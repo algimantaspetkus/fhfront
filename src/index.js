@@ -5,13 +5,13 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-// Create a custom theme
 const theme = createTheme({
   components: {
     MuiDrawer: {
       styleOverrides: {
         paper: {
-          width: 300, // Set your desired width here
+          width: 300,
+          backgroundColor: "rgb(239, 239, 239)",
         },
       },
     },
@@ -27,7 +27,4 @@ root.render(
   </React.StrictMode>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();

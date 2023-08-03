@@ -8,7 +8,7 @@ const initialState = {
   defaultGroupId: "notset",
 };
 
-const navigationSlice = createSlice({
+const userReducer = createSlice({
   name: "userSettings",
   initialState,
   reducers: {
@@ -44,5 +44,5 @@ export const {
   setAvatar,
   setDefaultGroupId,
   resetState,
-} = navigationSlice.actions;
-export default navigationSlice.reducer;
+} = userReducer.actions;
+export default userReducer.reducer;
